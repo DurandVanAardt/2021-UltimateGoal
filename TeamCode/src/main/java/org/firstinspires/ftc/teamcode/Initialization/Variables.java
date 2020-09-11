@@ -1,21 +1,17 @@
 package org.firstinspires.ftc.teamcode.Initialization;
 
-import android.graphics.Path;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 import org.firstinspires.ftc.teamcode.Resources.Sensors;
-import org.firstinspires.ftc.teamcode.Strafe;
+import org.firstinspires.ftc.teamcode.Motors;
 
 public class Variables {
     public RobotHardwareMap robot;
-    public Strafe strafe;
+    public Motors strafe;
     private boolean OpModeActive = false;
     public Sensors sensors;
     private double heading;
@@ -107,7 +103,7 @@ public class Variables {
     }
 
     public void init(Variables var) {
-        strafe = new Strafe(var);
+        strafe = new Motors(var);
         sensors = new Sensors(var);
     }
 
