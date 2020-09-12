@@ -63,7 +63,7 @@ public class Motors {
         var.robot.rightBack.setPower(v4);
     }
 
-    public void strafeL(double speed, double speedControl, double target) {
+    public void strafeL(double speed, double speedControl) {
         speed *= speedControl;
         speed -= 0.1;
         double v1 = speed;
