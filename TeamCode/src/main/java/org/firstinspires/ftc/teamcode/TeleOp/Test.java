@@ -23,9 +23,14 @@ public class Test extends OpMode {
         if (gamepad1.x || gamepad1.y) {
             xy = gamepad1.x;
         }
+
+
         if (xy) {
             var.strafe.driveStrafe(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x,1);
-        } else {
+        }
+
+
+        else {
 
             if (gamepad1.right_trigger != 0) {
                 var.strafe.strafeR(gamepad1.right_trigger, 1, 0);

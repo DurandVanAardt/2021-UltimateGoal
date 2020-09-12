@@ -5,9 +5,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 import org.firstinspires.ftc.teamcode.Resources.Sensors;
-import org.firstinspires.ftc.teamcode.Motors;
+import org.firstinspires.ftc.teamcode.Resources.Motors;
 
 public class Variables {
     public RobotHardwareMap robot;
@@ -17,8 +18,9 @@ public class Variables {
     private double heading;
     private double roll;
     private double pitch;
-//    Orientation lastAngles;
+    Orientation lastAngles;
     double globalAngle;
+    double relativeAngle;
     double avgEncoder;
     double distanceL;
     double distanceR;
@@ -107,31 +109,31 @@ public class Variables {
         sensors = new Sensors(var);
     }
 
+    public double getAngle() {
+        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-//    public double getAngle() {
-//        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//
-//        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-//
-//        if (deltaAngle < -180)
-//            deltaAngle += 360;
-//        else if (deltaAngle > 180)
-//            deltaAngle -= 360;
-//
-//        globalAngle += deltaAngle;
-//
-//        lastAngles = angles;
-//
-//        return globalAngle;
-//    }
-//
-//    public void resetAngle() {
-//        globalAngle = 0;
-//    }
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
 
-    public double getAngle2() {
-        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        relativeAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return relativeAngle;
     }
+
+    public void resetAngle() {
+        lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        relativeAngle = 0;
+    }
+
+//    public double getAngle2() {
+//        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+//    }
 
     public void setOpModeActive(boolean b) {
         this.OpModeActive = b;
