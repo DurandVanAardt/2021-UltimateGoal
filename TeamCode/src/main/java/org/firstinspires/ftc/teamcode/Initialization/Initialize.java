@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.Initialization;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.teamcode.Initialization.Variables;
+//import org.firstinspires.ftc.teamcode.Initialization.Variables;
 
 public class Initialize {
 
