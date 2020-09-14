@@ -25,11 +25,11 @@ public class Motors {
             var.resetAngle();
         }
 
-        double correction = pidStrafe.performPID(var.getAngle());
+        double correction = pidStrafe.performPID(var.getGlobalAngle());
         right_stick_x += correction;
 
         double Magnitude = Math.hypot(left_stick_x, left_stick_y);
-        double Direction = Math.atan2(left_stick_y, left_stick_x) - Math.PI / 4;
+        double Direction = Math.atan2(left_stick_y, left_stick_x)/* - Math.PI / 4*/;
 
         double v1 = Magnitude * Math.sin(Direction) - right_stick_x;
         double v2 = Magnitude * Math.cos(Direction) + right_stick_x;
@@ -42,7 +42,7 @@ public class Motors {
         var.robot.rightBack.setPower(v4 * speedControl);
     }
 
-    public void strafeR(double speed, double speedControl, double target) {
+    public void strafeR(double speed, double speedControl) {
         speed *= speedControl;
         speed -= 0.1;
         double v1 = speed;
@@ -50,7 +50,7 @@ public class Motors {
         double v3 = -speed;
         double v4 = speed;
 
-        double correction = pidStrafe.performPID(var.getGlobalAngle());
+        double correction = pidStrafe.performPID(var.getTrueAngle());
 
         v1 -= correction;
         v2 += correction;
@@ -63,7 +63,7 @@ public class Motors {
         var.robot.rightBack.setPower(v4);
     }
 
-    public void strafeL(double speed, double speedControl, double target) {
+    public void strafeL(double speed, double speedControl) {
         speed *= speedControl;
         speed -= 0.1;
         double v1 = speed;
@@ -71,7 +71,7 @@ public class Motors {
         double v3 = -speed;
         double v4 = speed;
 
-        double correction = pidStrafe.performPID(var.getGlobalAngle());
+        double correction = pidStrafe.performPID(var.getTrueAngle());
 
         v1 += correction;
         v2 -= correction;

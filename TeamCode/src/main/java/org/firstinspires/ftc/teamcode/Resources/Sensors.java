@@ -12,6 +12,7 @@ import java.util.Locale;
 
 
 //@TeleOp(name = "Sensors", group = "TeleOp")
+@SuppressWarnings("IntegerDivisionInFloatingPointContext")
 public class Sensors extends Thread {
     private Variables var;
 
@@ -92,7 +93,7 @@ public class Sensors extends Thread {
             distanceRAvg += distanceRTemp;
             distanceBAvg += distanceBTemp;
             distanceFMAvg += distanceFMTemp;
-        }else {
+        } else {
             distanceLAvg /= 5;
             distanceRAvg /= 5;
             distanceBAvg /= 5;
@@ -114,21 +115,9 @@ public class Sensors extends Thread {
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 
-    public Variables getVar() {
-        return var;
-    }
-
     public void resetAngle() {
         lastAngles = var.robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         var.setGlobalAngle(0);
     }
-//
-//    public RobotHardwareMap getRobot() {
-//        return robot;
-//    }
-//
-//    public void setRobot(RobotHardwareMap robot) {
-//        this.robot = robot;
-//    }
 }
