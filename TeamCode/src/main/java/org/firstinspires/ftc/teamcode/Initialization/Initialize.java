@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.Initialization;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-//import org.firstinspires.ftc.teamcode.Initialization.Variables;
+
+import org.firstinspires.ftc.teamcode.Resources.Sensors;
 
 public class Initialize {
 
@@ -13,8 +14,9 @@ public class Initialize {
         Variables var = new Variables(hardwareMap);
         var.init(var);
 
-        Thread Tsensors = new Thread(var.sensors);
-        Tsensors.start();
+//        Thread Tsensors = new Thread(var.sensors);
+//        Tsensors.start();
+//        new Thread(var.sensors).start();
         return var;
     }
 }
