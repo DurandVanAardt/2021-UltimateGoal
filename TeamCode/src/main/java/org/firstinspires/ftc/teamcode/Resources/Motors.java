@@ -25,7 +25,7 @@ public class Motors {
             var.resetAngle();
         }
 
-        double correction = pidStrafe.performPID(var.getGlobalAngle());
+        double correction = pidStrafe.performPID(var.getAngle());
         right_stick_x += correction;
 
         double Magnitude = Math.hypot(left_stick_x, left_stick_y);

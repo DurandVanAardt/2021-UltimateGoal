@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Resources;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -31,13 +30,6 @@ public class Sensors extends Thread {
 
     }
 
-    @Override
-    public void start(){
-
-        //Start the Actual Thread
-        run();
-
-    }
 
     @Override
     public void run(){
@@ -65,7 +57,7 @@ public class Sensors extends Thread {
         else if (deltaAngle > 180)
             deltaAngle -= 360;
 
-        var.setGlobalAngle(var.getGlobalAngle() + deltaAngle);
+        var.setAngle(var.getAngle() + deltaAngle);
 
         lastAngles = angles;
 
@@ -118,6 +110,6 @@ public class Sensors extends Thread {
     public void resetAngle() {
         lastAngles = var.robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-        var.setGlobalAngle(0);
+        var.setAngle(0);
     }
 }

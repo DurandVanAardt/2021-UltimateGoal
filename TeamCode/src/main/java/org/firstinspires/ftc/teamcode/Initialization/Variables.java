@@ -19,7 +19,7 @@ public class Variables {
     private double roll;
     private double pitch;
 //    Orientation lastAngles;
-    double globalAngle;
+    public double angle;
     double trueAngle;
     double avgEncoder;
     double distanceL;
@@ -108,12 +108,12 @@ public class Variables {
         this.pitch = pitch;
     }
 
-    public double getGlobalAngle() {
-        return globalAngle;
+    public double getAngle() {
+        return angle;
     }
 
-    public void setGlobalAngle(double globalAngle) {
-        this.globalAngle = globalAngle;
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 
 
