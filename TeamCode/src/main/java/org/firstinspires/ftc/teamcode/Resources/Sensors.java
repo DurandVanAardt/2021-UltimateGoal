@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Resources;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -12,6 +11,7 @@ import java.util.Locale;
 
 
 //@TeleOp(name = "Sensors", group = "TeleOp")
+@SuppressWarnings("IntegerDivisionInFloatingPointContext")
 public class Sensors extends Thread {
     private Variables var;
 
@@ -30,13 +30,6 @@ public class Sensors extends Thread {
 
     }
 
-    @Override
-    public void start(){
-
-        //Start the Actual Thread
-        run();
-
-    }
 
     @Override
     public void run(){
@@ -64,7 +57,7 @@ public class Sensors extends Thread {
         else if (deltaAngle > 180)
             deltaAngle -= 360;
 
-        var.setGlobalAngle(var.getGlobalAngle() + deltaAngle);
+        var.setAngle(var.getAngle() + deltaAngle);
 
         lastAngles = angles;
 
@@ -92,7 +85,7 @@ public class Sensors extends Thread {
             distanceRAvg += distanceRTemp;
             distanceBAvg += distanceBTemp;
             distanceFMAvg += distanceFMTemp;
-        }else {
+        } else {
             distanceLAvg /= 5;
             distanceRAvg /= 5;
             distanceBAvg /= 5;
@@ -114,21 +107,9 @@ public class Sensors extends Thread {
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 
-    public Variables getVar() {
-        return var;
-    }
-
     public void resetAngle() {
         lastAngles = var.robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-        var.setGlobalAngle(0);
+        var.setAngle(0);
     }
-//
-//    public RobotHardwareMap getRobot() {
-//        return robot;
-//    }
-//
-//    public void setRobot(RobotHardwareMap robot) {
-//        this.robot = robot;
-//    }
 }

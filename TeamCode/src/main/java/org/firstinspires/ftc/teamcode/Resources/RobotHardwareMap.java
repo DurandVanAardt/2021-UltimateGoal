@@ -25,35 +25,37 @@ public class RobotHardwareMap {
     public DistanceSensor distanceB;
     public DigitalChannel downLimit;
     public BNO055IMU imu;
+    public Servo shooterAngleServo;
     public Servo RBG;
     public Servo LBG;
 
-    public RobotHardwareMap(HardwareMap amasterConfig) {
-        init(amasterConfig);
+    public RobotHardwareMap(HardwareMap hardwareMap) {
+        init(hardwareMap);
     }
 
-    public void init(HardwareMap amasterConfig){
+    public void init(HardwareMap hardwareMap){
 
-        Claw = amasterConfig.get(Servo.class,"claw");
-        RBG = amasterConfig.get(Servo.class, "RBG");
-        LBG = amasterConfig.get(Servo.class, "LBG");
-        imu = amasterConfig.get(BNO055IMU.class, "imu");
+        Claw = hardwareMap.get(Servo.class,"claw");
+        RBG = hardwareMap.get(Servo.class, "RBG");
+        LBG = hardwareMap.get(Servo.class, "LBG");
+//        shooterAngleServo = hardwareMap.get(Servo.class, "shooterAngleServo");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
         initializeIMU();
 
-        distanceR = amasterConfig.get(DistanceSensor.class, "distanceR");
-        distanceL = amasterConfig.get(DistanceSensor.class, "distanceL");
-        distanceB = amasterConfig.get(DistanceSensor.class, "distanceB");
-        distanceFL = amasterConfig.get(DistanceSensor.class, "distanceFR");
-        distanceFR = amasterConfig.get(DistanceSensor.class, "distanceFL");
-        distanceFM = amasterConfig.get(DistanceSensor.class, "distanceFM");
+        distanceR = hardwareMap.get(DistanceSensor.class, "distanceR");
+        distanceL = hardwareMap.get(DistanceSensor.class, "distanceL");
+        distanceB = hardwareMap.get(DistanceSensor.class, "distanceB");
+        distanceFL = hardwareMap.get(DistanceSensor.class, "distanceFR");
+        distanceFR = hardwareMap.get(DistanceSensor.class, "distanceFL");
+        distanceFM = hardwareMap.get(DistanceSensor.class, "distanceFM");
 
-        leftFront = amasterConfig.get(DcMotor.class, "leftmotor");
-        rightFront = amasterConfig.get(DcMotor.class, "rightmotor");
-        leftBack = amasterConfig.get(DcMotor.class, "leftback");
-        rightBack = amasterConfig.get(DcMotor.class, "rightback");
-        liftMotor = amasterConfig.get(DcMotor.class, "motorHeight");
+        leftFront = hardwareMap.get(DcMotor.class, "leftmotor");
+        rightFront = hardwareMap.get(DcMotor.class, "rightmotor");
+        leftBack = hardwareMap.get(DcMotor.class, "leftback");
+        rightBack = hardwareMap.get(DcMotor.class, "rightback");
+        liftMotor = hardwareMap.get(DcMotor.class, "motorHeight");
 
-        downLimit = amasterConfig.get(DigitalChannel.class, "downLimit");
+        downLimit = hardwareMap.get(DigitalChannel.class, "downLimit");
         downLimit.setMode(DigitalChannel.Mode.INPUT);
 
         leftFront.setDirection(DcMotor.Direction.REVERSE);

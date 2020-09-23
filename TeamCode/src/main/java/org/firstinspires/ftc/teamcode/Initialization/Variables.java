@@ -12,19 +12,37 @@ import org.firstinspires.ftc.teamcode.Resources.Motors;
 
 public class Variables {
     public RobotHardwareMap robot;
-    public Motors strafe;
+    public Motors motors;
     private boolean OpModeActive = false;
     public Sensors sensors;
     private double heading;
     private double roll;
     private double pitch;
-    Orientation lastAngles;
-    double globalAngle;
-    double relativeAngle;
+//    Orientation lastAngles;
+    public double angle;
+    double trueAngle;
     double avgEncoder;
     double distanceL;
     double distanceR;
     double distanceB;
+    private Orientation lastAngles;
+    private double relativeAngle;
+
+    public Variables(HardwareMap hardware) {
+        robot = new RobotHardwareMap(hardware);
+    }
+
+    public void init(Variables var) {
+        motors = new Motors(var);
+        sensors = new Sensors(var);
+    }
+
+    public double getTrueAngle() {
+        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        trueAngle = angles.firstAngle;
+        return trueAngle;
+    }
 
     public double getAvgEncoder() {
         return avgEncoder;
@@ -92,22 +110,14 @@ public class Variables {
         this.pitch = pitch;
     }
 
-    public double getGlobalAngle() {
-        return globalAngle;
+//    public double getAngle() {
+//        return angle;
+//    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 
-    public void setGlobalAngle(double globalAngle) {
-        this.globalAngle = globalAngle;
-    }
-
-    public Variables(HardwareMap hardware) {
-        robot = new RobotHardwareMap(hardware);
-    }
-
-    public void init(Variables var) {
-        strafe = new Motors(var);
-        sensors = new Sensors(var);
-    }
 
     public double getAngle() {
         Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -128,6 +138,7 @@ public class Variables {
 
     public void resetAngle() {
         lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
         relativeAngle = 0;
     }
 

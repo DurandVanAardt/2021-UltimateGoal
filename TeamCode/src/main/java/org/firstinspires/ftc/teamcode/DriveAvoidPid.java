@@ -38,7 +38,7 @@ public class DriveAvoidPid extends LinearOpMode
 
     // called when init button is  pressed.
     @Override
-    public void runOpMode() throws InterruptedException
+    public void runOpMode()
     {
         leftMotor = hardwareMap.dcMotor.get("left_motor");
         rightMotor = hardwareMap.dcMotor.get("right_motor");
@@ -223,6 +223,7 @@ public class DriveAvoidPid extends LinearOpMode
 
         // rotate until turn is completed.
 
+        // power will be + on left turn.
         if (degrees < 0)
         {
             // On right turn we have to get off zero first.
@@ -233,20 +234,14 @@ public class DriveAvoidPid extends LinearOpMode
                 sleep(100);
             }
 
-            do
-            {
-                power = pidRotate.performPID(getAngle()); // power will be - on right turn.
-                leftMotor.setPower(-power);
-                rightMotor.setPower(power);
-            } while (opModeIsActive() && !pidRotate.onTarget());
         }
-        else    // left turn.
-            do
-            {
-                power = pidRotate.performPID(getAngle()); // power will be + on left turn.
-                leftMotor.setPower(-power);
-                rightMotor.setPower(power);
-            } while (opModeIsActive() && !pidRotate.onTarget());
+        // left turn.
+        do
+        {
+            power = pidRotate.performPID(getAngle()); // power will be - on right turn.
+            leftMotor.setPower(-power);
+            rightMotor.setPower(power);
+        } while (opModeIsActive() && !pidRotate.onTarget());
 
         // turn the motors off.
         rightMotor.setPower(0);
