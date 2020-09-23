@@ -25,6 +25,8 @@ public class Variables {
     double distanceL;
     double distanceR;
     double distanceB;
+    private Orientation lastAngles;
+    private double relativeAngle;
 
     public Variables(HardwareMap hardware) {
         robot = new RobotHardwareMap(hardware);
@@ -108,34 +110,36 @@ public class Variables {
         this.pitch = pitch;
     }
 
-    public double getAngle() {
-        return angle;
-    }
+//    public double getAngle() {
+//        return angle;
+//    }
 
     public void setAngle(double angle) {
         this.angle = angle;
     }
 
 
-//    public double getAngle() {
-//        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//
-//        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-//
-//        if (deltaAngle < -180)
-//            deltaAngle += 360;
-//        else if (deltaAngle > 180)
-//            deltaAngle -= 360;
-//
-//        relativeAngle += deltaAngle;
-//
-//        lastAngles = angles;
-//
-//        return relativeAngle;
-//    }
+    public double getAngle() {
+        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        relativeAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return relativeAngle;
+    }
 
     public void resetAngle() {
-        sensors.resetAngle();
+        lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        relativeAngle = 0;
     }
 
 //    public double getAngle2() {
