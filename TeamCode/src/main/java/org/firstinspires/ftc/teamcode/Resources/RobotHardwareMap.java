@@ -25,6 +25,7 @@ public class RobotHardwareMap {
     public DistanceSensor distanceB;
     public DigitalChannel downLimit;
     public BNO055IMU imu;
+    public Servo shooterAngleServo;
     public Servo RBG;
     public Servo LBG;
 
@@ -37,6 +38,7 @@ public class RobotHardwareMap {
         Claw = hardwareMap.get(Servo.class,"claw");
         RBG = hardwareMap.get(Servo.class, "RBG");
         LBG = hardwareMap.get(Servo.class, "LBG");
+//        shooterAngleServo = hardwareMap.get(Servo.class, "shooterAngleServo");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         initializeIMU();
 
