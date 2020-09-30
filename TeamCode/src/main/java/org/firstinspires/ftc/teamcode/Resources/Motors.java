@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode.Resources;
 
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 
+@SuppressWarnings("unused")
 public class Motors {
     private Variables var;
     PIDController           pidRotate, pidDrive, pidStrafe;
 
     public Motors(Variables var) {
-        this.var = var;
         pidRotate = new PIDController(.003, .00003, 0);
+        this.var = var;
         pidDrive = new PIDController(.05, 0, 0);
         pidStrafe = new PIDController(.05,0,0);
 
@@ -44,19 +45,19 @@ public class Motors {
         var.robot.rightBack.setPower(v4 * speedControl);
 
     }
-    public void driveStrafe(double angle, double speed) {
+    
+    public void driveStrafe(double angle, double speed, boolean check) {
 
-//        if (left_stick_x == 0 && left_stick_y == 0) {
-//            var.resetAngle();
-//        }
-//
-//        double correction = pidStrafe.performPID(var.getAngle());
-//        right_stick_x += correction;
+        if (!check) {
+            var.resetAngle();
+        }
 
-        double v1 = speed * Math.sin(angle)/* - correction*/;
-        double v2 = speed * Math.cos(angle)/* + correction*/;
-        double v3 = speed * Math.cos(angle)/* - correction*/;
-        double v4 = speed * Math.sin(angle)/* + correction*/;
+        double correction = pidStrafe.performPID(var.getAngle());
+
+        double v1 = speed * Math.sin(angle) - correction;
+        double v2 = speed * Math.cos(angle) + correction;
+        double v3 = speed * Math.cos(angle) - correction;
+        double v4 = speed * Math.sin(angle) + correction;
 
         var.robot.leftFront.setPower(v1);
         var.robot.rightFront.setPower(v2);

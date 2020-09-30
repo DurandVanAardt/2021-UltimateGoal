@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
@@ -17,10 +14,10 @@ public class Test extends OpMode {
     Variables var;
     Motors motors;
     RobotHardwareMap robot;
-    private double hingeHeight;
-    private double towerHeight;
-    private double cameraDistance;
-    private double shooterAngle;
+//    private double hingeHeight;
+//    private double towerHeight;
+//    private double cameraDistance;
+//    private double shooterAngle;
 
     @Override
     public void init() {
@@ -29,7 +26,7 @@ public class Test extends OpMode {
         robot = var.robot;
     }
 
-    boolean xy = true;
+//    boolean xy = true;
     @Override
     public void loop() {
 
@@ -53,23 +50,24 @@ public class Test extends OpMode {
 //        }
 
         if (gamepad1.b) {
-            motors.driveStrafe(135 * Math.PI / 180, 1);
-        }else
-        if (gamepad1.y) {
-            motors.driveStrafe(45 * Math.PI / 180, 1);
-        }else
-        if (gamepad1.x) {
-            motors.driveStrafe(-45 * Math.PI / 180, 1);
-        }else
-        if (gamepad1.a) {
-            motors.driveStrafe(-135 * Math.PI / 180, 1);
+            // right
+            motors.driveStrafe(135 * Math.PI / 180, 1, true);
+        }else if (gamepad1.y) {
+            // forward
+            motors.driveStrafe(45 * Math.PI / 180, 1, true);
+        }else if (gamepad1.x) {
+            // left
+            motors.driveStrafe(-45 * Math.PI / 180, 1, true);
+        }else if (gamepad1.a) {
+            // reverse
+            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
         }else {
-            motors.stop();
+            motors.driveStrafe(0, 0, false);
         }
 
-        telemetry.addData("hi", (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) * 180 / Math.PI);
-        telemetry.addData("x", gamepad1.left_stick_x);
-        telemetry.addData("y", gamepad1.left_stick_y);
+//        telemetry.addData("hi", (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) * 180 / Math.PI);
+//        telemetry.addData("x", gamepad1.left_stick_x);
+//        telemetry.addData("y", gamepad1.left_stick_y);
 
 
 //        double distanceL = var.robot.distanceL.getDistance(DistanceUnit.MM);
