@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 import org.firstinspires.ftc.teamcode.Resources.Sensors;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 
+@SuppressWarnings("unused")
 public class Variables {
     public RobotHardwareMap robot;
     public Motors motors;
@@ -26,7 +27,7 @@ public class Variables {
     double distanceR;
     double distanceB;
     private Orientation lastAngles;
-    private double relativeAngle;
+    private double globalAngle;
 
     public Variables(HardwareMap hardware) {
         robot = new RobotHardwareMap(hardware);
@@ -35,6 +36,7 @@ public class Variables {
     public void init(Variables var) {
         motors = new Motors(var);
         sensors = new Sensors(var);
+        resetAngle();
     }
 
     public double getTrueAngle() {
@@ -110,47 +112,21 @@ public class Variables {
         this.pitch = pitch;
     }
 
-//    public double getAngle() {
-//        return angle;
-//    }
-
     public void setAngle(double angle) {
         this.angle = angle;
     }
 
 
     public double getAngle() {
-        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-
-        if (deltaAngle < -180)
-            deltaAngle += 360;
-        else if (deltaAngle > 180)
-            deltaAngle -= 360;
-
-        relativeAngle += deltaAngle;
-
-        lastAngles = angles;
-
-        return relativeAngle;
+        return sensors.imu();
     }
 
     public void resetAngle() {
-        lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        relativeAngle = 0;
+//        lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//
+//        globalAngle = 0;
+        sensors.resetAngle();
     }
 
-//    public double getAngle2() {
-//        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-//    }
 
-    public void setOpModeActive(boolean b) {
-        this.OpModeActive = b;
-    }
-
-    public boolean isOpModeActive() {
-        return OpModeActive;
-    }
 }
