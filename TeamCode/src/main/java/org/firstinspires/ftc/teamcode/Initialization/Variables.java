@@ -30,6 +30,7 @@ public class Variables {
 
     public Variables(HardwareMap hardware) {
         robot = new RobotHardwareMap(hardware);
+        resetAngle();
     }
 
     public void init(Variables var) {

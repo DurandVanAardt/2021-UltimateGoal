@@ -67,6 +67,7 @@ public class Test extends OpMode {
             motors.stop();
         }
 
+
         telemetry.addData("hi", (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) * 180 / Math.PI);
         telemetry.addData("x", gamepad1.left_stick_x);
         telemetry.addData("y", gamepad1.left_stick_y);
