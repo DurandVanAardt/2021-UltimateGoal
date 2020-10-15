@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 import org.firstinspires.ftc.teamcode.Resources.PIDController;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
-
 import java.util.Locale;
 
 import static java.lang.Double.valueOf;
@@ -24,6 +23,7 @@ public class TestPID extends LinearOpMode {
 
     Variables var;
     Motors motors;
+
     RobotHardwareMap robot;
     private Orientation angles;
     private boolean start = true;
@@ -31,6 +31,7 @@ public class TestPID extends LinearOpMode {
     private boolean startR = true;
     private boolean stopL = true;
     private boolean stopR = true;
+
     private double SP;
     private double PV;
     private double errorPower;
@@ -75,19 +76,16 @@ public class TestPID extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            if(gamepad1.left_trigger!= 0 ) {
-                motors.driveStrafe(45 * Math.PI / 180, 1, true);
-            }
-            if(gamepad1.right_trigger!= 0 ) {
-                motors.driveStrafe(-45 * Math.PI / 180, 1 , true);
-            }
             PIDStrafeRTrigger(gamepad1.right_trigger, gamepad1.right_trigger > 0);
 
             PIDStrafeLTrigger(gamepad1.left_trigger, gamepad1.left_trigger > 0);
-
             drive(gamepad1.right_stick_x, gamepad1.left_stick_y);
 
-            errorPower = ((SP - PV)/SP);
+
+ }
+                // left
+                motors.driveStrafe(-45 * Math.PI / 180, 1, true);
+
 
             boolean stop;
             if ((gamepad1.a || turningA) && !turningB && !turningX && !turningY) {
@@ -121,7 +119,7 @@ public class TestPID extends LinearOpMode {
             telemetry.update();
         }
 
-    }
+
 
     private boolean PIDStrafeLToWall(double power, double wallDistance) {
         PV/*Process Variable*/ = -getAngle();
@@ -345,6 +343,7 @@ public class TestPID extends LinearOpMode {
 //                sleep(100);
 //            }
 //
+//
 //            do {
 //                power =  pidRotate3.performPID(getAngle()); // power will be - on right turn.
 //                robot.leftFront.setPower(-power);
@@ -397,12 +396,19 @@ public class TestPID extends LinearOpMode {
         double angle2 = PVFlip - SPFlip;
         pidRotate2.setSetpoint(SPFlip);
 
+
+       // errorPower = ((SP - PV)/SP);
+
+
         if (Math.abs(angle) <= 180){
-            //power = pidRotate.performPID(PV);
-            power = pidRotate.performPID(errorPower);
+
+            power = pidRotate.performPID(PV);
+
+//            power = pidRotate.performPID(errorPower);
         }else {
-            //power = pidRotate2.performPID(PV);
-            power = pidRotate2.performPID(errorPower);
+            power = pidRotate2.performPID(PV);
+
+//            power = pidRotate2.performPID(errorPower);
         }
 
 //        boolean turned = (SP <= PV + 1 && SP >= PV - 1);
@@ -467,7 +473,7 @@ public class TestPID extends LinearOpMode {
         angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return Double.parseDouble(formatAngle(angles.angleUnit, angles.firstAngle));
     }
-    
+
     private String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
     }

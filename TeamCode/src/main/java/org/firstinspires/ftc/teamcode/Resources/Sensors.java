@@ -13,6 +13,7 @@ import java.util.Locale;
 //@TeleOp(name = "Sensors", group = "TeleOp")
 @SuppressWarnings({"IntegerDivisionInFloatingPointContext", "unused"})
 public class Sensors {
+
     private Variables var;
 
     private int count = 0;
@@ -94,6 +95,7 @@ public class Sensors {
     }
 
     public void resetAngle() {
+        
         lastAngles = var.robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         var.setAngle(0);

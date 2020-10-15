@@ -18,8 +18,6 @@ public class RobotHardwareMap {
     public DcMotor rightBack;
     public DcMotor liftMotor;
     public Servo Claw;
-
-
     public DistanceSensor distanceR;
     public DistanceSensor distanceL;
     public DistanceSensor distanceFL;
@@ -41,7 +39,6 @@ public RevColorSensorV3 colourL;
     public void init(HardwareMap hardwareMap){
 
         Claw = hardwareMap.get(Servo.class,"claw");
-
         RBG = hardwareMap.get(Servo.class, "RBG");
         LBG = hardwareMap.get(Servo.class, "LBG");
 //        shooterAngleServo = hardwareMap.get(Servo.class, "shooterAngleServo");
