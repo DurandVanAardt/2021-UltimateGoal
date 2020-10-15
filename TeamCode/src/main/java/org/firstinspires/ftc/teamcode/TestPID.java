@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 import org.firstinspires.ftc.teamcode.Resources.PIDController;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
+
 import java.util.Locale;
 
 import static java.lang.Double.valueOf;
@@ -23,7 +26,6 @@ public class TestPID extends LinearOpMode {
 
     Variables var;
     Motors motors;
-
     RobotHardwareMap robot;
     private Orientation angles;
     private boolean start = true;
@@ -31,10 +33,8 @@ public class TestPID extends LinearOpMode {
     private boolean startR = true;
     private boolean stopL = true;
     private boolean stopR = true;
-
     private double SP;
     private double PV;
-    private double errorPower;
     private boolean strafeL;
     private boolean strafeR;
     private boolean turning;
@@ -42,8 +42,13 @@ public class TestPID extends LinearOpMode {
     private boolean turningB;
     private boolean turningX;
     private boolean turningY;
-    private double rotation;
-    PIDController pidRotate, pidRotate3, pidRotate2, pidDrive, pidStrafe;
+    PIDController pidRotate, pidRotate2, pidDrive, pidStrafe;
+    double gain = 0.0003;
+    double rate = 0.00003;
+    double resetTime = 0.0003;
+    private double angle;
+    private double angle2;
+    private boolean first;
 
 
     @Override
@@ -52,22 +57,17 @@ public class TestPID extends LinearOpMode {
         motors = var.motors;
         robot = var.robot;
 
-        pidRotate = new PIDController(.003, .00003, 0);
-        pidRotate.setOutputRange(-1, 1);
+        pidRotate = new PIDController(gain, resetTime, rate);
+//        pidRotate.setOutputRange(-1, 1);
         pidRotate.setInputRange(-180, 180);
         pidRotate.enable();
 
-        pidRotate2 = new PIDController(.003, .00003, 0);
-        pidRotate2.setOutputRange(-1, 1);
+        pidRotate2 = new PIDController(gain, resetTime, rate);
+//        pidRotate2.setOutputRange(-1, 1);
         pidRotate2.setInputRange(-180, 180);
         pidRotate2.enable();
 
-        pidRotate3 = new PIDController(.003, .00003, 0);
-        pidRotate3.setOutputRange(-1, 1);
-        pidRotate3.setInputRange(-180, 180);
-        pidRotate3.enable();
-
-        pidStrafe = new PIDController(.05, 0, 0);
+        pidStrafe = new PIDController(.05,0,0);
         pidStrafe.setOutputRange(0, 0.3);
         pidStrafe.setInputRange(-90, 90);
         pidStrafe.enable();
@@ -75,53 +75,95 @@ public class TestPID extends LinearOpMode {
         composeTelemetry();
         waitForStart();
 
-        while (opModeIsActive()) {
-            PIDStrafeRTrigger(gamepad1.right_trigger, gamepad1.right_trigger > 0);
+        while (opModeIsActive()){
+//                PIDStrafeRTrigger(gamepad1.right_trigger, gamepad1.right_trigger > 0);
+//
+//                PIDStrafeLTrigger(gamepad1.left_trigger, gamepad1.left_trigger > 0);
+//
+//                drive(gamepad1.right_stick_x, gamepad1.left_stick_y);
 
-            PIDStrafeLTrigger(gamepad1.left_trigger, gamepad1.left_trigger > 0);
-            drive(gamepad1.right_stick_x, gamepad1.left_stick_y);
+//            boolean stop;
+//            if ((gamepad1.a || turningA) && !turningB && !turningX && !turningY){
+//                    stop = PIDTurn(180);
+//                    turningA = stop;
+//                }
+//                if ((gamepad1.b || turningB) && !turningA && !turningX && !turningY){
+//                    stop = PIDTurn(90);
+//                   turningB = stop;
+//                }
+//                if ((gamepad1.x || turningX) && !turningA && !turningB && !turningY){
+//                    stop = PIDTurn(-90);
+//                    turningX = stop;
+//                }
+//                if ((gamepad1.y || turningY) && !turningA && !turningB && !turningX){
+//                    stop = PIDTurn(0);
+//                    turningY = stop;
+//                }
+//
+//                double liftPower = gamepad2.left_stick_y;
+//
+//                turning = (turningA || turningB || turningX || turningY);
+//
+//                robot.liftMotor.setPower(liftPower);
 
-
- }
-                // left
-                motors.driveStrafe(-45 * Math.PI / 180, 1, true);
-
-
-            boolean stop;
-            if ((gamepad1.a || turningA) && !turningB && !turningX && !turningY) {
-                stop = PIDTurn(180);
-                turningA = stop;
+            if (gamepad1.a) {
+                gain += 0.001;
             }
-            if ((gamepad1.b || turningB) && !turningA && !turningX && !turningY) {
-                stop = PIDTurn(90);
-                turningB = stop;
-            }
-            if ((gamepad1.x || turningX) && !turningA && !turningB && !turningY) {
-                stop = PIDTurn(-90);
-                turningX = stop;
-            }
-            if ((gamepad1.y || turningY) && !turningA && !turningB && !turningX) {
-                stop = PIDTurn(0);
-                turningY = stop;
+
+            if (gamepad1.b) {
+                gain -= 0.001;
             }
 
+            if (gamepad1.right_stick_button) {
+                gain /= 2;
+            }
 
-            double liftPower = gamepad2.left_stick_y;
+            if (gamepad1.dpad_up) {
+                resetTime -= 0.001;
+            }
 
-            turning = (turningA || turningB || turningX || turningY);
+            if (gamepad1.dpad_down) {
+                resetTime += 0.001;
+            }
 
-            robot.liftMotor.setPower(liftPower);
+            if (gamepad1.x) {
+                rate += 0.0001;
+            }
 
-            telemetry.addData("FM", robot.distanceFM.getDistance(DistanceUnit.MM));
-            telemetry.addData("B", robot.distanceB.getDistance(DistanceUnit.MM));
-            telemetry.addData("L", robot.distanceL.getDistance(DistanceUnit.MM));
-            telemetry.addData("R", robot.distanceR.getDistance(DistanceUnit.MM));
-            telemetry.update();
+            if (gamepad1.y) {
+                rate -= 0.0001;
+            }
+
+            pidRotate.setPID(gain, resetTime, rate);
+
+            pidRotate2.setPID(gain, resetTime, rate);
+
+            if (turning || gamepad1.left_stick_button) {
+//                if (first) {
+//                    PIDTurn2(90, true);
+//                    first = false;
+//                }
+
+                turning = PIDTurn(90);
+
+            } else
+                first = true;
+
+//            PIDTurn(90);
+
+//                telemetry.addData("FM", robot.distanceFM.getDistance(DistanceUnit.MM));
+//                telemetry.addData("B", robot.distanceB.getDistance(DistanceUnit.MM));
+//                telemetry.addData("L", robot.distanceL.getDistance(DistanceUnit.MM));
+//                telemetry.addData("R", robot.distanceR.getDistance(DistanceUnit.MM));
+            telemetry.addData("gain", gain);
+            telemetry.addData("resetTime", resetTime);
+            telemetry.addData("rate", rate);
+                telemetry.update();
         }
 
+    }
 
-
-    private boolean PIDStrafeLToWall(double power, double wallDistance) {
+    private boolean PIDStrafeLToWall(double power, double wallDistance){
         PV/*Process Variable*/ = -getAngle();
         boolean distanceReached = robot.distanceL.getDistance(DistanceUnit.MM) <= wallDistance;
         if (start) {
@@ -139,8 +181,8 @@ public class TestPID extends LinearOpMode {
         robot.rightFront.setPower(v2);
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(-v4);
-
-        if (distanceReached) {
+        
+        if (distanceReached){
             start = true;
 
             robot.leftFront.setPower(0);
@@ -152,7 +194,7 @@ public class TestPID extends LinearOpMode {
         return !distanceReached;
     }
 
-    private boolean PIDStrafeLFromWall(double power, double wallDistance) {
+    private boolean PIDStrafeLFromWall(double power, double wallDistance){
         PV/*Process Variable*/ = -getAngle();
         boolean distanceReached = robot.distanceL.getDistance(DistanceUnit.MM) >= wallDistance;
         if (start) {
@@ -171,7 +213,7 @@ public class TestPID extends LinearOpMode {
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(-v4);
 
-        if (distanceReached) {
+        if (distanceReached){
             start = true;
 
             robot.leftFront.setPower(0);
@@ -183,7 +225,7 @@ public class TestPID extends LinearOpMode {
         return !distanceReached;
     }
 
-    private boolean PIDStrafeRToWall(double power, double wallDistance) {
+    private boolean PIDStrafeRToWall(double power, double wallDistance){
         PV/*Process Variable*/ = -getAngle();
         boolean distanceReached = robot.distanceR.getDistance(DistanceUnit.MM) <= wallDistance;
         if (start) {
@@ -202,7 +244,7 @@ public class TestPID extends LinearOpMode {
         robot.leftBack.setPower(-v3);
         robot.rightBack.setPower(v4);
 
-        if (distanceReached) {
+        if (distanceReached){
             start = true;
 
             robot.leftFront.setPower(0);
@@ -214,7 +256,7 @@ public class TestPID extends LinearOpMode {
         return !distanceReached;
     }
 
-    private boolean PIDStrafeRFromWall(double power, double wallDistance) {
+    private boolean PIDStrafeRFromWall(double power, double wallDistance){
         PV/*Process Variable*/ = -getAngle();
         boolean distanceReached = robot.distanceR.getDistance(DistanceUnit.MM) >= wallDistance;
         if (start) {
@@ -233,7 +275,7 @@ public class TestPID extends LinearOpMode {
         robot.leftBack.setPower(-v3);
         robot.rightBack.setPower(v4);
 
-        if (distanceReached) {
+        if (distanceReached){
             start = true;
 
             robot.leftFront.setPower(0);
@@ -245,7 +287,7 @@ public class TestPID extends LinearOpMode {
         return !distanceReached;
     }
 
-    private void PIDStrafeLTrigger(double power, boolean strafe) {
+    private void PIDStrafeLTrigger(double power, boolean strafe){
         if (!strafe) {
             if (stopL) {
                 startL = true;
@@ -273,10 +315,10 @@ public class TestPID extends LinearOpMode {
         robot.rightFront.setPower(v2);
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(-v4);
-
+        
     }
 
-    private void PIDStrafeRTrigger(double power, boolean strafe) {
+    private void PIDStrafeRTrigger(double power, boolean strafe){
         if (!strafe) {
             if (stopR) {
                 startR = true;
@@ -304,80 +346,8 @@ public class TestPID extends LinearOpMode {
         robot.rightFront.setPower(-v2);
         robot.leftBack.setPower(-v3);
         robot.rightBack.setPower(v4);
-
+        
     }
-
-//    private boolean  pidRotate3(int degrees, double power) {
-//        // restart imu angle tracking.
-//      //resetAngle();
-//
-//        // if degrees > 359 we cap at 359 with same sign as original degrees.
-//        if (Math.abs(degrees) > 359) degrees = (int) Math.copySign(359, degrees);
-//
-//        // start pid controller. PID controller will monitor the turn angle with respect to the
-//        // target angle and reduce power as we approach the target angle. This is to prevent the
-//        // robots momentum from overshooting the turn after we turn off the power. The PID controller
-//        // reports onTarget() = true when the difference between turn angle and target angle is within
-//        // 1% of target (tolerance) which is about 1 degree. This helps prevent overshoot. Overshoot is
-//        // dependant on the motor and gearing configuration, starting power, weight of the robot and the
-//        // on target tolerance. If the controller overshoots, it will reverse the sign of the output
-//        // turning the robot back toward the setpoint value.
-//
-//        pidRotate.reset();
-//        pidRotate.setSetpoint(degrees);
-//        pidRotate.setInputRange(0, degrees);
-//        pidRotate.setOutputRange(0, power);
-//        pidRotate.setTolerance(1);
-//        pidRotate.enable();
-//
-//        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-//        // clockwise (right).
-//
-//        // rotate until turn is completed.
-//
-//        if (degrees < 0) {
-//            // On right turn we have to get off zero first.
-//            while (/*opModeIsActive()*/ getAngle() == 0) {
-//                robot.leftFront.setPower(power);
-//                robot.rightFront.setPower(-power);
-//                sleep(100);
-//            }
-//
-//
-//            do {
-//                power =  pidRotate3.performPID(getAngle()); // power will be - on right turn.
-//                robot.leftFront.setPower(-power);
-//                robot.rightFront.setPower(power);
-//            } while ( /*opModeIsActive()*/! pidRotate3.onTarget());
-//        } else    // left turn.
-//            do {
-//                power =  pidRotate3.performPID(getAngle()); // power will be + on left turn.
-//                robot.leftFront.setPower(-power);
-//                robot.rightFront.setPower(power);
-//            } while (/*opModeIsActive()*/  ! pidRotate3.onTarget());
-//
-//        // turn the motors off.
-//        robot.leftFront.setPower(0);
-//        robot.rightFront.setPower(0);
-//
-//        rotation = getAngle();
-//
-//        // wait for rotation to stop.
-//        sleep(500);
-//
-//        boolean turned = (SP <= PV + 1 && SP >= PV - 1);
-//
-//        robot.leftFront.setPower(-power);
-//        robot.rightFront.setPower(power);
-//        robot.leftBack.setPower(-power);
-//        robot.rightBack.setPower(power);
-//
-//        return ! pidRotate3.onTarget();
-//    }
-
-
-
-
 
     private boolean PIDTurn(double SP/*SetPoint*/){
         double power;
@@ -396,29 +366,78 @@ public class TestPID extends LinearOpMode {
         double angle2 = PVFlip - SPFlip;
         pidRotate2.setSetpoint(SPFlip);
 
-
-       // errorPower = ((SP - PV)/SP);
-
+        double errorPower = ((SP - PV)/SP);
+        double errorPowerFlip = ((SPFlip - PVFlip)/SPFlip);
 
         if (Math.abs(angle) <= 180){
-
-            power = pidRotate.performPID(PV);
-
-//            power = pidRotate.performPID(errorPower);
+//            power = pidRotate.performPID(PV);
+            power = pidRotate.performPID(errorPower);
         }else {
-            power = pidRotate2.performPID(PV);
-
-//            power = pidRotate2.performPID(errorPower);
+//            power = pidRotate2.performPID(PVFlip);
+            power = pidRotate2.performPID(errorPowerFlip);
         }
 
 //        boolean turned = (SP <= PV + 1 && SP >= PV - 1);
 
+        telemetry.addData("Power" , power);
+        telemetry.addData("PV", PV);
+        telemetry.addData("PVFlip", PVFlip);
         robot.leftFront.setPower(-power);
         robot.rightFront.setPower(power);
         robot.leftBack.setPower(-power);
         robot.rightBack.setPower(power);
 
         return !pidRotate.onTarget();
+    }
+
+    boolean PIDTurn2(double SP, boolean start) {
+
+        pidRotate.setTolerance(1);
+        pidRotate2.setTolerance(1);
+
+        double curAngle = getAngle();
+
+        if (start) {
+//            telemetry.addData("HI", "hi");
+            pidRotate.reset();
+            pidRotate2.reset();
+
+            double SPSign = SP / Math.abs(SP);
+            double SPFlip = SP - (180 * SPSign);
+
+//            angle = curAngle - SP;
+            pidRotate.setSetpoint(curAngle - SP);
+//            angle2 = PVFlip - SPFlip;
+            pidRotate2.setSetpoint(curAngle - SPFlip);
+            var.resetAngle();
+        }
+
+        double PV = var.getAngle();
+        double PVSign = curAngle / Math.abs(curAngle);
+        double PVFlip = curAngle - (180 * PVSign);
+
+        double power;
+
+        if (Math.abs(pidRotate.getSetpoint()) <= 180){
+            power = pidRotate.performPID(PV);
+        }else {
+            power = pidRotate2.performPID(PVFlip);
+        }
+
+        telemetry.addData("Power", power);
+        telemetry.addData("PV", PV);
+        telemetry.addData("PVFlip", PVFlip);
+//        telemetry.addData("Power", power);
+
+
+
+//        robot.leftFront.setPower(-power);
+//        robot.rightFront.setPower(power);
+//        robot.leftBack.setPower(-power);
+//        robot.rightBack.setPower(power);
+
+        return !pidRotate.onTarget();
+
     }
 
     private void drive(double rightStick, double leftStick){
