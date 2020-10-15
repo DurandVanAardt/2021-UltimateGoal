@@ -96,6 +96,8 @@ public class Sensors {
     public void resetAngle() {
         lastAngles = var.robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
+        globalAngle = 0;
+
         var.setAngle(0);
     }
 }

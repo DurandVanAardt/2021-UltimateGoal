@@ -43,6 +43,12 @@ public class TestPID extends LinearOpMode {
     private boolean turningX;
     private boolean turningY;
     PIDController pidRotate, pidRotate2, pidDrive, pidStrafe;
+    double gain = 0.0003;
+    double rate = 0.00003;
+    double resetTime = 0.0003;
+    private double angle;
+    private double angle2;
+    private boolean first;
 
 
     @Override
@@ -51,13 +57,13 @@ public class TestPID extends LinearOpMode {
         motors = var.motors;
         robot = var.robot;
 
-        pidRotate = new PIDController(.003, 1, 0);
-        pidRotate.setOutputRange(-1, 1);
+        pidRotate = new PIDController(gain, resetTime, rate);
+//        pidRotate.setOutputRange(-1, 1);
         pidRotate.setInputRange(-180, 180);
         pidRotate.enable();
 
-        pidRotate2 = new PIDController(.003, .00003, 0);
-        pidRotate2.setOutputRange(-1, 1);
+        pidRotate2 = new PIDController(gain, resetTime, rate);
+//        pidRotate2.setOutputRange(-1, 1);
         pidRotate2.setInputRange(-180, 180);
         pidRotate2.enable();
 
@@ -70,40 +76,88 @@ public class TestPID extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-                PIDStrafeRTrigger(gamepad1.right_trigger, gamepad1.right_trigger > 0);
+//                PIDStrafeRTrigger(gamepad1.right_trigger, gamepad1.right_trigger > 0);
+//
+//                PIDStrafeLTrigger(gamepad1.left_trigger, gamepad1.left_trigger > 0);
+//
+//                drive(gamepad1.right_stick_x, gamepad1.left_stick_y);
 
-                PIDStrafeLTrigger(gamepad1.left_trigger, gamepad1.left_trigger > 0);
+//            boolean stop;
+//            if ((gamepad1.a || turningA) && !turningB && !turningX && !turningY){
+//                    stop = PIDTurn(180);
+//                    turningA = stop;
+//                }
+//                if ((gamepad1.b || turningB) && !turningA && !turningX && !turningY){
+//                    stop = PIDTurn(90);
+//                   turningB = stop;
+//                }
+//                if ((gamepad1.x || turningX) && !turningA && !turningB && !turningY){
+//                    stop = PIDTurn(-90);
+//                    turningX = stop;
+//                }
+//                if ((gamepad1.y || turningY) && !turningA && !turningB && !turningX){
+//                    stop = PIDTurn(0);
+//                    turningY = stop;
+//                }
+//
+//                double liftPower = gamepad2.left_stick_y;
+//
+//                turning = (turningA || turningB || turningX || turningY);
+//
+//                robot.liftMotor.setPower(liftPower);
 
-                drive(gamepad1.right_stick_x, gamepad1.left_stick_y);
+            if (gamepad1.a) {
+                gain += 0.001;
+            }
 
-            boolean stop;
-            if ((gamepad1.a || turningA) && !turningB && !turningX && !turningY){
-                    stop = PIDTurn(180);
-                    turningA = stop;
-                }
-                if ((gamepad1.b || turningB) && !turningA && !turningX && !turningY){
-                    stop = PIDTurn(90);
-                   turningB = stop;
-                }
-                if ((gamepad1.x || turningX) && !turningA && !turningB && !turningY){
-                    stop = PIDTurn(-90);
-                    turningX = stop;
-                }
-                if ((gamepad1.y || turningY) && !turningA && !turningB && !turningX){
-                    stop = PIDTurn(0);
-                    turningY = stop;
-                }
+            if (gamepad1.b) {
+                gain -= 0.001;
+            }
 
-                double liftPower = gamepad2.left_stick_y;
+            if (gamepad1.right_stick_button) {
+                gain /= 2;
+            }
 
-                turning = (turningA || turningB || turningX || turningY);
+            if (gamepad1.dpad_up) {
+                resetTime -= 0.001;
+            }
 
-                robot.liftMotor.setPower(liftPower);
+            if (gamepad1.dpad_down) {
+                resetTime += 0.001;
+            }
 
-                telemetry.addData("FM", robot.distanceFM.getDistance(DistanceUnit.MM));
-                telemetry.addData("B", robot.distanceB.getDistance(DistanceUnit.MM));
-                telemetry.addData("L", robot.distanceL.getDistance(DistanceUnit.MM));
-                telemetry.addData("R", robot.distanceR.getDistance(DistanceUnit.MM));
+            if (gamepad1.x) {
+                rate += 0.0001;
+            }
+
+            if (gamepad1.y) {
+                rate -= 0.0001;
+            }
+
+            pidRotate.setPID(gain, resetTime, rate);
+
+            pidRotate2.setPID(gain, resetTime, rate);
+
+            if (turning || gamepad1.left_stick_button) {
+//                if (first) {
+//                    PIDTurn2(90, true);
+//                    first = false;
+//                }
+
+                turning = PIDTurn(90);
+
+            } else
+                first = true;
+
+//            PIDTurn(90);
+
+//                telemetry.addData("FM", robot.distanceFM.getDistance(DistanceUnit.MM));
+//                telemetry.addData("B", robot.distanceB.getDistance(DistanceUnit.MM));
+//                telemetry.addData("L", robot.distanceL.getDistance(DistanceUnit.MM));
+//                telemetry.addData("R", robot.distanceR.getDistance(DistanceUnit.MM));
+            telemetry.addData("gain", gain);
+            telemetry.addData("resetTime", resetTime);
+            telemetry.addData("rate", rate);
                 telemetry.update();
         }
 
@@ -312,20 +366,78 @@ public class TestPID extends LinearOpMode {
         double angle2 = PVFlip - SPFlip;
         pidRotate2.setSetpoint(SPFlip);
 
+        double errorPower = ((SP - PV)/SP);
+        double errorPowerFlip = ((SPFlip - PVFlip)/SPFlip);
+
         if (Math.abs(angle) <= 180){
-            power = pidRotate.performPID(PV);
+//            power = pidRotate.performPID(PV);
+            power = pidRotate.performPID(errorPower);
         }else {
-            power = pidRotate2.performPID(PV);
+//            power = pidRotate2.performPID(PVFlip);
+            power = pidRotate2.performPID(errorPowerFlip);
         }
 
 //        boolean turned = (SP <= PV + 1 && SP >= PV - 1);
 
+        telemetry.addData("Power" , power);
+        telemetry.addData("PV", PV);
+        telemetry.addData("PVFlip", PVFlip);
         robot.leftFront.setPower(-power);
         robot.rightFront.setPower(power);
         robot.leftBack.setPower(-power);
         robot.rightBack.setPower(power);
 
         return !pidRotate.onTarget();
+    }
+
+    boolean PIDTurn2(double SP, boolean start) {
+
+        pidRotate.setTolerance(1);
+        pidRotate2.setTolerance(1);
+
+        double curAngle = getAngle();
+
+        if (start) {
+//            telemetry.addData("HI", "hi");
+            pidRotate.reset();
+            pidRotate2.reset();
+
+            double SPSign = SP / Math.abs(SP);
+            double SPFlip = SP - (180 * SPSign);
+
+//            angle = curAngle - SP;
+            pidRotate.setSetpoint(curAngle - SP);
+//            angle2 = PVFlip - SPFlip;
+            pidRotate2.setSetpoint(curAngle - SPFlip);
+            var.resetAngle();
+        }
+
+        double PV = var.getAngle();
+        double PVSign = curAngle / Math.abs(curAngle);
+        double PVFlip = curAngle - (180 * PVSign);
+
+        double power;
+
+        if (Math.abs(pidRotate.getSetpoint()) <= 180){
+            power = pidRotate.performPID(PV);
+        }else {
+            power = pidRotate2.performPID(PVFlip);
+        }
+
+        telemetry.addData("Power", power);
+        telemetry.addData("PV", PV);
+        telemetry.addData("PVFlip", PVFlip);
+//        telemetry.addData("Power", power);
+
+
+
+//        robot.leftFront.setPower(-power);
+//        robot.rightFront.setPower(power);
+//        robot.leftBack.setPower(-power);
+//        robot.rightBack.setPower(power);
+
+        return !pidRotate.onTarget();
+
     }
 
     private void drive(double rightStick, double leftStick){
@@ -380,7 +492,7 @@ public class TestPID extends LinearOpMode {
         angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return Double.parseDouble(formatAngle(angles.angleUnit, angles.firstAngle));
     }
-    
+
     private String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
     }

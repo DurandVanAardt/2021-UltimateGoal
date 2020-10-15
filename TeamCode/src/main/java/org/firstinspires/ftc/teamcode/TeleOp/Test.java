@@ -63,6 +63,7 @@ public class Test extends OpMode {
             motors.driveStrafe(-135 * Math.PI / 180, 1, true);
         }else {
             motors.driveStrafe(0, 0, false);
+
         }
 
 //        telemetry.addData("hi", (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) * 180 / Math.PI);
