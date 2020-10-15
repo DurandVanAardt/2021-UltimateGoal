@@ -11,8 +11,8 @@ import java.util.Locale;
 
 
 //@TeleOp(name = "Sensors", group = "TeleOp")
-@SuppressWarnings("IntegerDivisionInFloatingPointContext")
-public class Sensors extends Thread {
+@SuppressWarnings({"IntegerDivisionInFloatingPointContext", "unused"})
+public class Sensors {
     private Variables var;
 
     private int count = 0;
@@ -21,30 +21,15 @@ public class Sensors extends Thread {
     private double distanceBAvg;
     private double distanceFMAvg;
     private Orientation lastAngles;
-//    public BNO055IMU imu;
+    private double globalAngle;
 
     public Sensors(Variables var){
 
         this.var = var;
-        var.setOpModeActive(true);
-
     }
 
 
-    @Override
-    public void run(){
-
-        while (var.isOpModeActive()){
-            imu();
-            distanceSensors();
-            colourSensor();
-            encoders();
-//            setVar();
-//            var.count ++;
-        }
-    }
-
-    private void imu() {
+    public double imu() {
         Orientation angles = var.robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         var.setHeading(formatAngle(angles.angleUnit, angles.firstAngle));
         var.setRoll(formatAngle(angles.angleUnit, angles.secondAngle));
@@ -57,10 +42,11 @@ public class Sensors extends Thread {
         else if (deltaAngle > 180)
             deltaAngle -= 360;
 
-        var.setAngle(var.getAngle() + deltaAngle);
+        globalAngle += deltaAngle;
 
         lastAngles = angles;
 
+        return globalAngle;
     }
 
     private void encoders() {
@@ -109,6 +95,8 @@ public class Sensors extends Thread {
 
     public void resetAngle() {
         lastAngles = var.robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
 
         var.setAngle(0);
     }
