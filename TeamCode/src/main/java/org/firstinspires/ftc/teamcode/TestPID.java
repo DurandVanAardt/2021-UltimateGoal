@@ -61,16 +61,6 @@ public class TestPID extends LinearOpMode {
         motors = var.motors;
         robot = var.robot;
 
-        pidRotate = new PIDController(gain, resetTime, rate);
-        //pidRotate.setOutputRange(-1, 1);
-        pidRotate.setInputRange(-180, 180);
-        pidRotate.enable();
-
-        pidRotate2 = new PIDController(gain, resetTime, rate);
-//        pidRotate2.setOutputRange(-1, 1);
-        pidRotate2.setInputRange(-180, 180);
-        pidRotate2.enable();
-
         pidStrafe = new PIDController(.05, 0, 0);
         pidStrafe.setOutputRange(0, 0.3);
         pidStrafe.setInputRange(-90, 90);
@@ -82,71 +72,9 @@ public class TestPID extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-//                PIDStrafeRTrigger(gamepad1.right_trigger, gamepad1.right_trigger > 0);
-//
-//                PIDStrafeLTrigger(gamepad1.left_trigger, gamepad1.left_trigger > 0);
-//
-//                drive(gamepad1.right_stick_x, gamepad1.left_stick_y);
 
-//            boolean stop;
-//            if ((gamepad1.a || turningA) && !turningB && !turningX && !turningY){
-//                    stop = PIDTurn(180);
-//                    turningA = stop;
-//                }
-//                if ((gamepad1.b || turningB) && !turningA && !turningX && !turningY){
-//                    stop = PIDTurn(90);
-//                   turningB = stop;
-//                }
-//                if ((gamepad1.x || turningX) && !turningA && !turningB && !turningY){
-//                    stop = PIDTurn(-90);
-//                    turningX = stop;
-//                }
-//                if ((gamepad1.y || turningY) && !turningA && !turningB && !turningX){
-//                    stop = PIDTurn(0);
-//                    turningY = stop;
-//                }
-//
-//                double liftPower = gamepad2.left_stick_y;
-//
-//                turning = (turningA || turningB || turningX || turningY);
-//
-//                robot.liftMotor.setPower(liftPower);
+            mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-
-
-            if (gamepad1.a) {
-                gain += 0.001;
-            }
-
-            if (gamepad1.b) {
-                gain -= 0.001;
-            }
-
-
-            if (gamepad1.right_stick_button) {
-                gain /= 2;
-            }
-
-            if (gamepad1.dpad_up) {
-                resetTime -= 0.001;
-            }
-
-            if (gamepad1.dpad_down) {
-                resetTime += 0.001;
-            }
-
-            if (gamepad1.x) {
-                rate += 0.0001;
-            }
-
-            if (gamepad1.y) {
-                rate -= 0.0001;
-            }
-
-            pidRotate.setPID(gain, resetTime, rate);
-
-            pidRotate2.setPID(gain, resetTime, rate);
 
             if (turning || gamepad1.left_stick_button) {
                 if (turnFirst) {
@@ -474,7 +402,7 @@ mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
     }
 
 
-
+/*
     private boolean PIDTurn(double SP)
     {
 
@@ -496,7 +424,8 @@ mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
         return !pidRotate.onTarget();
     }
 
-    /*
+    */
+/*
 
     private boolean PIDTurn(double SP){
         double power;
@@ -539,6 +468,7 @@ mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
         return !pidRotate.onTarget();
     }
     */
+/*
     boolean PIDTurn2(double SP, boolean start) {
 
         pidRotate.setTolerance(1);
@@ -587,7 +517,7 @@ mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
         return !pidRotate.onTarget();
 
-    }
+    }*/
 
     private void drive(double rightStick, double leftStick){
         if (!strafeR && !strafeL && !turning){

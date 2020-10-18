@@ -7,8 +7,7 @@ import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
-import org.firstinspires.ftc.teamcode.Resources.PIDController;
-import org.firstinspires.ftc.teamcode.TestPID;
+
 
 @TeleOp(name = "Test", group = "TeleOp")
 public class Test extends OpMode {
@@ -16,10 +15,13 @@ public class Test extends OpMode {
     Variables var;
     Motors motors;
     RobotHardwareMap robot;
-//    private double hingeHeight;
-//    private double towerHeight;
-//    private double cameraDistance;
-//    private double shooterAngle;
+
+    DriveTrain driveTrain = DriveTrain.STOP;
+    Shooter shooter = Shooter.REST;
+
+    private boolean turnFirst = true;
+    private boolean begin;
+    private boolean turning = false;
 
     @Override
     public void init() {
@@ -27,70 +29,39 @@ public class Test extends OpMode {
         motors = var.motors;
 
         robot = var.robot;
+
     }
 
-//    boolean xy = true;
     @Override
     public void loop() {
 
-//        if (gamepad1.x || gamepad1.y) {
-//            xy = gamepad1.x;
-//        }
-//
-//        if (xy) {
-//            motors.driveStrafe(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x,1);
-//        }
-//
-//        else {
-//
-//            if (gamepad1.right_trigger != 0) {
-//                motors.strafeR(gamepad1.right_trigger, 1);
-//            } else if (gamepad1.left_trigger != 0) {
-//                motors.strafeL(gamepad1.left_trigger, 1);
-//            } else
-//                motors.stop();
-//
-//        }
-
-        if (gamepad1.left_stick_y <0 ) {
-
-            // forward
-            motors.driveStrafe(45 * Math.PI / 180, 1, true);
+        if (gamepad1.right_trigger != 0)
+            driveTrain = DriveTrain.STRAFER;
+        else
+        if (gamepad1.left_trigger != 0)
+            driveTrain = DriveTrain.STRAFEL;
+        else
+        if (gamepad1.left_stick_y != 0 || gamepad1.right_stick_x != 0)
+            driveTrain = DriveTrain.DRIVE;
+        else
+            driveTrain = DriveTrain.STOP;
 
 
-        }else if (gamepad1.left_stick_y >0) {
-            // reverse
-            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
-        }else {
-            motors.driveStrafe(0, 0, false);
-
+        if (turning || gamepad1.a) {
+            if (turnFirst) {
+                var.resetAngle();
+                turnFirst = false;
+                motors.pidRotate.reset();
+                motors.pidRotate.enable();
+                turning = motors.rotate(90);
+            }
+            turning = motors.rotate(90);
         }
 
-
-        if (gamepad1.b) {
-            // right
-            motors.driveStrafe(135 * Math.PI / 180, 1, true);
-        }else if (gamepad1.y) {
-            // forward
-            motors.driveStrafe(45 * Math.PI / 180, 1, true);
-        }else if (gamepad1.x) {
-            // left
-            motors.driveStrafe(-45 * Math.PI / 180, 1, true);
-        }else if (gamepad1.a) {
-            // reverse
-            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
-        }else {
-            motors.driveStrafe(0, 0, false);
-
-        }
-
-//        telemetry.addData("hi", (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) * 180 / Math.PI);
-//        telemetry.addData("x", gamepad1.left_stick_x);
-//        telemetry.addData("y", gamepad1.left_stick_y);
+        stateMachine(driveTrain, shooter);
 
 
 //        double distanceL = var.robot.distanceL.getDistance(DistanceUnit.MM);
-//
 //
 //        hingeHeight = 100; //die hoogte vd shooter (vanaf camera)
 //
@@ -106,5 +77,65 @@ public class Test extends OpMode {
 
     @Override
     public void stop() {
+    }
+
+    private void stateMachine(DriveTrain driveTrain, Shooter shooter) {
+        driveTrainState(driveTrain);
+        shooterState(shooter);
+    }
+
+    private void driveTrainState(DriveTrain driveTrain) {
+
+        switch (driveTrain) {
+
+            case STRAFEL:
+                motors.driveStrafe(-90, gamepad1.left_trigger, begin);
+
+                if (begin)
+                    begin = false;
+
+                break;
+
+            case STRAFER:
+                motors.driveStrafe(90, gamepad1.right_trigger, begin);
+
+                if (begin)
+                    begin = false;
+
+                break;
+
+            case DRIVE:
+                motors.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, begin);
+
+                if (begin)
+                    begin = false;
+
+                break;
+
+            case STOP:
+                motors.driveStrafe(0,0,true);
+
+                begin = true;
+
+                break;
+        }
+    }
+
+    private void shooterState(Shooter shooter) {
+
+        switch (shooter) {
+
+            case FIRE:
+                break;
+
+            case ADJUSTANGLE:
+                break;
+
+            case PICKUP:
+                break;
+
+            case REST:
+                break;
+        }
     }
 }
