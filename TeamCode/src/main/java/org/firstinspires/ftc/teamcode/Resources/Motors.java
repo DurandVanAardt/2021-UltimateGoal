@@ -13,12 +13,15 @@ public class Motors {
         pidDrive = new PIDController(.05, 0, 0);
         pidStrafe = new PIDController(.05,0,0);
 
+
+
         pidStrafe.setSetpoint(0);
         pidStrafe.setOutputRange(0, 0.3);
         pidStrafe.setInputRange(-90, 90);
         pidStrafe.enable();
 
     }
+
 
     public void driveStrafe(double left_stick_x, double left_stick_y, double right_stick_x, double speedControl) {
         left_stick_x *= -1;
