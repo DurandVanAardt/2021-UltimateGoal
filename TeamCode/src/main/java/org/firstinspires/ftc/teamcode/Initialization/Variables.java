@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 import org.firstinspires.ftc.teamcode.Resources.Sensors;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 
+import java.util.Locale;
+
 @SuppressWarnings("unused")
 public class Variables {
     public RobotHardwareMap robot;
@@ -40,12 +42,12 @@ public class Variables {
        resetAngle();
     }
 
-    public double getTrueAngle() {
-        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        trueAngle = angles.firstAngle;
-        return trueAngle;
-    }
+//    public double getTrueAngle() {
+//        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//
+//        trueAngle = angles.firstAngle;
+//        return trueAngle;
+//    }
 
     public double getAvgEncoder() {
         return avgEncoder;
@@ -129,5 +131,20 @@ public class Variables {
         sensors.resetAngle();
     }
 
+    public double getTrueAngle() {
+        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        trueAngle = Double.parseDouble(formatAngle(angles.angleUnit, angles.firstAngle));
+
+        return trueAngle;
+    }
+
+    private String formatAngle(AngleUnit angleUnit, double angle) {
+        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
+    }
+
+    private String formatDegrees(double degrees){
+        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+    }
 
 }
