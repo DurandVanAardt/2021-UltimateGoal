@@ -15,16 +15,13 @@ public class Test extends OpMode {
     Variables var;
     Motors motors;
     RobotHardwareMap robot;
+
     DriveTrain driveTrain = DriveTrain.STOP;
     Shooter shooter = Shooter.REST;
-    boolean turnFirst = true;
 
+    private boolean turnFirst = true;
     private boolean begin;
     private boolean turning = false;
-//    private double hingeHeight;
-//    private double towerHeight;
-//    private double cameraDistance;
-//    private double shooterAngle;
 
     @Override
     public void init() {
@@ -35,7 +32,6 @@ public class Test extends OpMode {
 
     }
 
-//    boolean xy = true;
     @Override
     public void loop() {
 
@@ -65,45 +61,7 @@ public class Test extends OpMode {
         stateMachine(driveTrain, shooter);
 
 
-
-//        if (gamepad1.left_stick_y <0 ) {
-//            // forward
-//            motors.driveStrafe(0, 1, true);
-//
-//        }else if (gamepad1.left_stick_y >0) {
-//            // reverse
-//            motors.driveStrafe(-135, 1, true);
-//
-//        }else {
-//            motors.driveStrafe(0, 0, false);
-//
-//        }
-
-
-//        if (gamepad1.y) {
-//            // forward
-//            motors.driveStrafe(0, 1, true);
-//        }else if (gamepad1.x) {
-//            // left
-//            motors.driveStrafe(-90, 1, true);
-//        }else if (gamepad1.a) {
-//            // reverse
-//            motors.driveStrafe(-180, 1, true);
-//        }else if (gamepad1.b) {
-//            // right
-//            motors.driveStrafe(90, 1, true);
-//        }else {
-//            motors.driveStrafe(0, 0, false);
-//
-//        }
-
-//        telemetry.addData("hi", (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) * 180 / Math.PI);
-//        telemetry.addData("x", gamepad1.left_stick_x);
-//        telemetry.addData("y", gamepad1.left_stick_y);
-
-
 //        double distanceL = var.robot.distanceL.getDistance(DistanceUnit.MM);
-//
 //
 //        hingeHeight = 100; //die hoogte vd shooter (vanaf camera)
 //
@@ -122,8 +80,10 @@ public class Test extends OpMode {
     }
 
     private void stateMachine(DriveTrain driveTrain, Shooter shooter) {
-
+        driveTrainState(driveTrain);
+        shooterState(shooter);
     }
+
     private void driveTrainState(DriveTrain driveTrain) {
 
         switch (driveTrain) {
@@ -167,10 +127,13 @@ public class Test extends OpMode {
 
             case FIRE:
                 break;
+
             case ADJUSTANGLE:
                 break;
+
             case PICKUP:
                 break;
+
             case REST:
                 break;
         }
