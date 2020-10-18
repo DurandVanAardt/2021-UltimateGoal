@@ -31,12 +31,13 @@ public class Variables {
 
     public Variables(HardwareMap hardware) {
         robot = new RobotHardwareMap(hardware);
+        //resetAngle();
     }
 
     public void init(Variables var) {
         motors = new Motors(var);
         sensors = new Sensors(var);
-        resetAngle();
+       resetAngle();
     }
 
     public double getTrueAngle() {
