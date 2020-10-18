@@ -29,19 +29,19 @@ import org.firstinspires.ftc.teamcode.Resources.PIDController;
 public class DriveAvoidPid extends LinearOpMode
 {
     DcMotor                 leftMotor, rightMotor;
-    TouchSensor             touch;
+//    TouchSensor             touch;
     BNO055IMU               imu;
     Orientation             lastAngles = new Orientation();
     double                  globalAngle, power = .30, correction, rotation;
-    boolean                 aButton, bButton, touched;
+    boolean                 aButton, bButton;
     PIDController pidRotate, pidDrive;
 
     // called when init button is  pressed.
     @Override
     public void runOpMode()
     {
-        leftMotor = hardwareMap.dcMotor.get("left_motor");
-        rightMotor = hardwareMap.dcMotor.get("right_motor");
+        leftMotor = hardwareMap.dcMotor.get("leftmotor");
+        rightMotor = hardwareMap.dcMotor.get("rightmotor");
 
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -49,7 +49,7 @@ public class DriveAvoidPid extends LinearOpMode
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // get a reference to REV Touch sensor.
-        touch = hardwareMap.touchSensor.get("touch_sensor");
+//        touch = hardwareMap.touchSensor.get("touch_sensor");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -127,9 +127,9 @@ public class DriveAvoidPid extends LinearOpMode
 
             aButton = gamepad1.a;
             bButton = gamepad1.b;
-            touched = touch.isPressed();
+//            touched = touch.isPressed();
 
-            if (touched || aButton || bButton)
+            if (aButton || bButton)
             {
                 // backup.
                 leftMotor.setPower(-power);
@@ -142,7 +142,7 @@ public class DriveAvoidPid extends LinearOpMode
                 rightMotor.setPower(0);
 
                 // turn 90 degrees right.
-                if (touched || aButton) rotate(-90, power);
+                if (aButton) rotate(-90, power);
 
                 // turn 90 degrees left.
                 if (bButton) rotate(90, power);

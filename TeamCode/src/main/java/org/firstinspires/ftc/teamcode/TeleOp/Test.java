@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
+import org.firstinspires.ftc.teamcode.Resources.PIDController;
+import org.firstinspires.ftc.teamcode.TestPID;
 
 @TeleOp(name = "Test", group = "TeleOp")
 public class Test extends OpMode {
@@ -49,6 +51,21 @@ public class Test extends OpMode {
 //                motors.stop();
 //
 //        }
+
+        if (gamepad1.left_stick_y <0 ) {
+
+            // forward
+            motors.driveStrafe(45 * Math.PI / 180, 1, true);
+
+
+        }else if (gamepad1.left_stick_y >0) {
+            // reverse
+            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
+        }else {
+            motors.driveStrafe(0, 0, false);
+
+        }
+
 
         if (gamepad1.b) {
             // right
