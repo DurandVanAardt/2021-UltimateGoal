@@ -35,30 +35,55 @@ public class Test extends OpMode {
     @Override
     public void loop() {
 
-        if (gamepad1.right_trigger != 0)
-            driveTrain = DriveTrain.STRAFER;
-        else
-        if (gamepad1.left_trigger != 0)
-            driveTrain = DriveTrain.STRAFEL;
-        else
-        if (gamepad1.left_stick_y != 0 || gamepad1.right_stick_x != 0)
-            driveTrain = DriveTrain.DRIVE;
-        else
-            driveTrain = DriveTrain.STOP;
+//        if (gamepad1.b) {
+//            // right
+//            motors.strafe(135 * Math.PI / 180, 1, true);
+//        }else if (gamepad1.y) {
+//            // forward
+//            motors.strafe(45 * Math.PI / 180, 1, true);
+//        }else if (gamepad1.x) {
+//            // left
+//            motors.strafe(-45 * Math.PI / 180, 1, true);
+//        }else if (gamepad1.a) {
+//            // reverse
+//            motors.strafe(-135 * Math.PI / 180, 1, true);
+//        }else {
+//            motors.strafe(0, 0, false);
+//
+//        }
+
+//        if (gamepad1.right_trigger != 0)
+//            driveTrain = DriveTrain.STRAFER;
+//        else
+//        if (gamepad1.left_trigger != 0)
+//            driveTrain = DriveTrain.STRAFEL;
+//        else
+//        if (gamepad1.left_stick_y != 0 || gamepad1.right_stick_x != 0)
+//            driveTrain = DriveTrain.DRIVE;
+//        else
+//            driveTrain = DriveTrain.STOP;
 
 
-        if (turning || gamepad1.a) {
-            if (turnFirst) {
-                var.resetAngle();
-                turnFirst = false;
-                motors.pidRotate.reset();
-                motors.pidRotate.enable();
-                turning = motors.rotate(90);
-            }
-            turning = motors.rotate(90);
-        }
+//        motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-        stateMachine(driveTrain, shooter);
+        robot.leftFront.setPower(1);
+        robot.leftBack.setPower(1);
+        robot.rightFront.setPower(1);
+        robot.rightBack.setPower(1);
+
+//        telemetry.addData("state", driveTrain);
+//        if (turning || gamepad1.a) {
+//            if (turnFirst) {
+//                var.resetAngle();
+//                turnFirst = false;
+//                motors.pidRotate.reset();
+//                motors.pidRotate.enable();
+//                turning = motors.rotate(90);
+//            }
+//            turning = motors.rotate(90);
+//        }
+
+//        stateMachine(driveTrain, shooter);
 
 
 //        double distanceL = var.robot.distanceL.getDistance(DistanceUnit.MM);
@@ -89,7 +114,7 @@ public class Test extends OpMode {
         switch (driveTrain) {
 
             case STRAFEL:
-                motors.driveStrafe(-90, gamepad1.left_trigger, begin);
+                motors.strafe(-90, gamepad1.left_trigger, begin);
 
                 if (begin)
                     begin = false;
@@ -97,7 +122,7 @@ public class Test extends OpMode {
                 break;
 
             case STRAFER:
-                motors.driveStrafe(90, gamepad1.right_trigger, begin);
+                motors.strafe(90, gamepad1.right_trigger, begin);
 
                 if (begin)
                     begin = false;
@@ -105,7 +130,7 @@ public class Test extends OpMode {
                 break;
 
             case DRIVE:
-                motors.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, begin);
+                motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
                 if (begin)
                     begin = false;
@@ -113,7 +138,7 @@ public class Test extends OpMode {
                 break;
 
             case STOP:
-                motors.driveStrafe(0,0,true);
+                motors.strafe(0,0,true);
 
                 begin = true;
 

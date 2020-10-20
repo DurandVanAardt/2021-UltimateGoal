@@ -100,6 +100,6 @@ public class Sensors {
 
         globalAngle = 0;
 
-        var.setAngle(0);
+//        var.setAngle(0);
     }
 }

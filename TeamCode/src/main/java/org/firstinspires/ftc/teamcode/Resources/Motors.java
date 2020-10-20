@@ -60,7 +60,7 @@ public class Motors {
 
 
         double PV1 = var.getTrueAngle();
-        telemetry.addData("Current angle",PV1);
+//        telemetry.addData("Current angle",PV1);
 
         double degrees = SP;
 
@@ -110,7 +110,7 @@ public class Motors {
         if (!pidRotate.onTarget()) {
 
 //            loopCount += 1;
-            telemetry.addData("OnTarget", pidRotate.onTarget());
+//            telemetry.addData("OnTarget", pidRotate.onTarget());
 
 //            Loop = true;
 
@@ -147,31 +147,55 @@ public class Motors {
         return true;
     }
 
-    public void driveStrafe(double angle, double speed, boolean check) {
+    public void strafe(double angle, double speed, boolean check) {
 
         // correct the angle
         angle += 45;
         // convert to radials
         angle *= Math.PI / 180;
-        
+
         if (check) {
             var.resetAngle();
             pidStrafe.enable();
         }
+        //else if (!check) {
 
-        double correction = pidStrafe.performPID(var.getAngle());
+            double correction = pidStrafe.performPID(var.getAngle());
 
-        double v1 = speed * Math.sin(angle) - correction;
-        double v2 = speed * Math.cos(angle) + correction;
-        double v3 = speed * Math.cos(angle) - correction;
-        double v4 = speed * Math.sin(angle) + correction;
+            double v1 = speed * Math.sin(angle) - correction;
+            double v2 = speed * Math.cos(angle) + correction;
+            double v3 = speed * Math.cos(angle) - correction;
+            double v4 = speed * Math.sin(angle) + correction;
+
+            robot.leftFront.setPower(v1);
+            robot.rightFront.setPower(v2);
+            robot.leftBack.setPower(v3);
+            robot.rightBack.setPower(v4);
+
+        }
+
+    public void mecanum(double Strafe, double Forward, double Turn) {
+        //Find the magnitude of the controller's input
+        double r = Math.hypot(Strafe, Forward);
+
+        //returns point from +X axis to point (forward, strafe)
+        double robotAngle = Math.atan2(Forward, Strafe) - Math.PI / 4;
+
+        //Quantity to turn by (turn)
+        double rightX = Turn;
+
+        //double vX represents the velocities sent to each motor
+        final double v1 = (r * Math.cos(robotAngle)) + rightX;
+        final double v2 = (r * Math.sin(robotAngle)) - rightX;
+        final double v3 = (r * Math.sin(robotAngle)) + rightX;
+        final double v4 = (r * Math.cos(robotAngle)) - rightX;
 
         robot.leftFront.setPower(v1);
         robot.rightFront.setPower(v2);
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(v4);
-
     }
+
 
     public void drive(double left_stick_y, double right_stick_x, boolean check) {
 
@@ -181,7 +205,10 @@ public class Motors {
             pidDrive.enable();
         }
 
-        double correction = pidDrive.performPID(var.getAngle());
+        double correction = 0;
+
+        if (right_stick_x == 0)
+            correction = pidDrive.performPID(var.getAngle());
 
         double v1 = left_stick_y - right_stick_x;
         double v2 = left_stick_y + right_stick_x;

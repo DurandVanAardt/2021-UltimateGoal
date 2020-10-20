@@ -62,7 +62,7 @@ public class TestPID extends LinearOpMode {
         robot = var.robot;
 
         pidStrafe = new PIDController(.05, 0, 0);
-        pidStrafe.setOutputRange(0, 0.3);
+        pidStrafe.setOutputRange(-1, 1);
         pidStrafe.setInputRange(-90, 90);
         pidStrafe.enable();
 
