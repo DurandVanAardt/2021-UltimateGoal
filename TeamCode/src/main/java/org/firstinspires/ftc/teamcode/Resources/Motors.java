@@ -20,8 +20,10 @@ public class Motors {
         robot = var.robot;
 
         pidStrafe.setSetpoint(0);
-        pidStrafe.setOutputRange(0, 0.3);
-        pidStrafe.setInputRange(-90, 90);
+        pidStrafe.setOutputRange(-0.3, 0.3);
+        pidStrafe.enable();
+
+//        pidStrafe.setInputRange(-90, 90);
 
         pidDrive.setSetpoint(0);
         pidDrive.setOutputRange(0, 0.3);
@@ -174,15 +176,20 @@ public class Motors {
 
         }
 
-    public void mecanum(double Strafe, double Forward, double Turn) {
+    public double mecanum(double Strafe, double Forward, double Turn) {
         //Find the magnitude of the controller's input
         double r = Math.hypot(Strafe, Forward);
 
         //returns point from +X axis to point (forward, strafe)
         double robotAngle = Math.atan2(Forward, Strafe) - Math.PI / 4;
 
+        if (Turn != 0 || (Strafe == 0 && Forward == 0)) {
+            var.resetAngle();
+        }
+
         //Quantity to turn by (turn)
-        double rightX = Turn;
+        double correction = pidStrafe.performPID(var.getAngle());
+        double rightX = Turn + correction;
 
         //double vX represents the velocities sent to each motor
         final double v1 = (r * Math.cos(robotAngle)) + rightX;
@@ -194,6 +201,7 @@ public class Motors {
         robot.rightFront.setPower(v2);
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(v4);
+        return correction;
     }
 
 
