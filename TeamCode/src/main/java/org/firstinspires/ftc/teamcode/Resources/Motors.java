@@ -2,32 +2,41 @@ package org.firstinspires.ftc.teamcode.Resources;
 
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 @SuppressWarnings("unused")
 public class Motors {
     private Variables var;
     private RobotHardwareMap robot;
-    public PIDController           pidRotate, pidDrive, pidStrafe;
-    private int loopCount;
+    public PIDController           pidRotate, pidDrive, pidStrafe, pidMecanum, turnController, strafeController;
+
 
     public Motors(Variables var) {
         pidRotate = new PIDController(.003, .00003, 0);
         pidDrive = new PIDController(.05, 0, 0);
         pidStrafe = new PIDController(.05,0,0);
 
+
         this.var = var;
         robot = var.robot;
 
+
+
         pidStrafe.setSetpoint(0);
-        pidStrafe.setOutputRange(-0.3, 0.3);
+        pidStrafe.setOutputRange(-0.01, 0.01);
         pidStrafe.enable();
+
+//        double SPstrafe = var.getAngle();
+//
+//        pidMecanum.setSetpoint(0);
+//        pidMecanum.setOutputRange(-1, 1);
+//        pidMecanum.enable();
+
 
 //        pidStrafe.setInputRange(-90, 90);
 
         pidDrive.setSetpoint(0);
         pidDrive.setOutputRange(0, 0.3);
         pidDrive.setInputRange(-90, 90);
+
     }
 
 
@@ -176,8 +185,12 @@ public class Motors {
 
         }
 
+
+
     public double mecanum(double Strafe, double Forward, double Turn) {
         //Find the magnitude of the controller's input
+
+
         double r = Math.hypot(Strafe, Forward);
 
         //returns point from +X axis to point (forward, strafe)
@@ -201,8 +214,11 @@ public class Motors {
         robot.rightFront.setPower(v2);
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(v4);
-        return correction;
+        return rightX;
     }
+
+
+
 
 
     public void drive(double left_stick_y, double right_stick_x, boolean check) {
