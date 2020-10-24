@@ -41,21 +41,22 @@ public class Test extends OpMode {
 
 //        if (gamepad1.b) {
 //            // right
-//            motors.strafe(135 * Math.PI / 180, 1, true);
+//            motors.driveStrafe(135 * Math.PI / 180, 1, true);
 //        }else if (gamepad1.y) {
 //            // forward
-//            motors.strafe(45 * Math.PI / 180, 1, true);
+//            motors.driveStrafe(45 * Math.PI / 180, 1, true);
 //        }else if (gamepad1.x) {
 //            // left
-//            motors.strafe(-45 * Math.PI / 180, 1, true);
+//            motors.driveStrafe(-45 * Math.PI / 180, 1, true);
 //        }else if (gamepad1.a) {
 //            // reverse
-//            motors.strafe(-135 * Math.PI / 180, 1, true);
+//            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
 //        }else {
-//            motors.strafe(0, 0, false);
+//            motors.driveStrafe(0, 0, false);
 //        }
 
 
+        motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
 //
 //        else if (gamepad1.dpad_up || turningUp)
 //            driveTrain = DriveTrain.TURNUP;
@@ -68,22 +69,22 @@ public class Test extends OpMode {
 //
 //        else if (gamepad1.dpad_right || turningRight)
 //            driveTrain = DriveTrain.TURNRIGHT;
+//
+//        if (gamepad1.right_trigger != 0)
+//            driveTrain = DriveTrain.STRAFER;
+//        else
+//        if (gamepad1.left_trigger != 0)
+//            driveTrain = DriveTrain.STRAFEL;
+//        else
+//        if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x != 0)
+//            driveTrain = DriveTrain.DRIVE;
+//        else
+//            driveTrain = DriveTrain.STOP;
 
-        if (gamepad1.right_trigger != 0)
-            driveTrain = DriveTrain.STRAFER;
-        else
-        if (gamepad1.left_trigger != 0)
-            driveTrain = DriveTrain.STRAFEL;
-        else
-        if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x != 0)
-            driveTrain = DriveTrain.DRIVE;
-        else
-            driveTrain = DriveTrain.STOP;
+//        stateMachine(driveTrain, shooter);
 
-      stateMachine(driveTrain, shooter);
-
-      telemetry.addData("State", driveTrain);
-
+//        telemetry.addData("State", driveTrain);
+//
     }
 
     @Override
@@ -116,7 +117,7 @@ public class Test extends OpMode {
                 break;
 
             case DRIVE:
-                telemetry.addData("HI", motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x));
+                 motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
 //
 //                if (begin)
 //                    begin = false;
