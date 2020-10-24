@@ -22,6 +22,10 @@ public class Test extends OpMode {
     private boolean turnFirst = true;
     private boolean begin;
     private boolean turning = false;
+    private boolean turningUp;
+    private boolean turningDown;
+    private boolean turningLeft;
+    private boolean turningRight;
 
     @Override
     public void init() {
@@ -37,66 +41,50 @@ public class Test extends OpMode {
 
 //        if (gamepad1.b) {
 //            // right
-//            motors.strafe(135 * Math.PI / 180, 1, true);
+//            motors.driveStrafe(135 * Math.PI / 180, 1, true);
 //        }else if (gamepad1.y) {
 //            // forward
-//            motors.strafe(45 * Math.PI / 180, 1, true);
+//            motors.driveStrafe(45 * Math.PI / 180, 1, true);
 //        }else if (gamepad1.x) {
 //            // left
-//            motors.strafe(-45 * Math.PI / 180, 1, true);
+//            motors.driveStrafe(-45 * Math.PI / 180, 1, true);
 //        }else if (gamepad1.a) {
 //            // reverse
-//            motors.strafe(-135 * Math.PI / 180, 1, true);
+//            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
 //        }else {
-//            motors.strafe(0, 0, false);
-//
+//            motors.driveStrafe(0, 0, false);
 //        }
 
+
+        motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
+//
+//        else if (gamepad1.dpad_up || turningUp)
+//            driveTrain = DriveTrain.TURNUP;
+//
+//        else if (gamepad1.dpad_down || turningDown)
+//            driveTrain = DriveTrain.TURNDOWN;
+//
+//        else if (gamepad1.dpad_left || turningLeft)
+//            driveTrain = DriveTrain.TURNLEFT;
+//
+//        else if (gamepad1.dpad_right || turningRight)
+//            driveTrain = DriveTrain.TURNRIGHT;
+//
 //        if (gamepad1.right_trigger != 0)
 //            driveTrain = DriveTrain.STRAFER;
 //        else
 //        if (gamepad1.left_trigger != 0)
 //            driveTrain = DriveTrain.STRAFEL;
 //        else
-//        if (gamepad1.left_stick_y != 0 || gamepad1.right_stick_x != 0)
+//        if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x != 0)
 //            driveTrain = DriveTrain.DRIVE;
 //        else
 //            driveTrain = DriveTrain.STOP;
 
-
-//        motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-
-        robot.leftFront.setPower(1);
-        robot.leftBack.setPower(1);
-        robot.rightFront.setPower(1);
-        robot.rightBack.setPower(1);
-
-//        if (turning || gamepad1.a) {
-//            if (turnFirst) {
-//                var.resetAngle();
-//                turnFirst = false;
-//                motors.pidRotate.reset();
-//                motors.pidRotate.enable();
-//                turning = motors.rotate(90);
-//            }
-//            turning = motors.rotate(90);
-//        }
-
 //        stateMachine(driveTrain, shooter);
 
-
-//        double distanceL = var.robot.distanceL.getDistance(DistanceUnit.MM);
+//        telemetry.addData("State", driveTrain);
 //
-//        hingeHeight = 100; //die hoogte vd shooter (vanaf camera)
-//
-//        // onthou om die distance te minus vanaf camera tot shooter (cameraDistance)
-//
-//        towerHeight = 800 - hingeHeight; //mm
-//
-//        shooterAngle = (Math.atan2(towerHeight, cameraDistance)) /180;
-//
-//        robot.shooterAngleServo.setPosition(shooterAngle);
-
     }
 
     @Override
@@ -129,15 +117,80 @@ public class Test extends OpMode {
                 break;
 
             case DRIVE:
-                motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+                 motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
+//
+//                if (begin)
+//                    begin = false;
 
-                if (begin)
-                    begin = false;
+                break;
+
+            case TURNUP:
+
+                if (turnFirst) {
+                    var.resetAngle();
+                    turnFirst = false;
+                    motors.pidRotate.reset();
+                    motors.pidRotate.enable();
+                    turningUp = motors.rotate(0);
+                }
+
+                turningUp = motors.rotate(0);
+
+
+                turnFirst = !turningUp;
+
+                break;
+
+            case TURNDOWN:
+
+                if (turnFirst) {
+                    var.resetAngle();
+                    turnFirst = false;
+                    motors.pidRotate.reset();
+                    motors.pidRotate.enable();
+                    turningDown = motors.rotate(-180);
+                }
+
+                turningDown = motors.rotate(180);
+
+                turnFirst = !turningDown;
+
+                break;
+
+            case TURNLEFT:
+
+                if (turnFirst) {
+                    var.resetAngle();
+                    turnFirst = false;
+                    motors.pidRotate.reset();
+                    motors.pidRotate.enable();
+                    turningLeft = motors.rotate(90);
+                }
+
+                turningLeft = motors.rotate(90);
+
+                turnFirst = !turningLeft;
+
+                break;
+
+            case TURNRIGHT:
+
+                if (turnFirst) {
+                    var.resetAngle();
+                    turnFirst = false;
+                    motors.pidRotate.reset();
+                    motors.pidRotate.enable();
+                    turningRight = motors.rotate(-90);
+                }
+
+                turningRight = motors.rotate(-90);
+
+                turnFirst = !turningRight;
 
                 break;
 
             case STOP:
-                motors.strafe(0,0,true);
+                motors.stop();
 
                 begin = true;
 
@@ -155,7 +208,7 @@ public class Test extends OpMode {
             case ADJUSTANGLE:
                 break;
 
-            case PICKUP:
+            case SUCKER:
                 break;
 
             case REST:

@@ -69,7 +69,7 @@ public class TestPID extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+//            mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
 
             if (turning || gamepad1.left_stick_button) {
@@ -82,6 +82,22 @@ public class TestPID extends LinearOpMode {
                 }
                 turning = rotate(90);
             }
+
+                    if (gamepad1.b) {
+            // right
+            motors.driveStrafe(135 * Math.PI / 180, 1, true);
+        }else if (gamepad1.y) {
+            // forward
+            motors.driveStrafe(45 * Math.PI / 180, 1, true);
+        }else if (gamepad1.x) {
+            // left
+            motors.driveStrafe(-45 * Math.PI / 180, 1, true);
+        }else if (gamepad1.a) {
+            // reverse
+            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
+        }else {
+            motors.driveStrafe(0, 0, false);
+        }
 
 //            PIDTurn(90);
 
