@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 
 
 @TeleOp(name = "Test", group = "TeleOp")
+@Disabled
 public class Test extends OpMode {
 
     Variables var;
@@ -56,7 +58,7 @@ public class Test extends OpMode {
 //        }
 
 
-        telemetry.addData("hi", motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true));
+        telemetry.addData("hi", motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x));
 //
 //        else if (gamepad1.dpad_up || turningUp)
 //            driveTrain = DriveTrain.TURNUP;
@@ -85,6 +87,7 @@ public class Test extends OpMode {
 
 //        telemetry.addData("State", driveTrain);
 //
+        stateMachine(driveTrain, shooter);
 
     }
 
@@ -118,7 +121,7 @@ public class Test extends OpMode {
                 break;
 
             case DRIVE:
-                 motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
+                 telemetry.addData("Angle", motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x));
 //
 //                if (begin)
 //                    begin = false;

@@ -213,7 +213,7 @@ public class Motors {
 
 
 
-    public double mecanum(double Strafe, double Forward, double Turn, boolean check2) {
+    public double mecanum(double Strafe, double Forward, double Turn) {
         //Find the magnitude of the controller's input
         double r = Math.hypot(Strafe, Forward);
 
@@ -231,17 +231,24 @@ public class Motors {
         double rightX = Turn - correction;
 
         //double vX represents the velocities sent to each motor
-        final double v1 = (r * Math.cos(robotAngle)) + rightX;
-        final double v2 = (r * Math.sin(robotAngle)) - rightX;
-        final double v3 = (r * Math.sin(robotAngle)) + rightX;
-        final double v4 = (r * Math.cos(robotAngle)) - rightX;
+        double v1 = (r * Math.cos(robotAngle)) + rightX;
+        double v2 = (r * Math.sin(robotAngle)) - rightX;
+        double v3 = (r * Math.sin(robotAngle)) + rightX;
+        double v4 = (r * Math.cos(robotAngle)) - rightX;
+
+        if (robotAngle == 45 * Math.PI / 180 || robotAngle == -135 * Math.PI / 180) {
+            v1 = Math.copySign(1, robotAngle);
+            v2 = v1;
+            v3 = v1;
+            v4 = v1;
+        }
 
         robot.leftFront.setPower(v1);
         robot.rightFront.setPower(v2);
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(v4);
 
-        return rightX;
+        return robotAngle * 180 / Math.PI;
     }
 
 

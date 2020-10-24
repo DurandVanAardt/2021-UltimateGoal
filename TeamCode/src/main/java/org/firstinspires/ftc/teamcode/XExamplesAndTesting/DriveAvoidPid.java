@@ -10,13 +10,13 @@
 // Use PID controller to manage motor power during 90 degree turn to reduce
 // overshoot.
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.XExamplesAndTesting;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -25,7 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Resources.PIDController;
 
 @Autonomous(name="Drive Avoid PID", group="Exercises")
-//@Disabled
+@Disabled
 public class DriveAvoidPid extends LinearOpMode
 {
     DcMotor                 leftMotor, rightMotor;

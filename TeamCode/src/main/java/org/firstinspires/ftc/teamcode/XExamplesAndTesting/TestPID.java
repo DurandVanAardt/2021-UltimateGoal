@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.XExamplesAndTesting;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -17,9 +18,8 @@ import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 
 import java.util.Locale;
 
-import static java.lang.Double.valueOf;
-
 @TeleOp(name = "TestPID", group = "TeleOp")
+@Disabled
 public class TestPID extends LinearOpMode {
 
     Variables var;
@@ -120,13 +120,12 @@ public class TestPID extends LinearOpMode {
         double robotAngle = Math.atan2(Forward, Strafe) - Math.PI / 4;
 
         //Quantity to turn by (turn)
-        double rightX = Turn;
 
         //double vX represents the velocities sent to each motor
-        final double v1 = (r * Math.cos(robotAngle)) + rightX;
-        final double v2 = (r * Math.sin(robotAngle)) - rightX;
-        final double v3 = (r * Math.sin(robotAngle)) + rightX;
-        final double v4 = (r * Math.cos(robotAngle)) - rightX;
+        final double v1 = (r * Math.cos(robotAngle)) + Turn;
+        final double v2 = (r * Math.sin(robotAngle)) - Turn;
+        final double v3 = (r * Math.sin(robotAngle)) + Turn;
+        final double v4 = (r * Math.cos(robotAngle)) - Turn;
 
         robot.leftFront.setPower(v1);
         robot.rightFront.setPower(v2);
