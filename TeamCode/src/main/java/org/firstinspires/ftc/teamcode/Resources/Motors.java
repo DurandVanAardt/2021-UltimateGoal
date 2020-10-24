@@ -195,7 +195,6 @@ public class Motors {
             var.resetAngle();
 //            pidStrafe.enable();
         }
-        //else if (!check) {
 
             double correction = pidStrafe.performPID(var.getAngle());
 
@@ -216,21 +215,20 @@ public class Motors {
 
     public double mecanum(double Strafe, double Forward, double Turn, boolean check2) {
         //Find the magnitude of the controller's input
-        if (!check2) {
-            var.resetAngle();
-        }
         double r = Math.hypot(Strafe, Forward);
 
         //returns point from +X axis to point (forward, strafe)
         double robotAngle = Math.atan2(Forward, Strafe) - Math.PI / 4;
 
+        double correction = 0;
         if (Turn != 0 || (Strafe == 0 && Forward == 0)) {
             var.resetAngle();
+        } else {
+            correction = pidStrafe.performPID(var.getAngle()) * 7.5;
         }
 
         //Quantity to turn by (turn)
-        double correction = pidStrafe.performPID(var.getAngle());
-        double rightX = Turn + correction;
+        double rightX = Turn - correction;
 
         //double vX represents the velocities sent to each motor
         final double v1 = (r * Math.cos(robotAngle)) + rightX;

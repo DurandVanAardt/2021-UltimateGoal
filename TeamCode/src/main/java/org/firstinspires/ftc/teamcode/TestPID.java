@@ -82,22 +82,21 @@ public class TestPID extends LinearOpMode {
                 }
                 turning = rotate(90);
             }
-
-                    if (gamepad1.b) {
+            if (gamepad1.b) {
             // right
             motors.driveStrafe(135 * Math.PI / 180, 1, true);
-        }else if (gamepad1.y) {
+            }else if (gamepad1.y) {
             // forward
             motors.driveStrafe(45 * Math.PI / 180, 1, true);
-        }else if (gamepad1.x) {
+            }else if (gamepad1.x) {
             // left
             motors.driveStrafe(-45 * Math.PI / 180, 1, true);
-        }else if (gamepad1.a) {
+            }else if (gamepad1.a) {
             // reverse
             motors.driveStrafe(-135 * Math.PI / 180, 1, true);
-        }else {
+            }else {
             motors.driveStrafe(0, 0, false);
-        }
+            }
 
 //            PIDTurn(90);
 

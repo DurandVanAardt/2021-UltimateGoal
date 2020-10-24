@@ -56,7 +56,7 @@ public class Test extends OpMode {
 //        }
 
 
-        motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
+        telemetry.addData("hi", motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true));
 //
 //        else if (gamepad1.dpad_up || turningUp)
 //            driveTrain = DriveTrain.TURNUP;
@@ -70,21 +70,22 @@ public class Test extends OpMode {
 //        else if (gamepad1.dpad_right || turningRight)
 //            driveTrain = DriveTrain.TURNRIGHT;
 //
-//        if (gamepad1.right_trigger != 0)
-//            driveTrain = DriveTrain.STRAFER;
-//        else
-//        if (gamepad1.left_trigger != 0)
-//            driveTrain = DriveTrain.STRAFEL;
-//        else
-//        if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x != 0)
-//            driveTrain = DriveTrain.DRIVE;
-//        else
-//            driveTrain = DriveTrain.STOP;
+        if (gamepad1.right_trigger != 0)
+            driveTrain = DriveTrain.STRAFER;
+        else
+        if (gamepad1.left_trigger != 0)
+            driveTrain = DriveTrain.STRAFEL;
+        else
+        if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x != 0)
+            driveTrain = DriveTrain.DRIVE;
+        else
+            driveTrain = DriveTrain.STOP;
 
 //        stateMachine(driveTrain, shooter);
 
 //        telemetry.addData("State", driveTrain);
 //
+
     }
 
     @Override
