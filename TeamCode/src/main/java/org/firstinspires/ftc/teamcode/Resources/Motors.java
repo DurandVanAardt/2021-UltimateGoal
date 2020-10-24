@@ -156,7 +156,7 @@ public class Motors {
 
         if (check) {
             var.resetAngle();
-            pidStrafe.enable();
+//            pidStrafe.enable();
         }
         //else if (!check) {
 

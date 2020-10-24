@@ -71,7 +71,6 @@ public class Test extends OpMode {
         robot.rightFront.setPower(1);
         robot.rightBack.setPower(1);
 
-//        telemetry.addData("state", driveTrain);
 //        if (turning || gamepad1.a) {
 //            if (turnFirst) {
 //                var.resetAngle();

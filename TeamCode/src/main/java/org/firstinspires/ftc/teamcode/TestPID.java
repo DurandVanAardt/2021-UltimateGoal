@@ -38,17 +38,13 @@ public class TestPID extends LinearOpMode {
     private boolean strafeL;
     private boolean strafeR;
     private boolean turningA;
+    private boolean turningY;
     private boolean turningB;
     private boolean turningX;
-    private boolean turningY;
-    PIDController pidRotate, pidRotate2, pidDrive, pidRotate3, pidStrafe;
+    PIDController pidRotate3, pidStrafe;
     double gain = 0.0003;
     double rate = 0.0;
     double resetTime = 0.0;
-    private double angle;
-    private double angle2;
-    private boolean first;
-    private double power;
     double loopCount = 0;
     private double power2;
 
@@ -122,6 +118,7 @@ public class TestPID extends LinearOpMode {
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(v4);
     }
+
     private boolean PIDStrafeLToWall(double power, double wallDistance) {
         PV/*Process Variable*/ = -getAngle();
         boolean distanceReached = robot.distanceL.getDistance(DistanceUnit.MM) <= wallDistance;
@@ -363,10 +360,7 @@ public class TestPID extends LinearOpMode {
 
         if (!pidRotate3.onTarget()) {
 
-            loopCount = loopCount + 1;
             telemetry.addData("OnTarget", pidRotate3.onTarget());
-
-            Loop = true;
 
             power2 = (pidRotate3.performPID(PV1)); // power will be - on right turn.
 
