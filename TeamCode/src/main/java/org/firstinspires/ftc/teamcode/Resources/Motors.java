@@ -2,30 +2,48 @@ package org.firstinspires.ftc.teamcode.Resources;
 
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 @SuppressWarnings("unused")
 public class Motors {
     private Variables var;
     private RobotHardwareMap robot;
-    public PIDController           pidRotate, pidDrive, pidStrafe;
-    private int loopCount;
+    public PIDController           pidRotate, pidDrive, pidStrafe, pidMecanum, pidStrafe2;
+
 
     public Motors(Variables var) {
         pidRotate = new PIDController(.003, .00003, 0);
         pidDrive = new PIDController(.05, 0, 0);
         pidStrafe = new PIDController(.05,0,0);
+        pidStrafe2 = new PIDController(.05,0,0);
 
         this.var = var;
         robot = var.robot;
 
+
+
         pidStrafe.setSetpoint(0);
-        pidStrafe.setOutputRange(0, 0.3);
+        pidStrafe.setOutputRange(-0.01, 0.01);
         pidStrafe.setInputRange(-90, 90);
+        pidStrafe.enable();
+
+
+        pidStrafe2.setSetpoint(0);
+        pidStrafe2.setOutputRange(0, 0.3);
+        pidStrafe2.setInputRange(-90, 90);
+        pidStrafe2.enable();
+
+//        double SPstrafe = var.getAngle();
+//
+//        pidMecanum.setSetpoint(0);
+//        pidMecanum.setOutputRange(-1, 1);
+//        pidMecanum.enable();
+
+
+//        pidStrafe.setInputRange(-90, 90);
 
         pidDrive.setSetpoint(0);
         pidDrive.setOutputRange(0, 0.3);
         pidDrive.setInputRange(-90, 90);
+
     }
 
 
@@ -54,6 +72,25 @@ public class Motors {
         var.robot.rightBack.setPower(v4 * speedControl);
 
     }*/
+    public void driveStrafe(double angle, double speed, boolean check) {
+
+        if (!check) {
+            var.resetAngle();
+        }
+
+        double correction = pidStrafe2.performPID(var.getAngle());
+
+        double v1 = speed * Math.sin(angle) - correction;
+        double v2 = speed * Math.cos(angle) + correction;
+        double v3 = speed * Math.cos(angle) - correction;
+        double v4 = speed * Math.sin(angle) + correction;
+
+        var.robot.leftFront.setPower(v1);
+        var.robot.rightFront.setPower(v2);
+        var.robot.leftBack.setPower(v3);
+        var.robot.rightBack.setPower(v4);
+
+    }
 
     public boolean rotate(double SP) {
         // restart imu angle tracking.
@@ -174,15 +211,26 @@ public class Motors {
 
         }
 
-    public void mecanum(double Strafe, double Forward, double Turn) {
+
+
+
+    public double mecanum(double Strafe, double Forward, double Turn, boolean check2) {
         //Find the magnitude of the controller's input
+        if (!check2) {
+            var.resetAngle();
+        }
         double r = Math.hypot(Strafe, Forward);
 
         //returns point from +X axis to point (forward, strafe)
         double robotAngle = Math.atan2(Forward, Strafe) - Math.PI / 4;
 
+        if (Turn != 0 || (Strafe == 0 && Forward == 0)) {
+            var.resetAngle();
+        }
+
         //Quantity to turn by (turn)
-        double rightX = Turn;
+        double correction = pidStrafe.performPID(var.getAngle());
+        double rightX = Turn + correction;
 
         //double vX represents the velocities sent to each motor
         final double v1 = (r * Math.cos(robotAngle)) + rightX;
@@ -194,7 +242,12 @@ public class Motors {
         robot.rightFront.setPower(v2);
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(v4);
+
+        return rightX;
     }
+
+
+
 
 
     public void drive(double left_stick_y, double right_stick_x, boolean check) {
