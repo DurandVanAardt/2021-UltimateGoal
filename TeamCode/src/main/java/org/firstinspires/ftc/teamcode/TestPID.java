@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
@@ -76,6 +77,17 @@ public class TestPID extends LinearOpMode {
 //            mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
 
+}
+if (gamepad1.left_stick_y <0) {
+
+    robot.leftFront.setPower(1);
+    robot.rightFront.setPower(1);
+    robot.leftBack.setPower(1);
+    robot.rightBack.setPower(1);
+
+
+}
+
             if (turning || gamepad1.left_stick_button) {
                 if (turnFirst) {
                     var.resetAngle();
@@ -115,7 +127,7 @@ public class TestPID extends LinearOpMode {
             telemetry.update();
         }
 
-    }
+
 
     public void mecanum(double Strafe, double Forward, double Turn) {
         //Find the magnitude of the controller's input

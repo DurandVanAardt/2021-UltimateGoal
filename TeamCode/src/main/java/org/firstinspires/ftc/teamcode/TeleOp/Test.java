@@ -19,13 +19,21 @@ public class Test extends OpMode {
     DriveTrain driveTrain = DriveTrain.STOP;
     Shooter shooter = Shooter.REST;
 
+
     private boolean turnFirst = true;
     private boolean begin;
+    private boolean begin1;
+
     private boolean turning = false;
+    private boolean rotationShooter;
     private boolean turningUp;
     private boolean turningDown;
     private boolean turningLeft;
     private boolean turningRight;
+    private Shooter curShooterState = Shooter.REST;
+
+    int Counter= 0;
+    boolean shooterLoop = true;
 
     @Override
     public void init() {
@@ -56,7 +64,8 @@ public class Test extends OpMode {
 //        }
 
 
-        motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
+
+        readInputs();
 //
 //        else if (gamepad1.dpad_up || turningUp)
 //            driveTrain = DriveTrain.TURNUP;
@@ -91,6 +100,64 @@ public class Test extends OpMode {
     public void stop() {
     }
 
+    public void readInputs() {
+        if(gamepad2.a && curShooterState == Shooter.FIRE.REST)
+        {
+            curShooterState = Shooter.FIRE;
+            shooterState(Shooter.FIRE);
+        }
+
+        else if(gamepad2.a && curShooterState == Shooter.FIRE)
+        {
+            curShooterState = Shooter.FIRE.REST;
+            shooterState(Shooter.FIRE.REST);
+        }
+
+        if(gamepad2.left_bumper && curShooterState == Shooter.SUCKERIN.REST)
+        {
+            curShooterState = Shooter.SUCKERIN;
+            shooterState(Shooter.SUCKERIN);
+        }
+
+        else if(gamepad2.left_bumper && curShooterState == Shooter.SUCKERIN) {
+            curShooterState = Shooter.SUCKERIN.REST;
+            shooterState(Shooter.SUCKERIN.REST);
+        }
+
+        if(gamepad2.right_bumper && curShooterState == Shooter.SUCKEROUT.REST)
+        {
+            curShooterState = Shooter.SUCKEROUT;
+            shooterState(Shooter.SUCKEROUT);
+        }
+
+        else if(gamepad2.right_bumper && curShooterState == Shooter.SUCKEROUT)
+        {
+            curShooterState = Shooter.SUCKEROUT.REST;
+            shooterState(Shooter.SUCKEROUT.REST);
+        }
+
+if ((gamepad1.left_stick_x!=0) || (gamepad1.left_stick_y!=0) || (gamepad1.right_stick_x!=0))
+        {
+
+    driveTrainState(driveTrain.DRIVE);
+        }
+else  driveTrainState(driveTrain.DRIVE.STOP);
+
+        if (gamepad1.left_trigger!=0)
+        {
+            driveTrainState(driveTrain.STRAFEL);
+
+        }
+        else  driveTrainState(driveTrain.STRAFEL.STOP);
+
+
+        if (gamepad1.right_trigger!=0)
+        {
+            driveTrainState(driveTrain.STRAFER);
+        }
+        else  driveTrainState(driveTrain.STRAFER.STOP);
+    }
+
     private void stateMachine(DriveTrain driveTrain, Shooter shooter) {
         driveTrainState(driveTrain);
         shooterState(shooter);
@@ -117,7 +184,8 @@ public class Test extends OpMode {
                 break;
 
             case DRIVE:
-                 motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
+
+                motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
 //
 //                if (begin)
 //                    begin = false;
@@ -189,7 +257,20 @@ public class Test extends OpMode {
 
                 break;
 
+            case LEFTTOPOS:
+
+                motors.LEFTTOPOS(gamepad1.left_bumper);
+
+                break;
+
+            case RIGHTTOPOS:
+
+                motors.RIGHTTOPOS(gamepad1.right_bumper);
+
+                break;
+
             case STOP:
+
                 motors.stop();
 
                 begin = true;
@@ -197,21 +278,40 @@ public class Test extends OpMode {
                 break;
         }
     }
-
     private void shooterState(Shooter shooter) {
 
         switch (shooter) {
 
             case FIRE:
-                break;
+
+                motors.robotShooter(gamepad2.a);
+
+                    break;
 
             case ADJUSTANGLE:
+
+                motors.adjustAngle(gamepad2.b);
+
                 break;
 
-            case SUCKER:
+            case SUCKERIN:
+
+                motors.suckerIn(gamepad1.left_bumper);
+
+
+
+                break;
+
+            case SUCKEROUT:
+
+                motors.suckerOut(gamepad1.right_bumper);
+
+
                 break;
 
             case REST:
+
+                robot.shooterMotor.setPower(0);
                 break;
         }
     }

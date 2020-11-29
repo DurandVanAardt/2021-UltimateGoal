@@ -1,13 +1,15 @@
 package org.firstinspires.ftc.teamcode.Resources;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 
 @SuppressWarnings("unused")
 public class Motors {
     private Variables var;
     private RobotHardwareMap robot;
-    public PIDController           pidRotate, pidDrive, pidStrafe, pidMecanum, pidStrafe2;
-
+    public PIDController           pidRotate, pidDrive, pidStrafe, pidStrafe2;
+    double ShooterloopCount = 0;
 
     public Motors(Variables var) {
         pidRotate = new PIDController(.003, .00003, 0);
@@ -115,6 +117,7 @@ public class Motors {
         // dependant on the motor and gearing configuration, starting power, weight of the robot and the
         // on target tolerance. If the controller overshoots, it will reverse the sign of the output
         // turning the robot back toward the setpoint value.
+
         pidRotate.setSetpoint(degrees);
         pidRotate.setInputRange(0, degrees);
         pidRotate.setOutputRange(0, power);
@@ -181,6 +184,16 @@ public class Motors {
             var.resetAngle();
             return false;
         }
+        else if (!pidRotate.onTarget() && var.getAngle()>SP )
+
+            power = ((pidRotate.performPID(PV1)))/5;
+
+
+        robot.leftFront.setPower(power);
+        robot.rightFront.setPower(-power);
+        robot.leftBack.setPower(power);
+        robot.rightBack.setPower(-power);
+
         return true;
     }
 
@@ -211,8 +224,187 @@ public class Motors {
 
         }
 
+public void adjustAngle(boolean gamepad)
+
+{
+ double shooterAngle;
+
+ double cameraDistance = 120;
+
+ double angleHeight = 80;
+
+ shooterAngle = Math.atan2(angleHeight,cameraDistance);
+
+robot.shooterAngleMotor.setPower(shooterAngle);
+}
+    public void robotShooter(boolean gamepad) {
 
 
+        double speed = 1;
+
+
+//        ShooterloopCount = ShooterloopCount + 1;
+//
+//
+//        if ((ShooterloopCount % 2) == 0) {
+//            robot.shooterMotor.setPower(0);
+//
+//        }
+//
+//        if ((ShooterloopCount % 2) != 0) {
+            robot.shooterMotor.setPower(speed);
+
+        }
+
+
+
+
+    public void suckerOut(boolean gamepad)
+    {
+        double loopCount;
+
+        loopCount = 0;
+
+        double speed = 1;
+
+        loopCount= loopCount + 1;
+
+        if ((loopCount % 2) == 0) {
+            robot.sucker.setPower(0);
+        }
+
+
+        if  ((loopCount % 2) != 0)
+        {
+            robot.sucker.setPower(speed);
+
+        }
+
+
+
+
+
+    }
+
+    public void suckerIn(boolean gamepad)
+    {
+        double loopCount;
+
+        loopCount = 0;
+
+        double speed = 1;
+
+        loopCount= loopCount + 1;
+
+        if ((loopCount % 2) == 0) {
+            robot.sucker.setPower(0);
+        }
+
+
+        if  ((loopCount % 2) != 0)
+        {
+            robot.sucker.setPower(speed);
+
+        }
+
+    }
+
+    public void RIGHTTOPOS(boolean gamepad)
+    {
+
+        double loopCount;
+
+        loopCount = 0;
+
+        double speed = 1;
+
+        loopCount= loopCount + 1;
+
+        if ((loopCount % 2) == 0) {
+            robot.leftFront.setPower(0);
+            robot.rightFront.setPower(0);
+            robot.leftBack.setPower(0);
+            robot.rightBack.setPower(0);
+        }
+
+
+        if  ((loopCount % 2) != 0) {
+
+            if (robot.colourL.alpha() < 500) {
+
+                robot.leftFront.setPower(-1);
+                robot.leftBack.setPower(-1);
+            }
+            if (robot.colourR.alpha() < 500) {
+
+                robot.rightFront.setPower(-1);
+                robot.rightBack.setPower(-1);
+
+            } else stop();
+
+            if ((robot.colourL.alpha() > 500) && (robot.colourR.alpha() > 500)) {
+
+                driveStrafe(45 * Math.PI / 180, 1, true);
+
+                if (robot.distanceL.getDistance(DistanceUnit.MM) < 400) {
+                    stop();
+
+                }
+            }
+        }
+    }
+
+
+    public void LEFTTOPOS(boolean gamepad)
+    {
+
+        double loopCount;
+
+        loopCount = 0;
+
+        double speed = 1;
+
+        loopCount= loopCount + 1;
+
+        if ((loopCount % 2) == 0) {
+            robot.leftFront.setPower(0);
+            robot.rightFront.setPower(0);
+            robot.leftBack.setPower(0);
+            robot.rightBack.setPower(0);
+        }
+
+
+        if  ((loopCount % 2) != 0)
+        {
+
+                if (robot.colourL.alpha() < 500) {
+
+                    robot.leftFront.setPower(-1);
+                    robot.leftBack.setPower(-1);
+            }
+                if (robot.colourR.alpha() < 500) {
+
+                    robot.rightFront.setPower(-1);
+                    robot.rightBack.setPower(-1);
+
+            } else stop();
+
+                if ((robot.colourL.alpha() > 500) && (robot.colourR.alpha() > 500)) {
+
+                    driveStrafe(-45 * Math.PI / 180, 1, true);
+
+                if  (robot.distanceL.getDistance(DistanceUnit.MM) < 400) {
+                   stop();
+
+                }
+            }
+        }
+
+
+
+
+
+    }
 
     public double mecanum(double Strafe, double Forward, double Turn, boolean check2) {
         //Find the magnitude of the controller's input
