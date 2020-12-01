@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
@@ -31,6 +32,7 @@ public class Test extends OpMode {
     private boolean turningLeft;
     private boolean turningRight;
     private Shooter curShooterState = Shooter.REST;
+    private DriveTrain curDriveTrainState = DriveTrain.DRIVE.STOP;
 
     int Counter= 0;
     boolean shooterLoop = true;
@@ -66,6 +68,7 @@ public class Test extends OpMode {
 
 
         readInputs();
+
 //
 //        else if (gamepad1.dpad_up || turningUp)
 //            driveTrain = DriveTrain.TURNUP;
@@ -113,6 +116,14 @@ public class Test extends OpMode {
             shooterState(Shooter.FIRE.REST);
         }
 
+        if (gamepad2.b)
+        {
+
+         curShooterState = Shooter.ADJUSTANGLE;
+            shooterState(Shooter.ADJUSTANGLE);
+
+        }
+
         if(gamepad2.left_bumper && curShooterState == Shooter.SUCKERIN.REST)
         {
             curShooterState = Shooter.SUCKERIN;
@@ -136,26 +147,65 @@ public class Test extends OpMode {
             shooterState(Shooter.SUCKEROUT.REST);
         }
 
-if ((gamepad1.left_stick_x!=0) || (gamepad1.left_stick_y!=0) || (gamepad1.right_stick_x!=0))
+if ((gamepad1.left_stick_x !=0) || (gamepad1.left_stick_y!=0) || (gamepad1.right_stick_x!=0))
         {
 
-    driveTrainState(driveTrain.DRIVE);
-        }
-else  driveTrainState(driveTrain.DRIVE.STOP);
-
-        if (gamepad1.left_trigger!=0)
-        {
-            driveTrainState(driveTrain.STRAFEL);
+            driveTrainState(DriveTrain.DRIVE);
 
         }
-        else  driveTrainState(driveTrain.STRAFEL.STOP);
+
+else if ((gamepad1.left_stick_x ==0) && (gamepad1.left_stick_y==0) && (gamepad1.right_stick_x==0)&& (gamepad1.left_trigger==0)&& (gamepad1.right_trigger==0))
+{
+    driveTrainState(DriveTrain.DRIVE.STOP);
+    driveTrainState(DriveTrain.STRAFEL.STOP);
+    driveTrainState(DriveTrain.STRAFER.STOP);
+}
+
+else if (gamepad1.left_trigger!=0)
+
+    driveTrainState(DriveTrain.STRAFEL);
+
+else if (gamepad1.right_trigger!=0)
+    driveTrainState(DriveTrain.STRAFER);
+
+// else if (gamepad1.dpad_up)
+//
+//    driveTrainState(DriveTrain.TURNUP);
+//
+//else if (gamepad1.dpad_left)
+//
+//    driveTrainState(DriveTrain.TURNLEFT);
+//
+//else if (gamepad1.dpad_right)
+//
+//    driveTrainState(DriveTrain.TURNRIGHT);
+//
+//else if (gamepad1.dpad_down)
+//
+//    driveTrainState(DriveTrain.TURNDOWN);
+//
+//else
+//    driveTrainState((driveTrain.TURNUP.STOP));
+//    driveTrainState((driveTrain.TURNDOWN.STOP));
+//    driveTrainState((driveTrain.TURNLEFT.STOP));
+//    driveTrainState((driveTrain.TURNRIGHT.STOP));
+//
 
 
-        if (gamepad1.right_trigger!=0)
-        {
-            driveTrainState(driveTrain.STRAFER);
-        }
-        else  driveTrainState(driveTrain.STRAFER.STOP);
+
+//        if (gamepad1.left_trigger!=0)
+//        {
+//            driveTrainState(DriveTrain.STRAFEL);
+//
+//        }
+//        else  driveTrainState(DriveTrain.STRAFEL.STOP);
+//
+//
+//        if (gamepad1.right_trigger!=0)
+//        {
+//            driveTrainState(DriveTrain.STRAFER);
+//        }
+//        else  driveTrainState(DriveTrain.STRAFER.STOP);
     }
 
     private void stateMachine(DriveTrain driveTrain, Shooter shooter) {
@@ -195,7 +245,9 @@ else  driveTrainState(driveTrain.DRIVE.STOP);
             case TURNUP:
 
                 if (turnFirst) {
+
                     var.resetAngle();
+
                     turnFirst = false;
                     motors.pidRotate.reset();
                     motors.pidRotate.enable();

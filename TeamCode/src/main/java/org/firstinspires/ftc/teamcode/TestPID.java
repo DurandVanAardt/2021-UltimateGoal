@@ -88,15 +88,16 @@ if (gamepad1.left_stick_y <0) {
 
 }
 
-            if (turning || gamepad1.left_stick_button) {
+            if ( turning ||  gamepad1.left_stick_button) {
                 if (turnFirst) {
+
                     var.resetAngle();
                     turnFirst = false;
                     pidRotate3.reset();
                     pidRotate3.enable();
-                    turning = rotate(90);
+                    turning = motors.rotate(90);
                 }
-                turning = rotate(90);
+                turning = motors.rotate(90);
             }
 
                     if (gamepad1.b) {
