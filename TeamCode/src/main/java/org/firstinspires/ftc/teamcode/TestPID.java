@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorBNO055IMU;
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -73,35 +74,37 @@ public class TestPID extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-//            mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+           // mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
 
             if (turning || gamepad1.left_stick_button) {
                 if (turnFirst) {
                     var.resetAngle();
                     turnFirst = false;
-                    pidRotate3.reset();
-                    pidRotate3.enable();
-                    turning = rotate(90);
+                    motors.pidRotate.reset();
+                    motors.pidRotate.enable();
+                    turning = motors.rotate(90);
+
                 }
-                turning = rotate(90);
+                turning = motors.rotate(90);
             }
 
-                    if (gamepad1.b) {
-            // right
-            motors.driveStrafe(135 * Math.PI / 180, 1, true);
-        }else if (gamepad1.y) {
-            // forward
-            motors.driveStrafe(45 * Math.PI / 180, 1, true);
-        }else if (gamepad1.x) {
-            // left
-            motors.driveStrafe(-45 * Math.PI / 180, 1, true);
-        }else if (gamepad1.a) {
-            // reverse
-            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
-        }else {
-            motors.driveStrafe(0, 0, false);
-        }
+
+//                    if (gamepad1.b) {
+//            // right
+//            motors.driveStrafe(135 * Math.PI / 180, 1, true);
+//        }else if (gamepad1.y) {
+//            // forward
+//            motors.driveStrafe(45 * Math.PI / 180, 1, true);
+//        }else if (gamepad1.x) {
+//            // left
+//            motors.driveStrafe(-45 * Math.PI / 180, 1, true);
+//        }else if (gamepad1.a) {
+//            // reverse
+//            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
+//        }else {
+//            motors.driveStrafe(0, 0, false);
+//        }
 
 //            PIDTurn(90);
 
@@ -112,6 +115,7 @@ public class TestPID extends LinearOpMode {
             telemetry.addData("gain", gain);
             telemetry.addData("resetTime", resetTime);
             telemetry.addData("rate", rate);
+            telemetry.addData("IMU",SP-(var.getTrueAngle()));
             telemetry.update();
         }
 
@@ -351,7 +355,7 @@ public class TestPID extends LinearOpMode {
         pidRotate3.setSetpoint(degrees);
         pidRotate3.setInputRange(0, degrees);
         pidRotate3.setOutputRange(0, power2);
-        pidRotate3.setTolerance(1);
+        pidRotate3.setTolerance(0.000000001);
         pidRotate3.enable();
         pidRotate3.performPID(PV1);
 

@@ -17,7 +17,10 @@ public class RobotHardwareMap {
     public DcMotor leftBack;
     public DcMotor rightBack;
     public DcMotor liftMotor;
-    public Servo Claw;
+    public DcMotor shooterMotor;
+    public DcMotor sucker;
+
+    public DcMotor shooterAngleMotor;
     public DistanceSensor distanceR;
     public DistanceSensor distanceL;
     public DistanceSensor distanceFL;
@@ -26,7 +29,7 @@ public class RobotHardwareMap {
     public DistanceSensor distanceB;
     public DigitalChannel downLimit;
     public BNO055IMU imu;
-    public Servo shooterAngleServo;
+
     public Servo RBG;
     public Servo LBG;
 public RevColorSensorV3 colourL;
@@ -38,11 +41,12 @@ public RevColorSensorV3 colourL;
 
     public void init(HardwareMap hardwareMap){
 
-        Claw = hardwareMap.get(Servo.class,"claw");
+
         RBG = hardwareMap.get(Servo.class, "RBG");
         LBG = hardwareMap.get(Servo.class, "LBG");
 //        shooterAngleServo = hardwareMap.get(Servo.class, "shooterAngleServo");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+
         initializeIMU();
 
         distanceR = hardwareMap.get(DistanceSensor.class, "distanceR");
@@ -56,10 +60,17 @@ public RevColorSensorV3 colourL;
         rightFront = hardwareMap.get(DcMotor.class, "rightmotor");
         leftBack = hardwareMap.get(DcMotor.class, "leftback");
         rightBack = hardwareMap.get(DcMotor.class, "rightback");
+        shooterAngleMotor = hardwareMap.get(DcMotor.class, "shooterAngleMotor");
         liftMotor = hardwareMap.get(DcMotor.class, "motorHeight");
+        shooterMotor = hardwareMap.get(DcMotor.class, "shooterMotor");
+        sucker = hardwareMap.get(DcMotor.class, "sucker");
+
 
         downLimit = hardwareMap.get(DigitalChannel.class, "downLimit");
         downLimit.setMode(DigitalChannel.Mode.INPUT);
+
+        shooterMotor.setDirection(DcMotor.Direction.REVERSE);
+        sucker.setDirection(DcMotor.Direction.REVERSE);
 
         leftFront.setDirection(DcMotor.Direction.REVERSE);
 //       rightFront.setDirection(DcMotor.Direction.REVERSE);
