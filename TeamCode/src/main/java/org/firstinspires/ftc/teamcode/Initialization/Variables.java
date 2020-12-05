@@ -147,4 +147,15 @@ public class Variables {
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 
+    public double xAccel(double prev) {
+        return sensors.xAccel(prev);
+    }
+
+    public double yAccel(double prev) {
+        return sensors.yAccel(prev);
+    }
+
+    public double zAccel(double prev) {
+        return sensors.zAccel(prev);
+    }
 }

@@ -25,7 +25,11 @@ public class Tele_Op extends OpMode {
     private boolean turningDown;
     private boolean turningLeft;
     private boolean turningRight;
+    private double xAccel = 0;
+    private double yAccel = 0;
+    private double zAccel = 0;
 
+    boolean intake = true;
     @Override
     public void init() {
         var = new Initialize().Init(hardwareMap);
@@ -38,6 +42,23 @@ public class Tele_Op extends OpMode {
     @Override
     public void loop() {
 
+        if (gamepad1.a) {
+            intake = !intake;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if (gamepad1.right_trigger != 0)
             driveTrain = DriveTrain.STRAFER;
         else
@@ -46,22 +67,30 @@ public class Tele_Op extends OpMode {
         else
         if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x != 0)
             driveTrain = DriveTrain.DRIVE;
-
-        else if (gamepad1.dpad_up || turningUp)
+        else
+        if (gamepad1.dpad_up || turningUp)
             driveTrain = DriveTrain.TURNUP;
-
-        else if (gamepad1.dpad_down || turningDown)
+        else
+        if (gamepad1.dpad_down || turningDown)
             driveTrain = DriveTrain.TURNDOWN;
-
-        else if (gamepad1.dpad_left || turningLeft)
+        else
+        if (gamepad1.dpad_left || turningLeft)
             driveTrain = DriveTrain.TURNLEFT;
-
-        else if (gamepad1.dpad_right || turningRight)
+        else
+        if (gamepad1.dpad_right || turningRight)
             driveTrain = DriveTrain.TURNRIGHT;
         else
             driveTrain = DriveTrain.STOP;
 
         stateMachine(driveTrain, shooter);
+
+        xAccel = var.xAccel(xAccel);
+        yAccel = var.xAccel(yAccel);
+        zAccel = var.xAccel(zAccel);
+
+        telemetry.addData("xAccel", xAccel);
+        telemetry.addData("yAccel", yAccel);
+        telemetry.addData("zAccel", zAccel);
 
     }
 
@@ -71,7 +100,8 @@ public class Tele_Op extends OpMode {
 
     private void stateMachine(DriveTrain driveTrain, Shooter shooter) {
         driveTrainState(driveTrain);
-        shooterState(shooter);
+//        shooterState(shooter);
+        telemetry.addData("State", driveTrain);
     }
 
     private void driveTrainState(DriveTrain driveTrain) {
@@ -95,10 +125,7 @@ public class Tele_Op extends OpMode {
                 break;
 
             case DRIVE:
-                telemetry.addData("Angle", motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x));
-//
-//                if (begin)
-//                    begin = false;
+                telemetry.addData("rightX", motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x));
 
                 break;
 
@@ -196,4 +223,5 @@ public class Tele_Op extends OpMode {
                 break;
         }
     }
+
 }
