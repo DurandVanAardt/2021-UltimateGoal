@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Resources;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -49,30 +48,6 @@ public class Sensors {
         lastAngles = angles;
 
         return globalAngle;
-    }
-
-    public double xAccel(double prev) {
-        double xAccel = var.robot.imu.getLinearAcceleration().xAccel;
-
-        xAccel = xAccel - (xAccel - prev) / 2;
-
-        return xAccel;
-    }
-
-    public double yAccel(double prev) {
-        double yAccel = var.robot.imu.getLinearAcceleration().yAccel;
-
-        yAccel = yAccel - (yAccel - prev) / 2;
-
-        return yAccel;
-    }
-
-    public double zAccel(double prev) {
-        double zAccel = var.robot.imu.getLinearAcceleration().zAccel;
-
-        zAccel = zAccel - (zAccel - prev) / 2;
-
-        return zAccel;
     }
 
     private void encoders() {

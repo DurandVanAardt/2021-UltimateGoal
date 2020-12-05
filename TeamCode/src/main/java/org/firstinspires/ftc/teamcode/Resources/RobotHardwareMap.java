@@ -32,7 +32,7 @@ public class RobotHardwareMap {
 
     public Servo RBG;
     public Servo LBG;
-    public RevColorSensorV3 colourL;
+public RevColorSensorV3 colourL;
     public RevColorSensorV3 colourR;
 
     public RobotHardwareMap(HardwareMap hardwareMap) {
