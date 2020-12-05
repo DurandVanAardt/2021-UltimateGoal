@@ -12,9 +12,9 @@ public class Motors {
     double ShooterloopCount = 0;
 
     public Motors(Variables var) {
-        pidRotate = new PIDController(.003, .00003, 0);
+        pidRotate = new PIDController(.004, .00001, 0);
         pidDrive = new PIDController(.05, 0, 0);
-        pidStrafe = new PIDController(.05,0,0);
+        pidStrafe = new PIDController(.09,0,0);
         pidStrafe2 = new PIDController(.05,0,0);
 
         this.var = var;
@@ -94,14 +94,14 @@ public class Motors {
 
     }
 
-    public boolean rotate(double SP) {
+    public boolean rotate(double SP)  {
         // restart imu angle tracking.
 
 
         double PV1 = var.getTrueAngle();
 //        telemetry.addData("Current angle",PV1);
 
-        double degrees = SP;
+        double degrees = SP -1;
 
 
         double power = 1.0;
@@ -121,7 +121,7 @@ public class Motors {
         pidRotate.setSetpoint(degrees);
         pidRotate.setInputRange(0, degrees);
         pidRotate.setOutputRange(0, power);
-        pidRotate.setTolerance(1);
+        pidRotate.setTolerance(0.00000000001);
         pidRotate.enable();
         pidRotate.performPID(PV1);
 
@@ -257,32 +257,14 @@ robot.shooterAngleMotor.setPower(shooterAngle);
         }
 
 
+        public void intakeStop() {
 
+            robot.sucker.setPower(1);
+        }
 
-    public void suckerOut(boolean gamepad)
+    public void suckerOut()
     {
-        double loopCount;
-
-        loopCount = 0;
-
-        double speed = 1;
-
-        loopCount= loopCount + 1;
-
-        if ((loopCount % 2) == 0) {
-            robot.sucker.setPower(0);
-        }
-
-
-        if  ((loopCount % 2) != 0)
-        {
-            robot.sucker.setPower(speed);
-
-        }
-
-
-
-
+            robot.sucker.setPower(1);
 
     }
 
@@ -437,6 +419,9 @@ robot.shooterAngleMotor.setPower(shooterAngle);
 
         return rightX;
     }
+
+
+
 
 
 

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
@@ -11,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 
 
 @TeleOp(name = "Test", group = "TeleOp")
+
 public class Test extends OpMode {
 
     Variables var;
@@ -18,7 +18,7 @@ public class Test extends OpMode {
     RobotHardwareMap robot;
 
     DriveTrain driveTrain = DriveTrain.STOP;
-    Shooter shooter = Shooter.REST;
+    Shooter shooter = Shooter.SHOOTERREST;
 
 
     private boolean turnFirst = true;
@@ -31,8 +31,8 @@ public class Test extends OpMode {
     private boolean turningDown;
     private boolean turningLeft;
     private boolean turningRight;
-    private Shooter curShooterState = Shooter.REST;
-    private DriveTrain curDriveTrainState = DriveTrain.DRIVE.STOP;
+    private Shooter curShooterState = Shooter.SHOOTERREST;
+    private DriveTrain curDriveTrainState = DriveTrain.STOP;
 
     int Counter= 0;
     boolean shooterLoop = true;
@@ -69,6 +69,7 @@ public class Test extends OpMode {
 
         readInputs();
 
+        telemetry.addData("IMU", var.getAngle());
 //
 //        else if (gamepad1.dpad_up || turningUp)
 //            driveTrain = DriveTrain.TURNUP;
@@ -104,7 +105,7 @@ public class Test extends OpMode {
     }
 
     public void readInputs() {
-        if(gamepad2.a && curShooterState == Shooter.FIRE.REST)
+         if(gamepad2.a && curShooterState == Shooter.SHOOTERREST)
         {
             curShooterState = Shooter.FIRE;
             shooterState(Shooter.FIRE);
@@ -112,8 +113,8 @@ public class Test extends OpMode {
 
         else if(gamepad2.a && curShooterState == Shooter.FIRE)
         {
-            curShooterState = Shooter.FIRE.REST;
-            shooterState(Shooter.FIRE.REST);
+            curShooterState = Shooter.SHOOTERREST;
+            shooterState(Shooter.SHOOTERREST);
         }
 
         if (gamepad2.b)
@@ -124,73 +125,70 @@ public class Test extends OpMode {
 
         }
 
-        if(gamepad2.left_bumper && curShooterState == Shooter.SUCKERIN.REST)
+        if(gamepad2.left_bumper && curShooterState == Shooter.INTAKEREST)
         {
             curShooterState = Shooter.SUCKERIN;
             shooterState(Shooter.SUCKERIN);
         }
 
-        else if(gamepad2.left_bumper && curShooterState == Shooter.SUCKERIN) {
-            curShooterState = Shooter.SUCKERIN.REST;
-            shooterState(Shooter.SUCKERIN.REST);
+        else if(gamepad2.left_bumper) {
+            curShooterState = Shooter.INTAKEREST;
+            shooterState(Shooter.INTAKEREST);
         }
 
-        if(gamepad2.right_bumper && curShooterState == Shooter.SUCKEROUT.REST)
+        if(gamepad2.right_bumper && curShooterState == Shooter.INTAKEREST)
         {
             curShooterState = Shooter.SUCKEROUT;
             shooterState(Shooter.SUCKEROUT);
         }
 
-        else if(gamepad2.right_bumper && curShooterState == Shooter.SUCKEROUT)
+        else if(gamepad2.right_bumper)
         {
-            curShooterState = Shooter.SUCKEROUT.REST;
-            shooterState(Shooter.SUCKEROUT.REST);
+            curShooterState = Shooter.INTAKEREST;
+            shooterState(Shooter.INTAKEREST);
         }
 
-if ((gamepad1.left_stick_x !=0) || (gamepad1.left_stick_y!=0) || (gamepad1.right_stick_x!=0))
+    if ((gamepad1.left_stick_x !=0) || (gamepad1.left_stick_y!=0) || (gamepad1.right_stick_x!=0))
         {
 
             driveTrainState(DriveTrain.DRIVE);
 
         }
 
-else if ((gamepad1.left_stick_x ==0) && (gamepad1.left_stick_y==0) && (gamepad1.right_stick_x==0)&& (gamepad1.left_trigger==0)&& (gamepad1.right_trigger==0))
-{
-    driveTrainState(DriveTrain.DRIVE.STOP);
-    driveTrainState(DriveTrain.STRAFEL.STOP);
-    driveTrainState(DriveTrain.STRAFER.STOP);
-}
+    else if (gamepad1.left_trigger!=0)
 
-else if (gamepad1.left_trigger!=0)
+        driveTrainState(DriveTrain.STRAFEL);
 
-    driveTrainState(DriveTrain.STRAFEL);
+    else if (gamepad1.right_trigger!=0)
+        driveTrainState(DriveTrain.STRAFER);
 
-else if (gamepad1.right_trigger!=0)
-    driveTrainState(DriveTrain.STRAFER);
+    else
+        driveTrainState(DriveTrain.STOP);
 
-// else if (gamepad1.dpad_up)
+
+// else if ((gamepad1.dpad_up &&  (turnFirst==true))) {
 //
-//    driveTrainState(DriveTrain.TURNUP);
-//
-//else if (gamepad1.dpad_left)
+//            driveTrainState(DriveTrain.TURNUP);
+//        }
+//else if ((gamepad1.dpad_left &&  (turnFirst==true)))
 //
 //    driveTrainState(DriveTrain.TURNLEFT);
 //
-//else if (gamepad1.dpad_right)
+//else if ((gamepad1.dpad_right &&  (turnFirst==true)))
 //
 //    driveTrainState(DriveTrain.TURNRIGHT);
 //
-//else if (gamepad1.dpad_down)
+//else if ((gamepad1.dpad_down &&  (turnFirst==true)))
 //
 //    driveTrainState(DriveTrain.TURNDOWN);
 //
-//else
+//else {
 //    driveTrainState((driveTrain.TURNUP.STOP));
 //    driveTrainState((driveTrain.TURNDOWN.STOP));
 //    driveTrainState((driveTrain.TURNLEFT.STOP));
 //    driveTrainState((driveTrain.TURNRIGHT.STOP));
 //
-
+//}
 
 
 //        if (gamepad1.left_trigger!=0)
@@ -235,7 +233,7 @@ else if (gamepad1.right_trigger!=0)
 
             case DRIVE:
 
-                motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, true);
+                motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x,true);
 //
 //                if (begin)
 //                    begin = false;
@@ -356,15 +354,20 @@ else if (gamepad1.right_trigger!=0)
 
             case SUCKEROUT:
 
-                motors.suckerOut(gamepad1.right_bumper);
+                motors.suckerOut();
 
 
                 break;
 
-            case REST:
+            case SHOOTERREST:
 
                 robot.shooterMotor.setPower(0);
                 break;
+
+            case INTAKEREST:
+
+                motors.intakeStop();
+
         }
     }
 }

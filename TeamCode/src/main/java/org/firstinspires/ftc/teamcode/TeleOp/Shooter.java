@@ -5,5 +5,6 @@ enum Shooter {
     ADJUSTANGLE,
     SUCKERIN,
     SUCKEROUT,
-    REST
+    SHOOTERREST,
+    INTAKEREST
 }
