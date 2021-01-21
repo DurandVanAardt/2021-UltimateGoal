@@ -19,6 +19,7 @@ public class RobotHardwareMap {
     public DcMotor liftMotor;
     public DcMotor shooterMotor;
     public DcMotor sucker;
+    public DcMotor wobbleLifter;
 
     public DcMotor shooterAngleMotor;
     public DistanceSensor distanceR;
@@ -48,7 +49,7 @@ public RevColorSensorV3 colourL;
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         initializeIMU();
-
+        wobbleLifter = hardwareMap.get(DcMotor.class, "wobbleLifter");
         distanceR = hardwareMap.get(DistanceSensor.class, "distanceR");
         distanceL = hardwareMap.get(DistanceSensor.class, "distanceL");
         distanceB = hardwareMap.get(DistanceSensor.class, "distanceB");
@@ -60,10 +61,12 @@ public RevColorSensorV3 colourL;
         rightFront = hardwareMap.get(DcMotor.class, "rightmotor");
         leftBack = hardwareMap.get(DcMotor.class, "leftback");
         rightBack = hardwareMap.get(DcMotor.class, "rightback");
+
         shooterAngleMotor = hardwareMap.get(DcMotor.class, "shooterAngleMotor");
         liftMotor = hardwareMap.get(DcMotor.class, "motorHeight");
         shooterMotor = hardwareMap.get(DcMotor.class, "shooterMotor");
         sucker = hardwareMap.get(DcMotor.class, "sucker");
+
 
 
         downLimit = hardwareMap.get(DigitalChannel.class, "downLimit");

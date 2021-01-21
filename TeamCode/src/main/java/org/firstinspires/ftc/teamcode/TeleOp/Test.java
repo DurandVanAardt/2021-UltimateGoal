@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
@@ -69,7 +70,8 @@ public class Test extends OpMode {
 
         readInputs();
 
-        telemetry.addData("IMU", var.getAngle());
+        telemetry.addData("Current state", curShooterState);
+
 //
 //        else if (gamepad1.dpad_up || turningUp)
 //            driveTrain = DriveTrain.TURNUP;
@@ -105,14 +107,45 @@ public class Test extends OpMode {
     }
 
     public void readInputs() {
-         if(gamepad2.a && curShooterState == Shooter.SHOOTERREST)
+robot.wobbleLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+if ((gamepad2.b) && curShooterState == Shooter.SHOOTERREST)
+{
+
+    robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+robot.wobbleLifter.setTargetPosition(1000);
+robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+}
+
+        if ((gamepad2.x) && curShooterState == Shooter.SHOOTERREST)
+        {
+            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.wobbleLifter.setTargetPosition(1200);
+            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+
+        if ((gamepad2.y) && curShooterState == Shooter.SHOOTERREST)
+        {
+            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.wobbleLifter.setTargetPosition(0);
+            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+         if(gamepad2.a &&  curShooterState == Shooter.SHOOTERREST)
+
         {
             curShooterState = Shooter.FIRE;
             shooterState(Shooter.FIRE);
+
         }
 
+
         else if(gamepad2.a && curShooterState == Shooter.FIRE)
+
         {
+
             curShooterState = Shooter.SHOOTERREST;
             shooterState(Shooter.SHOOTERREST);
         }
@@ -124,6 +157,9 @@ public class Test extends OpMode {
             shooterState(Shooter.ADJUSTANGLE);
 
         }
+
+
+
 
         if(gamepad2.left_bumper && curShooterState == Shooter.INTAKEREST)
         {
@@ -266,7 +302,7 @@ public class Test extends OpMode {
                     turnFirst = false;
                     motors.pidRotate.reset();
                     motors.pidRotate.enable();
-                    turningDown = motors.rotate(-180);
+                    turningDown = motors.rotate(180);
                 }
 
                 turningDown = motors.rotate(180);
@@ -330,11 +366,13 @@ public class Test extends OpMode {
     }
     private void shooterState(Shooter shooter) {
 
-        switch (shooter) {
+        switch (shooter)
+
+        {
 
             case FIRE:
 
-                motors.robotShooter(gamepad2.a);
+               robot.shooterMotor.setPower(1);
 
                     break;
 
@@ -345,6 +383,7 @@ public class Test extends OpMode {
                 break;
 
             case SUCKERIN:
+
 
                 motors.suckerIn(gamepad1.left_bumper);
 

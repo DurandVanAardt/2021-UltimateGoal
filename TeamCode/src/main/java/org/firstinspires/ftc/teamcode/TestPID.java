@@ -146,9 +146,12 @@ public class TestPID extends LinearOpMode {
         PV/*Process Variable*/ = -getAngle();
         boolean distanceReached = robot.distanceL.getDistance(DistanceUnit.MM) <= wallDistance;
         if (start) {
+
             SP/*SetPoint*/ = -getAngle();
+
             start = false;
         }
+
         double correction = (SP - PV) * 0.02;
 
         double v1 = power - correction;
