@@ -1,20 +1,14 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import android.widget.Switch;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
+import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
-import org.firstinspires.ftc.teamcode.Autonomous.AutonomousShooter;
-import org.firstinspires.ftc.teamcode.Autonomous.AutonomousMove;
 
 
 
@@ -95,7 +89,9 @@ while (robot.shooterMotor.getCurrentPosition() < robot.shooterMotor.getTargetPos
     /**
      * Returns an estimation of the horizontal angle to the detected object.
      */
-    //estimateAngleToObject(AngleUnit angleUnit);
+    void estimateAngleToObject(AngleUnit angleUnit) {
+        
+    }
 
     private void MoveState(AutonomousMove DriveTrain) {
 
