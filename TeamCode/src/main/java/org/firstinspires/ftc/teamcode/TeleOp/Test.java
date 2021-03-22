@@ -67,7 +67,7 @@ public class Test extends OpMode {
 
 
 
-        readInputs();
+//        readInputs();
 
         telemetry.addData("IMU", var.getAngle());
 //
