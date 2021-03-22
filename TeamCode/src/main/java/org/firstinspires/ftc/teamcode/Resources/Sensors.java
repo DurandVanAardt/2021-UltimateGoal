@@ -61,30 +61,30 @@ public class Sensors {
 
     }
 
-    private void distanceSensors(){
-        double distanceLTemp = var.robot.distanceL.getDistance(DistanceUnit.MM);
-        double distanceRTemp = var.robot.distanceR.getDistance(DistanceUnit.MM);
-        double distanceBTemp = var.robot.distanceB.getDistance(DistanceUnit.MM);
-        double distanceFMTemp = var.robot.distanceFM.getDistance(DistanceUnit.MM);
-        count ++;
-        if (count != 5){
-            distanceLAvg += distanceLTemp;
-            distanceRAvg += distanceRTemp;
-            distanceBAvg += distanceBTemp;
-            distanceFMAvg += distanceFMTemp;
-        } else {
-            distanceLAvg /= 5;
-            distanceRAvg /= 5;
-            distanceBAvg /= 5;
-            distanceFMAvg /= 5;
-            var.setDistanceL(distanceLAvg);
-            var.setDistanceR(distanceRAvg);
-            var.setDistanceB(distanceBAvg);
-            var.setDistanceFM(distanceFMAvg);
-
-            count = 0;
-        }
-    }
+//    private void distanceSensors(){
+//        double distanceLTemp = var.robot.distanceL.getDistance(DistanceUnit.MM);
+//        double distanceRTemp = var.robot.distanceR.getDistance(DistanceUnit.MM);
+//        double distanceBTemp = var.robot.distanceB.getDistance(DistanceUnit.MM);
+//        double distanceFMTemp = var.robot.distanceFM.getDistance(DistanceUnit.MM);
+//        count ++;
+//        if (count != 5){
+//            distanceLAvg += distanceLTemp;
+//            distanceRAvg += distanceRTemp;
+//            distanceBAvg += distanceBTemp;
+//            distanceFMAvg += distanceFMTemp;
+//        } else {
+//            distanceLAvg /= 5;
+//            distanceRAvg /= 5;
+//            distanceBAvg /= 5;
+//            distanceFMAvg /= 5;
+//            var.setDistanceL(distanceLAvg);
+//            var.setDistanceR(distanceRAvg);
+//            var.setDistanceB(distanceBAvg);
+//            var.setDistanceFM(distanceFMAvg);
+//
+//            count = 0;
+//        }
+//    }
 
     public double formatAngle(AngleUnit angleUnit, double angle) {
         return Double.parseDouble(formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle)));

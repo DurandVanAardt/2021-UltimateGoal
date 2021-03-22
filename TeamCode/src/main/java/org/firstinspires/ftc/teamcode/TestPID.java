@@ -142,132 +142,133 @@ public class TestPID extends LinearOpMode {
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(v4);
     }
-    private boolean PIDStrafeLToWall(double power, double wallDistance) {
-        PV/*Process Variable*/ = -getAngle();
-        boolean distanceReached = robot.distanceL.getDistance(DistanceUnit.MM) <= wallDistance;
-        if (start) {
+//     private boolean PIDStrafeLToWall(double power, double wallDistance) {
+//         PV/*Process Variable*/ = -getAngle();
+//         boolean distanceReached = robot.distanceL.getDistance(DistanceUnit.MM) <= wallDistance;
+//         if (start) {
 
-            SP/*SetPoint*/ = -getAngle();
+//             SP/*SetPoint*/ = -getAngle();
 
-            start = false;
-        }
+//             start = false;
+//         }
 
-        double correction = (SP - PV) * 0.02;
+//         double correction = (SP - PV) * 0.02;
 
-        double v1 = power - correction;
-        double v2 = power - correction;
-        double v3 = power + correction;
-        double v4 = power + correction;
+//         double v1 = power - correction;
+//         double v2 = power - correction;
+//         double v3 = power + correction;
+//         double v4 = power + correction;
 
-        robot.leftFront.setPower(-v1);
-        robot.rightFront.setPower(v2);
-        robot.leftBack.setPower(v3);
-        robot.rightBack.setPower(-v4);
+//         robot.leftFront.setPower(-v1);
+//         robot.rightFront.setPower(v2);
+//         robot.leftBack.setPower(v3);
+//         robot.rightBack.setPower(-v4);
 
-        if (distanceReached) {
-            start = true;
+//         if (distanceReached) {
+//             start = true;
 
-            robot.leftFront.setPower(0);
-            robot.rightFront.setPower(0);
-            robot.leftBack.setPower(0);
-            robot.rightFront.setPower(0);
-        }
+//             robot.leftFront.setPower(0);
+//             robot.rightFront.setPower(0);
+//             robot.leftBack.setPower(0);
+//             robot.rightFront.setPower(0);
+//         }
 
-        return !distanceReached;
-    }
+//         return !distanceReached;
+//     }
 
-    private boolean PIDStrafeLFromWall(double power, double wallDistance) {
-        PV/*Process Variable*/ = -getAngle();
-        boolean distanceReached = robot.distanceL.getDistance(DistanceUnit.MM) >= wallDistance;
-        if (start) {
-            SP/*SetPoint*/ = -getAngle();
-            start = false;
-        }
-        double correction = (SP - PV) * 0.02;
+//     private boolean PIDStrafeLFromWall(double power, double wallDistance) {
+//         PV/*Process Variable*/ = -getAngle();
+//         boolean distanceReached = robot.distanceL.getDistance(DistanceUnit.MM) >= wallDistance;
+//         if (start) {
+//             SP/*SetPoint*/ = -getAngle();
+//             start = false;
+//         }
+//         double correction = (SP - PV) * 0.02;
 
-        double v1 = power - correction;
-        double v2 = power - correction;
-        double v3 = power + correction;
-        double v4 = power + correction;
+//         double v1 = power - correction;
+//         double v2 = power - correction;
+//         double v3 = power + correction;
+//         double v4 = power + correction;
 
-        robot.leftFront.setPower(-v1);
-        robot.rightFront.setPower(v2);
-        robot.leftBack.setPower(v3);
-        robot.rightBack.setPower(-v4);
+//         robot.leftFront.setPower(-v1);
+//         robot.rightFront.setPower(v2);
+//         robot.leftBack.setPower(v3);
+//         robot.rightBack.setPower(-v4);
 
-        if (distanceReached) {
-            start = true;
+//         if (distanceReached) {
+//             start = true;
 
-            robot.leftFront.setPower(0);
-            robot.rightFront.setPower(0);
-            robot.leftBack.setPower(0);
-            robot.rightFront.setPower(0);
-        }
+//             robot.leftFront.setPower(0);
+//             robot.rightFront.setPower(0);
+//             robot.leftBack.setPower(0);
+//             robot.rightFront.setPower(0);
+//         }
 
-        return !distanceReached;
-    }
+//         return !distanceReached;
+//     }
 
-    private boolean PIDStrafeRToWall(double power, double wallDistance) {
-        PV/*Process Variable*/ = -getAngle();
-        boolean distanceReached = robot.distanceR.getDistance(DistanceUnit.MM) <= wallDistance;
-        if (start) {
-            SP/*SetPoint*/ = -getAngle();
-            start = false;
-        }
-        double correction = (SP - PV) * 0.02;
+//     private boolean PIDStrafeRToWall(double power, double wallDistance) {
+//         PV/*Process Variable*/ = -getAngle();
+//         boolean distanceReached = robot.distanceR.getDistance(DistanceUnit.MM) <= wallDistance;
+//         if (start) {
+//             SP/*SetPoint*/ = -getAngle();
+//             start = false;
+//         }
+//         double correction = (SP - PV) * 0.02;
 
-        double v1 = power + correction;
-        double v2 = power + correction;
-        double v3 = power - correction;
-        double v4 = power - correction;
+//         double v1 = power + correction;
+//         double v2 = power + correction;
+//         double v3 = power - correction;
+//         double v4 = power - correction;
 
-        robot.leftFront.setPower(v1);
-        robot.rightFront.setPower(-v2);
-        robot.leftBack.setPower(-v3);
-        robot.rightBack.setPower(v4);
+//         robot.leftFront.setPower(v1);
+//         robot.rightFront.setPower(-v2);
+//         robot.leftBack.setPower(-v3);
+//         robot.rightBack.setPower(v4);
 
-        if (distanceReached) {
-            start = true;
+//         if (distanceReached) {
+//             start = true;
 
-            robot.leftFront.setPower(0);
-            robot.rightFront.setPower(0);
-            robot.leftBack.setPower(0);
-            robot.rightFront.setPower(0);
-        }
+//             robot.leftFront.setPower(0);
+//             robot.rightFront.setPower(0);
+//             robot.leftBack.setPower(0);
+//             robot.rightFront.setPower(0);
+//         }
 
-        return !distanceReached;
-    }
+//         return !distanceReached;
+//     }
 
-    private boolean PIDStrafeRFromWall(double power, double wallDistance) {
-        PV/*Process Variable*/ = -getAngle();
-        boolean distanceReached = robot.distanceR.getDistance(DistanceUnit.MM) >= wallDistance;
-        if (start) {
-            SP/*SetPoint*/ = -getAngle();
-            start = false;
-        }
-        double correction = (SP - PV) * 0.02;
+//     private boolean PIDStrafeRFromWall(double power, double wallDistance) {
+//         PV/*Process Variable*/ = -getAngle();
+//         boolean distanceReached = robot.distanceR.getDistance(DistanceUnit.MM) >= wallDistance;
+//         if (start) {
+//             SP/*SetPoint*/ = -getAngle();
+//             start = false;
+//         }
+//         double correction = (SP - PV) * 0.02;
 
-        double v1 = power + correction;
-        double v2 = power + correction;
-        double v3 = power - correction;
-        double v4 = power - correction;
+//         double v1 = power + correction;
+//         double v2 = power + correction;
+//         double v3 = power - correction;
+//         double v4 = power - correction;
 
-        robot.leftFront.setPower(v1);
-        robot.rightFront.setPower(-v2);
-        robot.leftBack.setPower(-v3);
-        robot.rightBack.setPower(v4);
+//         robot.leftFront.setPower(v1);
+//         robot.rightFront.setPower(-v2);
+//         robot.leftBack.setPower(-v3);
+//         robot.rightBack.setPower(v4);
 
-        if (distanceReached) {
-            start = true;
+//         if (distanceReached) {
+//             start = true;
 
-            robot.leftFront.setPower(0);
-            robot.rightFront.setPower(0);
-            robot.leftBack.setPower(0);
-            robot.rightFront.setPower(0);
-        }
+//             robot.leftFront.setPower(0);
+//             robot.rightFront.setPower(0);
+//             robot.leftBack.setPower(0);
+//             robot.rightFront.setPower(0);
+//         }
 
-        return !distanceReached;
-    }
+//         return !distanceReached;
+//     }
+
 
     private void PIDStrafeLTrigger(double power, boolean strafe) {
         if (!strafe) {
@@ -582,11 +583,11 @@ public class TestPID extends LinearOpMode {
                     }
                 });
 
-        telemetry.addLine()
-                .addData("DistanceR", robot.distanceR.getDistance(DistanceUnit.MM))
-                .addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM))
-                .addData("DistanceB", robot.distanceB.getDistance(DistanceUnit.MM))
-                .addData("DistanceFM", robot.distanceFM.getDistance(DistanceUnit.MM));
+//        telemetry.addLine()
+//                .addData("DistanceR", robot.distanceR.getDistance(DistanceUnit.MM))
+//                .addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM))
+//                .addData("DistanceB", robot.distanceB.getDistance(DistanceUnit.MM))
+//                .addData("DistanceFM", robot.distanceFM.getDistance(DistanceUnit.MM));
 
     }
 

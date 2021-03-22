@@ -68,7 +68,7 @@ public class Test extends OpMode {
 
 
 
-        readInputs();
+//        readInputs();
 
         telemetry.addData("Current state", curShooterState);
 
