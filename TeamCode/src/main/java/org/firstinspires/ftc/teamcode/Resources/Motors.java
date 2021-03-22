@@ -1,8 +1,14 @@
 package org.firstinspires.ftc.teamcode.Resources;
 
+import android.provider.Settings;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
+
+import java.util.Base64;
 
 @SuppressWarnings("unused")
 public class Motors {
@@ -12,7 +18,8 @@ public class Motors {
     double ShooterloopCount = 0;
 
     public Motors(Variables var) {
-        pidRotate = new PIDController(.004, .00001, 0);
+       pidRotate = new PIDController(.004, .00001, 0);
+       // pidRotate = new PIDController(.006, .00001, 0);
         pidDrive = new PIDController(.05, 0, 0);
         pidStrafe = new PIDController(.09,0,0);
         pidStrafe2 = new PIDController(.05,0,0);
@@ -105,6 +112,7 @@ public class Motors {
 
 
         double power = 1.0;
+        double power2 = 0.1;
 
         // if degrees > 359 we cap at 359 with same sign as original degrees.
         if (Math.abs(degrees) > 359) degrees = (int) Math.copySign(359, degrees);
@@ -181,12 +189,15 @@ public class Motors {
 
 
             // reset angle tracking on new heading.
-            var.resetAngle();
+
             return false;
+
         }
         else if (!pidRotate.onTarget() && var.getAngle()>SP )
 
-            power = ((pidRotate.performPID(PV1)))/5;
+
+
+            power2 = ((pidRotate.performPID(PV1)));
 
 
         robot.leftFront.setPower(power);
@@ -195,6 +206,9 @@ public class Motors {
         robot.rightBack.setPower(-power);
 
         return true;
+
+
+
     }
 
     public void strafe(double angle, double speed, boolean check) {
@@ -224,6 +238,15 @@ public class Motors {
 
         }
 
+        public void Fire(double EncoderTurn)
+        {
+            robot.shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+            robot.shooterMotor.setTargetPosition((int) EncoderTurn);
+
+        }
+
 public void adjustAngle(boolean gamepad)
 
 {
@@ -237,57 +260,32 @@ public void adjustAngle(boolean gamepad)
 
 robot.shooterAngleMotor.setPower(shooterAngle);
 }
-    public void robotShooter(boolean gamepad) {
+    public void robotShooter(boolean gamepad)
+    {
 
+    robot.shooterMotor.setPower(1);
 
-        double speed = 1;
-
-
-//        ShooterloopCount = ShooterloopCount + 1;
-//
-//
-//        if ((ShooterloopCount % 2) == 0) {
-//            robot.shooterMotor.setPower(0);
-//
-//        }
-//
-//        if ((ShooterloopCount % 2) != 0) {
-            robot.shooterMotor.setPower(speed);
 
         }
 
 
         public void intakeStop() {
 
-            robot.sucker.setPower(1);
+            robot.sucker.setPower(0);
         }
 
     public void suckerOut()
     {
-            robot.sucker.setPower(1);
+            robot.sucker.setPower(-1);
 
     }
 
     public void suckerIn(boolean gamepad)
     {
-        double loopCount;
 
-        loopCount = 0;
-
-        double speed = 1;
-
-        loopCount= loopCount + 1;
-
-        if ((loopCount % 2) == 0) {
-            robot.sucker.setPower(0);
-        }
+            robot.sucker.setPower(1);
 
 
-        if  ((loopCount % 2) != 0)
-        {
-            robot.sucker.setPower(speed);
-
-        }
 
     }
 
@@ -334,6 +332,8 @@ robot.shooterAngleMotor.setPower(shooterAngle);
                 }
             }
         }
+
+
     }
 
 
@@ -431,7 +431,7 @@ robot.shooterAngleMotor.setPower(shooterAngle);
 
         if (check) {
             var.resetAngle();
-            pidStrafe.reset();
+            pidDrive.reset();
             pidDrive.enable();
         }
 
@@ -450,6 +450,7 @@ robot.shooterAngleMotor.setPower(shooterAngle);
         robot.leftBack.setPower(v3 - correction);
         robot.rightBack.setPower(v4 + correction);
     }
+
 
 
     /*

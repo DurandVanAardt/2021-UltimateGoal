@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-enum AutomousRed {
+enum AutonomousMove {
     STRAFELTOVIEW,
     STRAFERTOVIEW,
     STOP,
     TURNLEFT,
     TURNRIGHT,
-    ADJUSTANGLE
+    TURNBACK,
+    TURNFRONT,
+
 }
