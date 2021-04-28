@@ -33,7 +33,9 @@ public class Test extends OpMode {
     private boolean turningLeft;
     private boolean turningRight;
     private Shooter curShooterState = Shooter.SHOOTERREST;
+    private Shooter prevShooterState = Shooter.SHOOTERREST;
     private DriveTrain curDriveTrainState = DriveTrain.STOP;
+    private DriveTrain prevDriveState = DriveTrain.STOP;
 
     int Counter= 0;
     boolean shooterLoop = true;
@@ -65,7 +67,7 @@ public class Test extends OpMode {
 //        }else {
 //            motors.driveStrafe(0, 0, false);
 //        }
-
+        readInputs();
 
 
 //        readInputs();
@@ -107,32 +109,36 @@ public class Test extends OpMode {
     }
 
     public void readInputs() {
-robot.wobbleLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//robot.wobbleLifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//if ((gamepad2.b) && curShooterState == Shooter.SHOOTERREST)
+//{
+//
+//    robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//robot.wobbleLifter.setTargetPosition(1000);
+//robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//}
 
-if ((gamepad2.b) && curShooterState == Shooter.SHOOTERREST)
-{
+//        if ((gamepad2.x) && curShooterState == Shooter.SHOOTERREST)
+//        {
+//            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            robot.wobbleLifter.setTargetPosition(1200);
+//            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        }
+//
+//        if ((gamepad2.y) && curShooterState == Shooter.SHOOTERREST)
+//        {
+//            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            robot.wobbleLifter.setTargetPosition(0);
+//            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        }
 
-    robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-robot.wobbleLifter.setTargetPosition(1000);
-robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        prevDriveState = curDriveTrainState;
+//        prevShooterState = curShooterState;
 
-}
-
-        if ((gamepad2.x) && curShooterState == Shooter.SHOOTERREST)
-        {
-            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.wobbleLifter.setTargetPosition(1200);
-            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        }
-
-        if ((gamepad2.y) && curShooterState == Shooter.SHOOTERREST)
-        {
-            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.wobbleLifter.setTargetPosition(0);
-            robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        }
          if(gamepad2.a &&  curShooterState == Shooter.SHOOTERREST)
 
         {
@@ -187,21 +193,21 @@ robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     if ((gamepad1.left_stick_x !=0) || (gamepad1.left_stick_y!=0) || (gamepad1.right_stick_x!=0))
         {
 
-            driveTrainState(DriveTrain.DRIVE);
+            curDriveTrainState = DriveTrain.DRIVE;
 
         }
 
     else if (gamepad1.left_trigger!=0)
 
-        driveTrainState(DriveTrain.STRAFEL);
+        curDriveTrainState = DriveTrain.STRAFEL;
 
     else if (gamepad1.right_trigger!=0)
-        driveTrainState(DriveTrain.STRAFER);
+            curDriveTrainState = DriveTrain.STRAFER;
 
     else
-        driveTrainState(DriveTrain.STOP);
+        curDriveTrainState = DriveTrain.STOP;
 
-
+        driveTrainState(curDriveTrainState, prevDriveState);
 // else if ((gamepad1.dpad_up &&  (turnFirst==true))) {
 //
 //            driveTrainState(DriveTrain.TURNUP);
@@ -242,12 +248,12 @@ robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        else  driveTrainState(DriveTrain.STRAFER.STOP);
     }
 
-    private void stateMachine(DriveTrain driveTrain, Shooter shooter) {
-        driveTrainState(driveTrain);
-        shooterState(shooter);
-    }
+//    private void stateMachine(DriveTrain driveTrain, Shooter shooter) {
+//        driveTrainState(driveTrain);
+//        shooterState(shooter);
+//    }
 
-    private void driveTrainState(DriveTrain driveTrain) {
+    private void driveTrainState(DriveTrain driveTrain, DriveTrain prevState) {
 
         switch (driveTrain) {
 
@@ -269,7 +275,10 @@ robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             case DRIVE:
 
-                motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x,true);
+                boolean startDrive = prevState != DriveTrain.STOP;
+
+                telemetry.addData("Angle",motors.mecanum(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x,startDrive));
+                telemetry.addData("Angle", var.getAngle());
 //
 //                if (begin)
 //                    begin = false;
