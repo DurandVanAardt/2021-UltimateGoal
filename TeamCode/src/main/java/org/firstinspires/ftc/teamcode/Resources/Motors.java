@@ -407,10 +407,10 @@ robot.shooterAngleMotor.setPower(shooterAngle);
         double rightX = Turn + correction;
 
         //double vX represents the velocities sent to each motor
-        final double v1 = (r * Math.cos(robotAngle)) + rightX;
-        final double v2 = (r * Math.sin(robotAngle)) - rightX;
-        final double v3 = (r * Math.sin(robotAngle)) + rightX;
-        final double v4 = (r * Math.cos(robotAngle)) - rightX;
+        final double v1 = ((r * Math.cos(robotAngle)) + rightX);
+        final double v2 = ((r * Math.sin(robotAngle)) - rightX);
+        final double v3 = ((r * Math.sin(robotAngle)) + rightX);
+        final double v4 = ((r * Math.cos(robotAngle)) - rightX);
 
         robot.leftFront.setPower(v1);
         robot.rightFront.setPower(v2);

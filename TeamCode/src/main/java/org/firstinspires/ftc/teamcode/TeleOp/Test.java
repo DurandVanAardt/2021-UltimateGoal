@@ -269,7 +269,7 @@ robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             case DRIVE:
 
-                motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x,true);
+                motors.mecanum(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x,true);
 //
 //                if (begin)
 //                    begin = false;
