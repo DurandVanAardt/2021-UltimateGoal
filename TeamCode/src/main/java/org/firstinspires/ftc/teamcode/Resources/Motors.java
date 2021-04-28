@@ -21,7 +21,7 @@ public class Motors {
        pidRotate = new PIDController(.004, .00001, 0);
        // pidRotate = new PIDController(.006, .00001, 0);
         pidDrive = new PIDController(.05, 0, 0);
-        pidStrafe = new PIDController(.09,0,0);
+        pidStrafe = new PIDController(.09,0.0003,0);
         pidStrafe2 = new PIDController(.05,0,0);
 
         this.var = var;
@@ -30,7 +30,7 @@ public class Motors {
 
 
         pidStrafe.setSetpoint(0);
-        pidStrafe.setOutputRange(-0.01, 0.01);
+        pidStrafe.setOutputRange(-0.1, 0.1);
         pidStrafe.setInputRange(-90, 90);
         pidStrafe.enable();
 
@@ -390,7 +390,7 @@ robot.shooterAngleMotor.setPower(shooterAngle);
 
     public double mecanum(double Strafe, double Forward, double Turn, boolean check2) {
         //Find the magnitude of the controller's input
-        if (!check2) {
+        if (!check2 || Turn != 0 || (Strafe == 0 && Forward == 0)) {
             var.resetAngle();
         }
         double r = Math.hypot(Strafe, Forward);
@@ -398,13 +398,13 @@ robot.shooterAngleMotor.setPower(shooterAngle);
         //returns point from +X axis to point (forward, strafe)
         double robotAngle = Math.atan2(Forward, Strafe) - Math.PI / 4;
 
-        if (Turn != 0 || (Strafe == 0 && Forward == 0)) {
-            var.resetAngle();
-        }
+//        if (Turn != 0 || (Strafe == 0 && Forward == 0)) {
+//            var.resetAngle();
+//        }
 
         //Quantity to turn by (turn)
         double correction = pidStrafe.performPID(var.getAngle());
-        double rightX = Turn + correction;
+        double rightX = Turn - correction;
 
         //double vX represents the velocities sent to each motor
         final double v1 = ((r * Math.cos(robotAngle)) + rightX);

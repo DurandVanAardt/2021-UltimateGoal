@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.Resources;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.motors.RevRobotics20HdHexMotor;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,7 +18,7 @@ public class RobotHardwareMap {
     public DcMotor rightFront;
     public DcMotor leftBack;
     public DcMotor rightBack;
-    public DcMotor liftMotor;
+//    public DcMotor liftMotor;
     public DcMotor shooterMotor;
     public DcMotor sucker;
     public DcMotor wobbleLifter;
@@ -31,6 +33,8 @@ public class RobotHardwareMap {
     public DigitalChannel downLimit;
     public BNO055IMU imu;
 
+    public Servo RBG;
+    public Servo LBG;
 public RevColorSensorV3 colourL;
     public RevColorSensorV3 colourR;
 
@@ -41,12 +45,13 @@ public RevColorSensorV3 colourL;
     public void init(HardwareMap hardwareMap){
 
 
-
+//        RBG = hardwareMap.get(Servo.class, "RBG");
+//        LBG = hardwareMap.get(Servo.class, "LBG");
 //        shooterAngleServo = hardwareMap.get(Servo.class, "shooterAngleServo");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         initializeIMU();
-        wobbleLifter = hardwareMap.get(DcMotor.class, "wobbleLifter");
+
 //        distanceR = hardwareMap.get(DistanceSensor.class, "distanceR");
 //        distanceL = hardwareMap.get(DistanceSensor.class, "distanceL");
 //        distanceB = hardwareMap.get(DistanceSensor.class, "distanceB");
@@ -65,13 +70,12 @@ public RevColorSensorV3 colourL;
         sucker = hardwareMap.get(DcMotor.class, "sucker");
 
 
-
 //        downLimit = hardwareMap.get(DigitalChannel.class, "downLimit");
 //        downLimit.setMode(DigitalChannel.Mode.INPUT);
-
-        shooterMotor.setDirection(DcMotor.Direction.REVERSE);
-        sucker.setDirection(DcMotor.Direction.REVERSE);
-
+//
+//        shooterMotor.setDirection(DcMotor.Direction.REVERSE);
+//        sucker.setDirection(DcMotor.Direction.REVERSE);
+        
         leftFront.setDirection(DcMotor.Direction.REVERSE);
 //       rightFront.setDirection(DcMotor.Direction.REVERSE);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
@@ -80,7 +84,7 @@ public RevColorSensorV3 colourL;
 //        colourL = hardwareMap.get(RevColorSensorV3.class, "colourL");
 //        colourR = hardwareMap.get(RevColorSensorV3.class, "colourR");
 
-        //liftMotor.setDirection(DcMotor.Direction.REVERSE);
+//        liftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
