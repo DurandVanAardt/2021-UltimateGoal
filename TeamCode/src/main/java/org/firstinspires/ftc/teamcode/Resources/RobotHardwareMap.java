@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.Resources;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.motors.RevRobotics20HdHexMotor;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -19,6 +21,7 @@ public class RobotHardwareMap {
 //    public DcMotor liftMotor;
     public DcMotor shooterMotor;
     public DcMotor sucker;
+    public DcMotor wobbleLifter;
 
     public DcMotor shooterAngleMotor;
     public DistanceSensor distanceR;
@@ -56,10 +59,11 @@ public RevColorSensorV3 colourL;
 //        distanceFR = hardwareMap.get(DistanceSensor.class, "distanceFL");
 //        distanceFM = hardwareMap.get(DistanceSensor.class, "distanceFM");
 
-        leftFront = hardwareMap.get(DcMotor.class, "leftmotor");
-        rightFront = hardwareMap.get(DcMotor.class, "rightmotor");
+        leftFront = hardwareMap.get(DcMotor.class, "leftfront");
+        rightFront = hardwareMap.get(DcMotor.class, "rightfront");
         leftBack = hardwareMap.get(DcMotor.class, "leftback");
         rightBack = hardwareMap.get(DcMotor.class, "rightback");
+
         shooterAngleMotor = hardwareMap.get(DcMotor.class, "shooterAngleMotor");
 //        liftMotor = hardwareMap.get(DcMotor.class, "motorHeight");
         shooterMotor = hardwareMap.get(DcMotor.class, "shooterMotor");
@@ -68,10 +72,10 @@ public RevColorSensorV3 colourL;
 
 //        downLimit = hardwareMap.get(DigitalChannel.class, "downLimit");
 //        downLimit.setMode(DigitalChannel.Mode.INPUT);
-
-        shooterMotor.setDirection(DcMotor.Direction.REVERSE);
-        sucker.setDirection(DcMotor.Direction.REVERSE);
-
+//
+//        shooterMotor.setDirection(DcMotor.Direction.REVERSE);
+//        sucker.setDirection(DcMotor.Direction.REVERSE);
+        
         leftFront.setDirection(DcMotor.Direction.REVERSE);
 //       rightFront.setDirection(DcMotor.Direction.REVERSE);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
