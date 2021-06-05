@@ -21,7 +21,8 @@ public class Motors {
        pidRotate = new PIDController(.004, .00001, 0);
        // pidRotate = new PIDController(.006, .00001, 0);
         pidDrive = new PIDController(.05, 0, 0);
-        pidStrafe = new PIDController(.09,0.0003,0);
+//        pidStrafe = new PIDController(.09,0.0003,0);
+        pidStrafe = new PIDController(.002,0,0);
         pidStrafe2 = new PIDController(.05,0,0);
 
         this.var = var;
@@ -30,7 +31,7 @@ public class Motors {
 
 
         pidStrafe.setSetpoint(0);
-        pidStrafe.setOutputRange(-0.1, 0.1);
+        pidStrafe.setOutputRange(-0.035, 0.035);
         pidStrafe.setInputRange(-90, 90);
         pidStrafe.enable();
 
@@ -226,10 +227,12 @@ public class Motors {
 
             double correction = pidStrafe.performPID(var.getAngle());
 
+
             double v1 = speed * Math.sin(angle) - correction;
             double v2 = speed * Math.cos(angle) + correction;
             double v3 = speed * Math.cos(angle) - correction;
             double v4 = speed * Math.sin(angle) + correction;
+
 
             robot.leftFront.setPower(v1);
             robot.rightFront.setPower(v2);
@@ -240,9 +243,8 @@ public class Motors {
 
         public void Fire(double EncoderTurn)
         {
+
             robot.shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
             robot.shooterMotor.setTargetPosition((int) EncoderTurn);
 
         }
@@ -276,14 +278,14 @@ robot.shooterAngleMotor.setPower(shooterAngle);
 
     public void suckerOut()
     {
-            robot.sucker.setPower(-1);
+            robot.sucker.setPower(1);
 
     }
 
     public void suckerIn(boolean gamepad)
     {
 
-            robot.sucker.setPower(1);
+            robot.sucker.setPower(-1);
 
 
 
@@ -398,13 +400,14 @@ robot.shooterAngleMotor.setPower(shooterAngle);
         //returns point from +X axis to point (forward, strafe)
         double robotAngle = Math.atan2(Forward, Strafe) - Math.PI / 4;
 
-//        if (Turn != 0 || (Strafe == 0 && Forward == 0)) {
+
 //            var.resetAngle();
 //        }
 
         //Quantity to turn by (turn)
-        double correction = pidStrafe.performPID(var.getAngle());
-        double rightX = Turn - correction;
+       double correction = pidStrafe.performPID(var.getAngle());
+       double rightX = Turn- correction;
+
 
         //double vX represents the velocities sent to each motor
         final double v1 = ((r * Math.cos(robotAngle)) + rightX);
@@ -416,6 +419,7 @@ robot.shooterAngleMotor.setPower(shooterAngle);
         robot.rightFront.setPower(v2);
         robot.leftBack.setPower(v3);
         robot.rightBack.setPower(v4);
+
 
         return rightX;
     }

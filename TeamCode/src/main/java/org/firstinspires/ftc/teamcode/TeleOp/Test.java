@@ -32,6 +32,10 @@ public class Test extends OpMode {
     private boolean turningDown;
     private boolean turningLeft;
     private boolean turningRight;
+
+    private Shooter curCollectionState = Shooter.INTAKEREST;
+    private Shooter prevCollectionState =Shooter.INTAKEREST;
+
     private Shooter curShooterState = Shooter.SHOOTERREST;
     private Shooter prevShooterState = Shooter.SHOOTERREST;
     private DriveTrain curDriveTrainState = DriveTrain.STOP;
@@ -69,6 +73,13 @@ public class Test extends OpMode {
 //        }
         readInputs();
 
+//        if (gamepad1.a){
+//            robot.leftFront.setPower(-0.5);
+//            robot.leftBack.setPower(-0.5);
+//            robot.rightFront.setPower(0.5);
+//            robot.rightBack.setPower(0.5);
+//
+//        }
 
 //        readInputs();
 
@@ -148,7 +159,7 @@ public class Test extends OpMode {
         }
 
 
-        else if(gamepad2.a && curShooterState == Shooter.FIRE)
+        else if(gamepad2.x && curShooterState == Shooter.FIRE)
 
         {
 
@@ -156,37 +167,37 @@ public class Test extends OpMode {
             shooterState(Shooter.SHOOTERREST);
         }
 
-        if (gamepad2.b)
+//        if (gamepad2.b)
+//        {
+//
+//         curShooterState = Shooter.ADJUSTANGLE;
+//            shooterState(Shooter.ADJUSTANGLE);
+//
+//        }
+
+
+
+
+        if(gamepad2.left_bumper && curCollectionState == Shooter.INTAKEREST)
         {
-
-         curShooterState = Shooter.ADJUSTANGLE;
-            shooterState(Shooter.ADJUSTANGLE);
-
-        }
-
-
-
-
-        if(gamepad2.left_bumper && curShooterState == Shooter.INTAKEREST)
-        {
-            curShooterState = Shooter.SUCKERIN;
+            curCollectionState = Shooter.SUCKERIN;
             shooterState(Shooter.SUCKERIN);
         }
 
-        else if(gamepad2.left_bumper) {
-            curShooterState = Shooter.INTAKEREST;
+        else if(gamepad2.y) {
+            curCollectionState = Shooter.INTAKEREST;
             shooterState(Shooter.INTAKEREST);
         }
 
-        if(gamepad2.right_bumper && curShooterState == Shooter.INTAKEREST)
+        if(gamepad2.right_bumper && curCollectionState == Shooter.INTAKEREST)
         {
-            curShooterState = Shooter.SUCKEROUT;
+            curCollectionState = Shooter.SUCKEROUT;
             shooterState(Shooter.SUCKEROUT);
         }
 
-        else if(gamepad2.right_bumper)
+        else if(gamepad2.y)
         {
-            curShooterState = Shooter.INTAKEREST;
+            curCollectionState = Shooter.INTAKEREST;
             shooterState(Shooter.INTAKEREST);
         }
 
@@ -262,7 +273,6 @@ public class Test extends OpMode {
 
                 if (begin)
                     begin = false;
-
                 break;
 
             case STRAFER:
@@ -277,9 +287,14 @@ public class Test extends OpMode {
 
                 boolean startDrive = prevState != DriveTrain.STOP;
 
-                telemetry.addData("Angle",motors.mecanum(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x,startDrive));
+                telemetry.addData("Angle",motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x,startDrive));
                 telemetry.addData("Angle", var.getAngle());
-//
+                telemetry.addData("LeftFront",robot.leftFront.getPower());
+                telemetry.addData("RightFront",robot.rightFront.getPower());
+                telemetry.addData("LeftBack",robot.leftBack.getPower());
+                telemetry.addData("RightBack",robot.rightBack.getPower());
+
+                telemetry.update();
 //                if (begin)
 //                    begin = false;
 
@@ -381,7 +396,7 @@ public class Test extends OpMode {
 
             case FIRE:
 
-               robot.shooterMotor.setPower(1);
+               robot.shooterMotor.setPower(-1);
 
                     break;
 
