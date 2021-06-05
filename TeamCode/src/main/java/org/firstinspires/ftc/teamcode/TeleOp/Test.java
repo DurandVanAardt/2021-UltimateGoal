@@ -1,13 +1,26 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import android.annotation.SuppressLint;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Initialization.Variables;
 import org.firstinspires.ftc.teamcode.Initialization.Initialize;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
+
+import java.util.List;
+
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
 
 @TeleOp(name = "Test", group = "TeleOp")
@@ -18,13 +31,13 @@ public class Test extends OpMode {
     Motors motors;
     RobotHardwareMap robot;
 
-    DriveTrain driveTrain = DriveTrain.STOP;
-    Shooter shooter = Shooter.SHOOTERREST;
+//    DriveTrain driveTrain = DriveTrain.STOP;
+//    Shooter shooter = Shooter.SHOOTERREST;
 
 
     private boolean turnFirst = true;
     private boolean begin;
-    private boolean begin1;
+//    private boolean begin1;
 
     private boolean turning = false;
     private boolean rotationShooter;
@@ -37,12 +50,13 @@ public class Test extends OpMode {
     private Shooter prevCollectionState =Shooter.INTAKEREST;
 
     private Shooter curShooterState = Shooter.SHOOTERREST;
-    private Shooter prevShooterState = Shooter.SHOOTERREST;
+//    private Shooter prevShooterState = Shooter.SHOOTERREST;
     private DriveTrain curDriveTrainState = DriveTrain.STOP;
-    private DriveTrain prevDriveState = DriveTrain.STOP;
 
-    int Counter= 0;
-    boolean shooterLoop = true;
+//    int Counter= 0;
+//    boolean shooterLoop = true;
+
+    boolean targetVisible = false;
 
     @Override
     public void init() {
@@ -51,10 +65,74 @@ public class Test extends OpMode {
 
         robot = var.robot;
 
+        var.targetsUltimateGoal.activate();
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void loop() {
+//         waitForStart();
+
+        // Note: To use the remote camera preview:
+        // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
+        // Tap the preview window to receive a fresh image.
+
+
+        // check all the trackable targets to see which one (if any) is visible.
+        for (VuforiaTrackable trackable : var.allTrackables) {
+            if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                telemetry.addData("Visible Target", trackable.getName());
+                targetVisible = true;
+
+                // getUpdatedRobotLocation() will return null if no new information is available since
+                // the last time that call was made, or if the trackable is not currently visible.
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                if (robotLocationTransform != null) {
+                    var.lastLocation = robotLocationTransform;
+                }
+                break;
+            }
+        }
+
+        // Provide feedback as to where the robot is located (if we know).
+        if (targetVisible) {
+            // express position (translation) of robot in inches.
+            VectorF translation = var.lastLocation.getTranslation();
+            telemetry.addData("Pos (mm)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                    translation.get(0), translation.get(1), translation.get(2));
+
+            // express the rotation of the robot in degrees.
+            Orientation rotation = Orientation.getOrientation(var.lastLocation, EXTRINSIC, XYZ, DEGREES);
+            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+        }
+        else {
+            telemetry.addData("Visible Target", "none");
+        }
+
+
+        if (var.tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = var.tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                // step through the list of recognitions and display boundary info.
+                int i = 0;
+                for (Recognition recognition : updatedRecognitions) {
+                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                            recognition.getLeft(), recognition.getTop());
+                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                            recognition.getRight(), recognition.getBottom());
+                }
+                telemetry.update();
+            }
+        }
+
+        telemetry.update();
+
+
+        // Disable Tracking when we are done;
 
 //        if (gamepad1.b) {
 //            // right
@@ -83,7 +161,7 @@ public class Test extends OpMode {
 
 //        readInputs();
 
-        telemetry.addData("Current state", curShooterState);
+//        telemetry.addData("Current state", curShooterState);
 
 //
 //        else if (gamepad1.dpad_up || turningUp)
@@ -117,6 +195,11 @@ public class Test extends OpMode {
 
     @Override
     public void stop() {
+        var.targetsUltimateGoal.deactivate();
+
+        if (var.tfod != null) {
+            var.tfod.shutdown();
+        }
     }
 
     public void readInputs() {
@@ -147,7 +230,7 @@ public class Test extends OpMode {
 //
 //        }
 
-        prevDriveState = curDriveTrainState;
+        DriveTrain prevDriveState = curDriveTrainState;
 //        prevShooterState = curShooterState;
 
          if(gamepad2.a &&  curShooterState == Shooter.SHOOTERREST)
@@ -302,6 +385,7 @@ public class Test extends OpMode {
 
             case TURNUP:
 
+                boolean turningUp;
                 if (turnFirst) {
 
                     var.resetAngle();
@@ -309,7 +393,6 @@ public class Test extends OpMode {
                     turnFirst = false;
                     motors.pidRotate.reset();
                     motors.pidRotate.enable();
-                    turningUp = motors.rotate(0);
                 }
 
                 turningUp = motors.rotate(0);
@@ -321,12 +404,12 @@ public class Test extends OpMode {
 
             case TURNDOWN:
 
+                boolean turningDown;
                 if (turnFirst) {
                     var.resetAngle();
                     turnFirst = false;
                     motors.pidRotate.reset();
                     motors.pidRotate.enable();
-                    turningDown = motors.rotate(180);
                 }
 
                 turningDown = motors.rotate(180);
@@ -337,12 +420,12 @@ public class Test extends OpMode {
 
             case TURNLEFT:
 
+                boolean turningLeft;
                 if (turnFirst) {
                     var.resetAngle();
                     turnFirst = false;
                     motors.pidRotate.reset();
                     motors.pidRotate.enable();
-                    turningLeft = motors.rotate(90);
                 }
 
                 turningLeft = motors.rotate(90);
@@ -353,12 +436,12 @@ public class Test extends OpMode {
 
             case TURNRIGHT:
 
+                boolean turningRight;
                 if (turnFirst) {
                     var.resetAngle();
                     turnFirst = false;
                     motors.pidRotate.reset();
                     motors.pidRotate.enable();
-                    turningRight = motors.rotate(-90);
                 }
 
                 turningRight = motors.rotate(-90);

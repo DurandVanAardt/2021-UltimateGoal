@@ -2,14 +2,20 @@ package org.firstinspires.ftc.teamcode.Initialization;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 import org.firstinspires.ftc.teamcode.Resources.Sensors;
 import org.firstinspires.ftc.teamcode.Resources.Motors;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @SuppressWarnings("unused")
@@ -30,6 +36,15 @@ public class Variables {
     double distanceB;
     private Orientation lastAngles;
     private double globalAngle;
+
+    // Vuforia
+    public List<VuforiaTrackable> allTrackables;
+    public OpenGLMatrix lastLocation = null;
+    public VuforiaTrackables targetsUltimateGoal;
+
+    //TensorFlow
+    public TFObjectDetector tfod;
+
 
     public Variables(HardwareMap hardware) {
         robot = new RobotHardwareMap(hardware);
