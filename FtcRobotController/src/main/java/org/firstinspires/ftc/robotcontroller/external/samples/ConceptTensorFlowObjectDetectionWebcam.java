@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection Webcam", group = "Concept")
-@Disabled
+//@Disabled
 public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
@@ -69,7 +69,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY =
-            " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+            "AYSD/P//////AAABmR1zVmwX0kdckb8df7pS1fRsEtj6VXa2Pxmx7PDDfAespnbdYju+FFSuSw6soY6xdrnsS263KCGQQhzpOl7rM8ljS5bqY24sIv1RblWBcEbkVQZ9+F2mAT+75KZBGlmAcss3ccaEj+xjEVftZuiW7CZ/DAgfNUIYdjdWJe8zSB22xS6YRa3nQ4JQ4PopaWI2D/kDF5KghljXKWvdqltKgyVGY3AKhIahUsXAx18hCJt9TExs60MSVQSNQH7tQC9OenKEysMc3481HB56Xaih8TTobKcexXeeZDCVQ6lDfxoaZaVDJir5K5ptLFNIACoDpbgxwgbFJ14JZiAAhOMVZ4pusmWcSSOAdido5x0ZlxT1";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -90,7 +90,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
         initVuforia();
         initTfod();
 
-        /**
+        /*
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          **/
@@ -106,7 +106,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
             tfod.setZoom(2.5, 16.0/9.0);
         }
 
-        /** Wait for the game to begin */
+        /* Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
