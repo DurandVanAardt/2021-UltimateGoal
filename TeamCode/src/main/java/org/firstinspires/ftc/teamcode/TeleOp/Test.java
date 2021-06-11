@@ -34,20 +34,19 @@ public class Test extends OpMode {
 //    DriveTrain driveTrain = DriveTrain.STOP;
 //    Shooter shooter = Shooter.SHOOTERREST;
 
-
     private boolean turnFirst = true;
     private boolean begin;
 //    private boolean begin1;
 
-    private boolean turning = false;
-    private boolean rotationShooter;
-    private boolean turningUp;
-    private boolean turningDown;
-    private boolean turningLeft;
-    private boolean turningRight;
+//    private boolean turning = false;
+//    private boolean rotationShooter;
+//    private boolean turningUp;
+//    private boolean turningDown;
+//    private boolean turningLeft;
+//    private boolean turningRight;
 
     private Shooter curCollectionState = Shooter.INTAKEREST;
-    private Shooter prevCollectionState =Shooter.INTAKEREST;
+//    private Shooter prevCollectionState =Shooter.INTAKEREST;
 
     private Shooter curShooterState = Shooter.SHOOTERREST;
 //    private Shooter prevShooterState = Shooter.SHOOTERREST;
@@ -58,6 +57,9 @@ public class Test extends OpMode {
 
     boolean targetVisible = false;
 
+    // testing
+    int HI = 0;
+
     @Override
     public void init() {
         var = new Initialize().Init(hardwareMap);
@@ -66,6 +68,7 @@ public class Test extends OpMode {
         robot = var.robot;
 
         var.targetsUltimateGoal.activate();
+        telemetry.addData("Press Play to start the program","");
     }
 
     @SuppressLint("DefaultLocale")
@@ -80,6 +83,7 @@ public class Test extends OpMode {
 
         // check all the trackable targets to see which one (if any) is visible.
         for (VuforiaTrackable trackable : var.allTrackables) {
+            HI ++;
             if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                 telemetry.addData("Visible Target", trackable.getName());
                 targetVisible = true;
@@ -125,8 +129,8 @@ public class Test extends OpMode {
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
                 }
-                telemetry.update();
-            }
+            }else
+                telemetry.addData("# Object Detected", 0);
         }
 
         telemetry.update();
@@ -471,6 +475,7 @@ public class Test extends OpMode {
                 break;
         }
     }
+
     private void shooterState(Shooter shooter) {
 
         switch (shooter)

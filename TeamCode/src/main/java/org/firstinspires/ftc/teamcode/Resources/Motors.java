@@ -56,32 +56,6 @@ public class Motors {
 
     }
 
-
-    /*public void driveStrafe(double left_stick_x, double left_stick_y, double right_stick_x, double speedControl) {
-        left_stick_x *= -1;
-        left_stick_y *= -1;
-        right_stick_x *= -1;
-        if (left_stick_x == 0 && left_stick_y == 0) {
-            var.resetAngle();
-        }
-
-        double correction = pidStrafe.performPID(var.getAngle());
-        right_stick_x += correction;
-
-        double Magnitude = Math.hypot(left_stick_x, left_stick_y);
-        double Direction = Math.atan2(left_stick_y, left_stick_x) - Math.PI / 4;
-
-        double v1 = Magnitude * Math.sin(Direction) - right_stick_x;
-        double v2 = Magnitude * Math.cos(Direction) + right_stick_x;
-        double v3 = Magnitude * Math.cos(Direction) - right_stick_x;
-        double v4 = Magnitude * Math.sin(Direction) + right_stick_x;
-
-        var.robot.leftFront.setPower(v1 * speedControl);
-        var.robot.rightFront.setPower(v2 * speedControl);
-        var.robot.leftBack.setPower(v3 * speedControl);
-        var.robot.rightBack.setPower(v4 * speedControl);
-
-    }*/
     public void driveStrafe(double angle, double speed, boolean check) {
 
         if (!check) {
@@ -176,7 +150,6 @@ public class Motors {
 //        while (opModeIsActive() && !pidRotate3.onTarget());
         else if (pidRotate.onTarget()) {
 
-
             // turn the motors off.
 
             robot.leftFront.setPower(0);
@@ -185,19 +158,12 @@ public class Motors {
             robot.leftBack.setPower(0);
             robot.rightBack.setPower(0);
 
-
             // wait for rotation to stop.
 
-
             // reset angle tracking on new heading.
-
             return false;
 
-        }
-        else if (!pidRotate.onTarget() && var.getAngle()>SP )
-
-
-
+        } else if (!pidRotate.onTarget() && var.getAngle()>SP )
             power2 = ((pidRotate.performPID(PV1)));
 
 
@@ -207,8 +173,6 @@ public class Motors {
         robot.rightBack.setPower(-power);
 
         return true;
-
-
 
     }
 
@@ -241,59 +205,42 @@ public class Motors {
 
         }
 
-        public void Fire(double EncoderTurn)
-        {
+    public void Fire(double EncoderTurn){
 
             robot.shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.shooterMotor.setTargetPosition((int) EncoderTurn);
 
-        }
+    }
 
-public void adjustAngle(boolean gamepad)
+    public void adjustAngle(boolean gamepad) {
+         double shooterAngle;
 
-{
- double shooterAngle;
+         double cameraDistance = 120;
 
- double cameraDistance = 120;
+         double angleHeight = 80;
 
- double angleHeight = 80;
+         shooterAngle = Math.atan2(angleHeight,cameraDistance);
 
- shooterAngle = Math.atan2(angleHeight,cameraDistance);
+        robot.shooterAngleMotor.setPower(shooterAngle);
+    }
 
-robot.shooterAngleMotor.setPower(shooterAngle);
-}
-    public void robotShooter(boolean gamepad)
-    {
+    public void robotShooter(boolean gamepad){
+        robot.shooterMotor.setPower(1);
+    }
 
-    robot.shooterMotor.setPower(1);
+    public void intakeStop() {
+        robot.sucker.setPower(0);
+    }
 
-
-        }
-
-
-        public void intakeStop() {
-
-            robot.sucker.setPower(0);
-        }
-
-    public void suckerOut()
-    {
+    public void suckerOut() {
             robot.sucker.setPower(1);
-
     }
 
-    public void suckerIn(boolean gamepad)
-    {
-
+    public void suckerIn(boolean gamepad) {
             robot.sucker.setPower(-1);
-
-
-
     }
 
-    public void RIGHTTOPOS(boolean gamepad)
-    {
-
+    public void RIGHTTOPOS(boolean gamepad) {
         double loopCount;
 
         loopCount = 0;
@@ -308,7 +255,6 @@ robot.shooterAngleMotor.setPower(shooterAngle);
             robot.leftBack.setPower(0);
             robot.rightBack.setPower(0);
         }
-
 
         if  ((loopCount % 2) != 0) {
 
@@ -334,14 +280,9 @@ robot.shooterAngleMotor.setPower(shooterAngle);
                 }
             }
         }
-
-
     }
 
-
-    public void LEFTTOPOS(boolean gamepad)
-    {
-
+    public void LEFTTOPOS(boolean gamepad) {
         double loopCount;
 
         loopCount = 0;
@@ -358,18 +299,16 @@ robot.shooterAngleMotor.setPower(shooterAngle);
         }
 
 
-        if  ((loopCount % 2) != 0)
-        {
-
-                if (robot.colourL.alpha() < 500) {
-
-                    robot.leftFront.setPower(-1);
-                    robot.leftBack.setPower(-1);
+        if  ((loopCount % 2) != 0) {
+            if (robot.colourL.alpha() < 500) {
+                robot.leftFront.setPower(-1);
+                robot.leftBack.setPower(-1);
             }
-                if (robot.colourR.alpha() < 500) {
 
-                    robot.rightFront.setPower(-1);
-                    robot.rightBack.setPower(-1);
+            if (robot.colourR.alpha() < 500) {
+
+                robot.rightFront.setPower(-1);
+                robot.rightBack.setPower(-1);
 
             } else stop();
 
@@ -383,11 +322,6 @@ robot.shooterAngleMotor.setPower(shooterAngle);
                 }
             }
         }
-
-
-
-
-
     }
 
     public double mecanum(double Strafe, double Forward, double Turn, boolean check2) {
@@ -399,10 +333,6 @@ robot.shooterAngleMotor.setPower(shooterAngle);
 
         //returns point from +X axis to point (forward, strafe)
         double robotAngle = Math.atan2(Forward, Strafe) - Math.PI / 4;
-
-
-//            var.resetAngle();
-//        }
 
         //Quantity to turn by (turn)
        double correction = pidStrafe.performPID(var.getAngle());
@@ -423,13 +353,6 @@ robot.shooterAngleMotor.setPower(shooterAngle);
 
         return rightX;
     }
-
-
-
-
-
-
-
 
     public void drive(double left_stick_y, double right_stick_x, boolean check) {
 
@@ -454,8 +377,6 @@ robot.shooterAngleMotor.setPower(shooterAngle);
         robot.leftBack.setPower(v3 - correction);
         robot.rightBack.setPower(v4 + correction);
     }
-
-
 
     /*
     public void strafeR(double speed, double speedControl) {
