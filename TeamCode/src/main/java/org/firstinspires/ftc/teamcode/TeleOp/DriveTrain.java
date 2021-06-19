@@ -10,5 +10,6 @@ enum DriveTrain {
     TURNDOWN,
     TURNLEFT,
     TURNRIGHT,
-    STOP
+    STOP,
+    MOVEMIDDLE;
 }

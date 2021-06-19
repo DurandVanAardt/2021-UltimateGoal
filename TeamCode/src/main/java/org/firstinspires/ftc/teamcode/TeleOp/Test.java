@@ -55,6 +55,9 @@ public class Test extends OpMode {
 //    int Counter= 0;
 //    boolean shooterLoop = true;
 
+    // Vuforia
+    VuforiaTrackable lastTrackable;
+
     boolean targetVisible = false;
 
     // testing
@@ -87,6 +90,7 @@ public class Test extends OpMode {
             if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                 telemetry.addData("Visible Target", trackable.getName());
                 targetVisible = true;
+                lastTrackable = trackable;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
                 // the last time that call was made, or if the trackable is not currently visible.
@@ -154,8 +158,7 @@ public class Test extends OpMode {
 //            motors.driveStrafe(0, 0, false);
 //        }
         readInputs();
-
-//        if (gamepad1.a){
+        //        if (gamepad1.a){
 //            robot.leftFront.setPower(-0.5);
 //            robot.leftBack.setPower(-0.5);
 //            robot.rightFront.setPower(0.5);
@@ -234,6 +237,7 @@ public class Test extends OpMode {
 //
 //        }
 
+
         DriveTrain prevDriveState = curDriveTrainState;
 //        prevShooterState = curShooterState;
 
@@ -246,9 +250,7 @@ public class Test extends OpMode {
         }
 
 
-        else if(gamepad2.x && curShooterState == Shooter.FIRE)
-
-        {
+        else if(gamepad2.x && curShooterState == Shooter.FIRE){
 
             curShooterState = Shooter.SHOOTERREST;
             shooterState(Shooter.SHOOTERREST);
@@ -261,9 +263,6 @@ public class Test extends OpMode {
 //            shooterState(Shooter.ADJUSTANGLE);
 //
 //        }
-
-
-
 
         if(gamepad2.left_bumper && curCollectionState == Shooter.INTAKEREST)
         {
@@ -354,6 +353,77 @@ public class Test extends OpMode {
     private void driveTrainState(DriveTrain driveTrain, DriveTrain prevState) {
 
         switch (driveTrain) {
+
+            case MOVEMIDDLE:
+                // I want to go to the middle of the picture I'm seeing. I need to get the current position, and determine what direction to strafe.
+                // First, I need to determine which VuMarker I'm seeing. Then I need to get the coordinate from a case statement
+                // input the angle to our fancy strafe program "motors.strafe()" and voila
+
+                double curX = var.lastLocation.getTranslation().get(0);
+                double curY = var.lastLocation.getTranslation().get(1);
+
+                double targetX = 0;
+                double targetY = 0;
+
+                Direction direction = Direction.FRONT;
+                switch (lastTrackable.getName()) {
+                    case "Trackable 1": // Front wall, so ignore y value
+                        targetX = 100; // Just an example. Will be fixed in the future
+                        direction = Direction.FRONT;
+                        break;
+                    case "Trackable 2": // Back wall, so ignore y value
+                        targetX = 200; // Again, just an example. Don't kill me
+                        direction = Direction.BACK;
+                        break;
+                    case "Trackable 3": // Left wall, so ignore x value
+                        targetY = 100;
+                        direction = Direction.LEFT;
+                        break;
+                    case "Trackable 4": // Right wall, so ignore x value
+                        targetY = 200;
+                        direction = Direction.RIGHT;
+                        break;
+                    default:
+                        targetX = 0; // Just to keep the warnings at bay
+                        targetY = 0;
+                }
+
+                // This might change, I don't know if the Math.atan function returns values in the same way our strafe program uses it.
+                // Might need to do some post-processing
+                // Also need to take into account the angle of the robot. Will do some further thinking, come back tomorrow with fresh eyes.
+                /*2021/6/11*/
+
+                double deltaX = (targetX-curX);
+                double deltaY = (targetY-curY);
+
+                double angle=0;
+                switch (direction) {
+                    case FRONT:
+                        angle = 0;
+                        break;
+                    case BACK:
+                        angle = 180;
+                        break;
+                    case RIGHT:
+                        angle = -90;
+                        break;
+                    case LEFT:
+                        angle = 90;
+                        break;
+                }
+
+                int tolerance = 1; // the tolerance when we want the robot to stop
+                boolean destination = curX < (targetX +tolerance) && curX > (targetX -tolerance) && curY < (targetY +tolerance) && curY > (targetY -tolerance);
+
+                if (!destination) {
+                    motors.mecanum(angle, 0.5, begin);
+                }
+
+                if (begin) {
+                    begin = false;
+                }
+                break;
+
 
             case STRAFEL:
                 motors.strafe(-90, gamepad1.left_trigger, begin);
@@ -466,7 +536,7 @@ public class Test extends OpMode {
 
                 break;
 
-            case STOP:
+            default:
 
                 motors.stop();
 
