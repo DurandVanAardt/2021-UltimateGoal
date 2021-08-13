@@ -238,10 +238,21 @@ public class Test extends OpMode {
 //        }
 
 
-        DriveTrain prevDriveState = curDriveTrainState;
+        robot.wobbleMotor.setPower(gamepad2.left_trigger);
+
+        robot.wobbleMotor.setPower(-gamepad2.right_trigger);
+
+
+        if (gamepad2.dpad_up) {
+            robot.wobbleLifter.setPosition(0);
+        }
+        if (gamepad2.dpad_down) {
+            robot.wobbleLifter.setPosition(0.45);
+        }
+
 //        prevShooterState = curShooterState;
 
-         if(gamepad2.a &&  curShooterState == Shooter.SHOOTERREST)
+         if(gamepad2.a &&  curShooterState == Shooter.SHOOTERREST) 
 
         {
             curShooterState = Shooter.FIRE;
