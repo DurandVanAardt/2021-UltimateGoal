@@ -50,6 +50,9 @@ public class Sensors {
         return globalAngle;
     }
 
+    public Orientation imuAngle() {
+        return var.robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    }
     private void encoders() {
         var.setAvgEncoder((var.robot.leftFront.getCurrentPosition()+
                 var.robot.rightFront.getCurrentPosition()+

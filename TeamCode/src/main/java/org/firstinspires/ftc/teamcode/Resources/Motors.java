@@ -180,36 +180,30 @@ public class Motors {
 
         // correct the angle
         angle += 45;
-        // convert to radials
+        // convert to radians
         angle *= Math.PI / 180;
 
         if (check) {
             var.resetAngle();
             pidStrafe.enable();
         }
-        //else if (!check) {
 
-            double correction = pidStrafe.performPID(var.getAngle());
+        double correction = pidStrafe.performPID(var.getAngle());
 
+        double v1 = speed * Math.sin(angle) - correction;
+        double v2 = speed * Math.cos(angle) + correction;
+        double v3 = speed * Math.cos(angle) - correction;
+        double v4 = speed * Math.sin(angle) + correction;
 
-            double v1 = speed * Math.sin(angle) - correction;
-            double v2 = speed * Math.cos(angle) + correction;
-            double v3 = speed * Math.cos(angle) - correction;
-            double v4 = speed * Math.sin(angle) + correction;
+        robot.leftFront.setPower(v1);
+        robot.rightFront.setPower(v2);
+        robot.leftBack.setPower(v3);
+        robot.rightBack.setPower(v4);
+    }
 
-
-            robot.leftFront.setPower(v1);
-            robot.rightFront.setPower(v2);
-            robot.leftBack.setPower(v3);
-            robot.rightBack.setPower(v4);
-
-        }
-
-    public void Fire(double EncoderTurn){
-
-            robot.shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.shooterMotor.setTargetPosition((int) EncoderTurn);
-
+    public void Fire(double EncoderTurn) {
+        robot.shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.shooterMotor.setTargetPosition((int) EncoderTurn);
     }
 
     public void adjustAngle(boolean gamepad) {
