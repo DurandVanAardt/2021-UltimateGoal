@@ -239,6 +239,9 @@ public class Test extends OpMode {
 
         robot.wobbleMotor.setPower(-gamepad2.right_trigger);
 
+        if (gamepad2.left_stick_button) {
+            motors.rotate(90);
+        }
 
         if (gamepad2.dpad_up) {
             robot.wobbleLifter.setPosition(0);
