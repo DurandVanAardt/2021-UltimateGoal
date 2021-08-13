@@ -416,7 +416,7 @@ public class Test extends OpMode {
                 boolean destination = curX < (targetX +tolerance) && curX > (targetX -tolerance) && curY < (targetY +tolerance) && curY > (targetY -tolerance);
 
                 if (!destination) {
-                    motors.mecanum(angle, 0.5, begin);
+                    motors.strafe(angle, 0.5, begin);
                 }
 
                 if (begin) {
