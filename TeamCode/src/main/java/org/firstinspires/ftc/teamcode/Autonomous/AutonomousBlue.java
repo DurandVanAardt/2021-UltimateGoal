@@ -45,6 +45,7 @@ public class AutonomousBlue extends LinearOpMode {
     boolean turningRight = false;
     boolean TurnRight = false;
     boolean bBoolean = true;
+    private int iringCount=0;
 
 
     Variables var;
@@ -111,6 +112,127 @@ public class AutonomousBlue extends LinearOpMode {
 
         waitForStart();
 
+if (iringCount==0) {
+    while (robot.colourF.alpha() < 2000) ;
+    {
+        robot.leftFront.setPower(1);
+        robot.leftBack.setPower(1);
+        robot.rightFront.setPower(1);
+        robot.rightBack.setPower(1);
+
+    }
+
+
+}
+
+        if (iringCount==1) {
+            while (robot.colourF.alpha() < 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+
+            while (robot.colourF.alpha() > 2000) ;
+            {
+                motors.driveStrafe(135 * Math.PI / 180, 0.4, true);
+
+            }
+
+            while (robot.colourF.alpha() < 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+
+            while (robot.colourF.alpha() > 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+
+            while (robot.colourF.alpha() < 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+
+
+
+
+
+        }
+        if (iringCount==4) {
+
+            while (robot.colourF.alpha() < 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+
+            while (robot.colourF.alpha() > 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }while (robot.colourF.alpha() < 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+
+            while (robot.colourF.alpha() > 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+            while (robot.colourF.alpha() < 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+
+            while (robot.colourF.alpha() > 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+
+
+
+
+
+        }
+
+
 //        ShooterState(AutonomousShooter.AUTOMATEDSHOOTERREST);
 
 //
@@ -121,7 +243,7 @@ public class AutonomousBlue extends LinearOpMode {
 //
 //        }
 
-       //shooting
+
         while (robot.distanceR.getDistance(DistanceUnit.MM) >450)
         {
             motors.driveStrafe(135 * Math.PI / 180, 0.4, true);
@@ -158,6 +280,79 @@ sleep(3000);
         robot.magazineLifter.setPosition(0);
         sleep(700);
         robot.Tap.setPosition(0);
+
+        while (robot.distanceB.getDistance(DistanceUnit.MM) >=400)
+        {
+            robot.leftFront.setPower(-0.4);
+            robot.leftBack.setPower(-0.4);
+            robot.rightBack.setPower(-0.4);
+            robot.rightBack.setPower(-0.4);
+        }
+ while (robot.colourF.alpha()<1000)
+ {
+     motors.driveStrafe(-45 * Math.PI / 180, 0.2, true);
+ }
+
+ while ((robot.distanceR.getDistance(DistanceUnit.MM)<=915))  //&& ringtargetIsNotVisible
+ {
+
+     motors.driveStrafe(-45 * Math.PI / 180, 0.2, true);
+ }
+
+ while (robot.distanceL.getDistance(DistanceUnit.MM) >=150)
+ {
+//strafe LEFT
+     motors.driveStrafe(-45 * Math.PI / 180, 0.2, true);
+ }
+
+
+        if (iringCount==1) {
+            while (robot.colourF.alpha() < 2000) ;
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+        }
+            //Strafe R tot Distance R = 950mm
+
+            while (robot.distanceL.getDistance(DistanceUnit.MM) <= 900)
+            {
+
+                motors.driveStrafe(135 * Math.PI / 180, 0.4, true);
+            }
+//Kyk vir die wit lyn
+            while (robot.colourF.alpha() < 2000) ;
+            {
+
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+            // Vanaf die wit lyn, kyk vir die grys
+
+            while (robot.colourF.alpha() >2000)
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+
+            }
+        //Vanaf die grys, kyk weer vir die wit/blou lyn
+            while (robot.colourF.alpha() <2000)
+            {
+                robot.leftFront.setPower(1);
+                robot.leftBack.setPower(1);
+                robot.rightFront.setPower(1);
+                robot.rightBack.setPower(1);
+            }
+
+
 
 //        ShooterState(AutonomousShooter.TAPRIGHT);
 //

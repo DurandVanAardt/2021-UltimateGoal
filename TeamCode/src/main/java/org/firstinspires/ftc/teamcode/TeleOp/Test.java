@@ -45,9 +45,7 @@ public class Test extends OpMode {
 
     private boolean turnFirst = true;
     private boolean begin;
-    private boolean bboolean=false;
-    private boolean bBack=false;
-    private boolean bRight=false;
+
 
 //    private boolean begin1;
 
@@ -310,6 +308,7 @@ telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
                 robot.shooterMotor.setPower(0);
                 robot.magazineLifter.setPosition(0.4);
 
+
                 //curTapperState = Tapper.TAPDEFAULT;
 
 
@@ -324,7 +323,9 @@ telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
 //
 //    robot.shooterMotor.setPower(-1);
 //    robot.magazineLifter.setPosition(0);
-//
+//        if (robot.magazineLifter.getPosition() >=0)
+//        {
+//telemetry.addData("ML",robot.magazineLifter.getPosition());
 //    robot.Tap.setPosition(0);
 //
 //    if (robot.Tap.getPosition() == 0) {
@@ -343,7 +344,7 @@ telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
 ////
 ////            robot.Tap.setPosition(0);
 //        }
-//    }
+//    }}
 //}}
         if (gamepad2.dpad_up)
             robot.magazineLifter.setPosition(0);
@@ -458,7 +459,7 @@ if (gamepad2.dpad_left)
 
 
 
- else if ((gamepad1.dpad_up &&  (turnFirst))) {
+    else if ((gamepad1.dpad_up &&  (turnFirst))) {
 
             driveTrainState(DriveTrain.TURNUP, prevDriveState);
         }
@@ -474,9 +475,8 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
 
     driveTrainState(DriveTrain.TURNDOWN,prevDriveState);
 
-else {
-    driveTrainState((DriveTrain.STOP), prevDriveState);
-}
+    else motors.stop();
+
 
 
         driveTrainState(curDriveTrainState, prevDriveState);
@@ -495,7 +495,8 @@ else {
 //            driveTrainState(DriveTrain.STRAFER);
 //        }
 //        else  driveTrainState(DriveTrain.STRAFER.STOP);
-   telemetry.addData("TAP",robot.Tap.getPosition());
+        telemetry.addData("TAP",robot.Tap.getPosition());
+        telemetry.addData("Colour",robot.colourF.alpha());
     }
 
 //    private void stateMachine(DriveTrain driveTrain, Shooter shooter) {

@@ -38,6 +38,7 @@ public class RobotHardwareMap {
     public Servo LBG;
     public Servo magazineLifter;
     public Servo Tap;
+    public RevColorSensorV3 colourF;
 public RevColorSensorV3 colourL;
     public RevColorSensorV3 colourR;
 
@@ -88,7 +89,8 @@ public RevColorSensorV3 colourL;
         leftBack.setDirection(DcMotor.Direction.REVERSE);
 //        rightBack.setDirection(DcMotor.Direction.REVERSE);
 
-//        colourL = hardwareMap.get(RevColorSensorV3.class, "colourL");
+          colourF = hardwareMap.get(RevColorSensorV3.class, "colourF");
+
 //        colourR = hardwareMap.get(RevColorSensorV3.class, "colourR");
 
 //        liftMotor.setDirection(DcMotor.Direction.REVERSE);
