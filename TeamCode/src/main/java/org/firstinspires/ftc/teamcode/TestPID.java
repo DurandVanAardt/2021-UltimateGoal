@@ -74,27 +74,38 @@ public class TestPID extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if (gamepad1.left_stick_y<0)
-        {
-            robot.leftFront.setPower(0.5);
-            robot.rightFront.setPower(0.5);
-            robot.rightBack.setPower(0.5);
-            robot.leftBack.setPower(0.5);
+//            if (gamepad1.left_stick_y<0)
+//        {
+//            robot.leftFront.setPower(0.5);
+//            robot.rightFront.setPower(0.5);
+//            robot.rightBack.setPower(0.5);
+//            robot.leftBack.setPower(0.5);
+//
+//            }
+//            else
+//            if (gamepad1.left_stick_y>0)
+//            {
+//                robot.leftFront.setPower(-0.5);
+//                robot.rightFront.setPower(-0.5);
+//                robot.rightBack.setPower(-0.5);
+//                robot.leftBack.setPower(-0.5);
+//
+//            }
+//
+//            else motors.stop();
+//
 
+            if (turning || gamepad1.left_stick_button) {
+                if (turnFirst) {
+                    var.resetAngle();
+                    turnFirst = false;
+                    motors.pidRotate.reset();
+                    motors.pidRotate.enable();
+                    turning = motors.rotate(90);
+
+                }
+                turning = motors.rotate(90);
             }
-            else
-            if (gamepad1.left_stick_y>0)
-            {
-                robot.leftFront.setPower(-0.5);
-                robot.rightFront.setPower(-0.5);
-                robot.rightBack.setPower(-0.5);
-                robot.leftBack.setPower(-0.5);
-
-            }
-
-            else motors.stop();
-
-
 
 
 
@@ -407,6 +418,7 @@ private boolean rotate(double SP) {
 //                robot.leftBack.setPower(power);
 //                robot.rightBack.setPower(-power);
 //            }
+
 
 
         if (!pidRotate3.onTarget()) {

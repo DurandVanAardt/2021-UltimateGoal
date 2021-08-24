@@ -204,6 +204,7 @@ public class Motors {
     public void Fire(double EncoderTurn) {
         robot.shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.shooterMotor.setTargetPosition((int) EncoderTurn);
+
     }
 
     public void adjustAngle(boolean gamepad) {
