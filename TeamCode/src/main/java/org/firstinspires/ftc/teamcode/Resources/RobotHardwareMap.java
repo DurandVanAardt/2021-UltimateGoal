@@ -18,10 +18,11 @@ public class RobotHardwareMap {
     public DcMotor rightFront;
     public DcMotor leftBack;
     public DcMotor rightBack;
+    public DcMotor wobbleMotor;
 //    public DcMotor liftMotor;
     public DcMotor shooterMotor;
     public DcMotor sucker;
-    public DcMotor wobbleLifter;
+    public Servo wobbleLifter;
 
     public DcMotor shooterAngleMotor;
     public DistanceSensor distanceR;
@@ -35,6 +36,9 @@ public class RobotHardwareMap {
 
     public Servo RBG;
     public Servo LBG;
+    public Servo magazineLifter;
+    public Servo Tap;
+    public RevColorSensorV3 colourF;
 public RevColorSensorV3 colourL;
     public RevColorSensorV3 colourR;
 
@@ -44,7 +48,10 @@ public RevColorSensorV3 colourL;
 
     public void init(HardwareMap hardwareMap){
 
-
+        wobbleLifter = hardwareMap.get(Servo.class, "wobbleLifter");
+        Tap = hardwareMap.get(Servo.class, "Tap");
+        magazineLifter = hardwareMap.get(Servo.class, "magazineLifter");
+//
 //        RBG = hardwareMap.get(Servo.class, "RBG");
 //        LBG = hardwareMap.get(Servo.class, "LBG");
 //        shooterAngleServo = hardwareMap.get(Servo.class, "shooterAngleServo");
@@ -52,9 +59,9 @@ public RevColorSensorV3 colourL;
 
         initializeIMU();
 
-//        distanceR = hardwareMap.get(DistanceSensor.class, "distanceR");
-//        distanceL = hardwareMap.get(DistanceSensor.class, "distanceL");
-//        distanceB = hardwareMap.get(DistanceSensor.class, "distanceB");
+        distanceR = hardwareMap.get(DistanceSensor.class, "distanceR");
+        distanceL = hardwareMap.get(DistanceSensor.class, "distanceL");
+        distanceB = hardwareMap.get(DistanceSensor.class, "distanceB");
 //        distanceFL = hardwareMap.get(DistanceSensor.class, "distanceFR");
 //        distanceFR = hardwareMap.get(DistanceSensor.class, "distanceFL");
 //        distanceFM = hardwareMap.get(DistanceSensor.class, "distanceFM");
@@ -63,6 +70,7 @@ public RevColorSensorV3 colourL;
         rightFront = hardwareMap.get(DcMotor.class, "rightfront");
         leftBack = hardwareMap.get(DcMotor.class, "leftback");
         rightBack = hardwareMap.get(DcMotor.class, "rightback");
+        wobbleMotor = hardwareMap.get(DcMotor.class, "wobbleMotor");
 
         shooterAngleMotor = hardwareMap.get(DcMotor.class, "shooterAngleMotor");
 //        liftMotor = hardwareMap.get(DcMotor.class, "motorHeight");
@@ -81,7 +89,8 @@ public RevColorSensorV3 colourL;
         leftBack.setDirection(DcMotor.Direction.REVERSE);
 //        rightBack.setDirection(DcMotor.Direction.REVERSE);
 
-//        colourL = hardwareMap.get(RevColorSensorV3.class, "colourL");
+          colourF = hardwareMap.get(RevColorSensorV3.class, "colourF");
+
 //        colourR = hardwareMap.get(RevColorSensorV3.class, "colourR");
 
 //        liftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -90,6 +99,7 @@ public RevColorSensorV3 colourL;
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wobbleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         enableEncoders();
     }
 
