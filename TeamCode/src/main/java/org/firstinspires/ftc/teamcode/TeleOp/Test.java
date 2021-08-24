@@ -1,9 +1,3 @@
-
-
-
-
-
-
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import android.annotation.SuppressLint;
@@ -25,7 +19,6 @@ import org.firstinspires.ftc.teamcode.Resources.Motors;
 import org.firstinspires.ftc.teamcode.Resources.RobotHardwareMap;
 
 import java.util.List;
-import java.util.Timer;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
@@ -49,20 +42,20 @@ public class Test extends OpMode {
 
 //    private boolean begin1;
 
-//    private boolean turning = false;
+    //    private boolean turning = false;
 //    private boolean rotationShooter;
 //    private boolean turningUp;
 //    private boolean turningDown;
 //    private boolean turningLeft;
 //    private boolean turningRight;
-ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timer = new ElapsedTime();
 
     private Shooter curCollectionState = Shooter.INTAKEREST;
 //    private Shooter prevCollectionState =Shooter.INTAKEREST;
 
     private Shooter curShooterState = Shooter.SHOOTERREST;
     private Tapper curTapperState = Tapper.TAPDEFAULT;
-//    private Shooter prevShooterState = Shooter.SHOOTERREST;
+    //    private Shooter prevShooterState = Shooter.SHOOTERREST;
     private DriveTrain curDriveTrainState = DriveTrain.STOP;
     private DriveTrain prevDriveState = DriveTrain.STOP;
 
@@ -85,30 +78,25 @@ ElapsedTime timer = new ElapsedTime();
         robot = var.robot;
 
         var.targetsUltimateGoal.activate();
-        telemetry.addData("Press Play to start the program","");
+        telemetry.addData("Press Play to start the program", "");
     }
 
     @SuppressLint("DefaultLocale")
     @Override
     public void loop() {
-//         waitForStart();
-
-        // Note: To use the remote camera preview:
-        // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
-        // Tap the preview window to receive a fresh image.
 
 
         // check all the trackable targets to see which one (if any) is visible.
         for (VuforiaTrackable trackable : var.allTrackables) {
-            HI ++;
-            if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+            HI++;
+            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                 telemetry.addData("Visible Target", trackable.getName());
                 targetVisible = true;
                 lastTrackable = trackable;
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
                 // the last time that call was made, or if the trackable is not currently visible.
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
                     var.lastLocation = robotLocationTransform;
                 }
@@ -126,8 +114,7 @@ ElapsedTime timer = new ElapsedTime();
             // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(var.lastLocation, EXTRINSIC, XYZ, DEGREES);
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-        }
-        else {
+        } else {
             telemetry.addData("Visible Target", "none");
         }
 
@@ -147,71 +134,14 @@ ElapsedTime timer = new ElapsedTime();
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
                 }
-            }else
+            } else
                 telemetry.addData("# Object Detected", 0);
         }
 
         telemetry.update();
 
 
-        // Disable Tracking when we are done;
-
-//        if (gamepad1.b) {
-//            // right
-//            motors.driveStrafe(135 * Math.PI / 180, 1, true);
-//        }else if (gamepad1.y) {
-//            // forward
-//            motors.driveStrafe(45 * Math.PI / 180, 1, true);
-//        }else if (gamepad1.x) {
-//            // left
-//            motors.driveStrafe(-45 * Math.PI / 180, 1, true);
-//        }else if (gamepad1.a) {
-//            // reverse
-//            motors.driveStrafe(-135 * Math.PI / 180, 1, true);
-//        }else {
-//            motors.driveStrafe(0, 0, false);
-//        }
         readInputs();
-        //        if (gamepad1.a){
-//            robot.leftFront.setPower(-0.5);
-//            robot.leftBack.setPower(-0.5);
-//            robot.rightFront.setPower(0.5);
-//            robot.rightBack.setPower(0.5);
-//
-//        }
-
-//        readInputs();
-
-//        telemetry.addData("Current state", curShooterState);
-
-//
-//        else if (gamepad1.dpad_up || turningUp)
-//            driveTrain = DriveTrain.TURNUP;
-//
-//        else if (gamepad1.dpad_down || turningDown)
-//            driveTrain = DriveTrain.TURNDOWN;
-//
-//        else if (gamepad1.dpad_left || turningLeft)
-//            driveTrain = DriveTrain.TURNLEFT;
-//
-//        else if (gamepad1.dpad_right || turningRight)
-//            driveTrain = DriveTrain.TURNRIGHT;
-//
-//        if (gamepad1.right_trigger != 0)
-//            driveTrain = DriveTrain.STRAFER;
-//        else
-//        if (gamepad1.left_trigger != 0)
-//          driveTrain = DriveTrain.STRAFEL;
-//        else
-//        if (gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x != 0)
-//            driveTrain = DriveTrain.DRIVE;
-//        else
-//            driveTrain = DriveTrain.STOP;
-
-//        stateMachine(driveTrain, shooter);
-
-//        telemetry.addData("State", driveTrain);
-//
     }
 
     @Override
@@ -226,23 +156,22 @@ ElapsedTime timer = new ElapsedTime();
     public void readInputs() {
 
         if (gamepad1.dpad_up) {
-            while (robot.distanceR.getDistance(DistanceUnit.MM) >450)
-            {
+            while (robot.distanceR.getDistance(DistanceUnit.MM) > 450) {
                 motors.driveStrafe(135 * Math.PI / 180, 0.4, true);
 
             }
             motors.stop();
-            telemetry.addData("Right",robot.distanceR.getDistance(DistanceUnit.MM));
+            telemetry.addData("Right", robot.distanceR.getDistance(DistanceUnit.MM));
 
-            if (robot.distanceB.getDistance(DistanceUnit.MM) <450) {
-                while (robot.distanceB.getDistance(DistanceUnit.MM) < 450)   {
+            if (robot.distanceB.getDistance(DistanceUnit.MM) < 450) {
+                while (robot.distanceB.getDistance(DistanceUnit.MM) < 450) {
                     robot.leftFront.setPower(0.1);
                     robot.leftBack.setPower(0.1);
                     robot.rightFront.setPower(0.1);
                     robot.rightBack.setPower(0.1);
                 }
             }
-            if (robot.distanceB.getDistance(DistanceUnit.MM) >450) {
+            if (robot.distanceB.getDistance(DistanceUnit.MM) > 450) {
                 while (robot.distanceB.getDistance(DistanceUnit.MM) > 450) {
                     robot.leftFront.setPower(-0.1);
                     robot.leftBack.setPower(-0.1);
@@ -265,7 +194,7 @@ ElapsedTime timer = new ElapsedTime();
 //robot.wobbleLifter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //
 //}
-telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
+        telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
         telemetry.addData("DistanceB", robot.distanceB.getDistance(DistanceUnit.MM));
         telemetry.addData("DistanceR", robot.distanceR.getDistance(DistanceUnit.MM));
 
@@ -289,12 +218,12 @@ telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
             robot.magazineLifter.setPosition(0);
             robot.shooterMotor.setPower(-1);
 
-           if (curTapperState == Tapper.TAPDEFAULT && gamepad2.left_stick_button) {
+            if (curTapperState == Tapper.TAPDEFAULT && gamepad2.left_stick_button) {
 
-               curTapperState = (Tapper.TAPRIGHT);
-               Tapperstate(Tapper.TAPRIGHT);
+                curTapperState = (Tapper.TAPRIGHT);
+                Tapperstate(Tapper.TAPRIGHT);
 
-           }
+            }
 
 
 //            if (curTapperState == Tapper.TAPRIGHT) {
@@ -310,7 +239,6 @@ telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
 
 
                 //curTapperState = Tapper.TAPDEFAULT;
-
 
 
             }
@@ -352,33 +280,30 @@ telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
         if (gamepad2.dpad_down)
             robot.magazineLifter.setPosition(0.4);
 
-        if (gamepad2.dpad_right)
-        {
+        if (gamepad2.dpad_right) {
 
 
-    robot.Tap.setPosition(0.4);
-}
-if (gamepad2.left_trigger !=0)
-{
-   robot.Tap.setPosition(0);
+            robot.Tap.setPosition(0.4);
+        }
+        if (gamepad2.left_trigger != 0) {
+            robot.Tap.setPosition(0);
 
 //    if (robot.Tap.getPosition() == robot.Tap)
 
 
-}
-if (gamepad2.left_trigger ==0)
-    robot.Tap.setPosition(0.4);
+        }
+        if (gamepad2.left_trigger == 0)
+            robot.Tap.setPosition(0.4);
 
-if (gamepad2.dpad_left)
-{
+        if (gamepad2.dpad_left) {
 
-    robot.Tap.setPosition(0);
-    double waitTime = 1;
-    timer.reset();
+            robot.Tap.setPosition(0);
+            double waitTime = 1;
+            timer.reset();
 
 //    if (robot.Tap.getPosition() == robot.Tap)
-    robot.Tap.setPosition(0.4);
-}
+            robot.Tap.setPosition(0.4);
+        }
 
         robot.wobbleMotor.setPower(gamepad2.left_trigger);
 
@@ -397,16 +322,11 @@ if (gamepad2.dpad_left)
 
 //        prevShooterState = curShooterState;
 
-         if(gamepad2.a &&  curShooterState == Shooter.SHOOTERREST) 
-
-        {
+        if (gamepad2.a && curShooterState == Shooter.SHOOTERREST) {
             curShooterState = Shooter.FIRE;
             shooterState(Shooter.FIRE);
 
-        }
-
-
-        else if(gamepad2.x && curShooterState == Shooter.FIRE){
+        } else if (gamepad2.x && curShooterState == Shooter.FIRE) {
 
             curShooterState = Shooter.SHOOTERREST;
             shooterState(Shooter.SHOOTERREST);
@@ -420,63 +340,50 @@ if (gamepad2.dpad_left)
 //
 //        }
 
-        if(gamepad1.left_bumper && curCollectionState == Shooter.INTAKEREST)
-        {
+        if (gamepad1.left_bumper && curCollectionState == Shooter.INTAKEREST) {
             curCollectionState = Shooter.SUCKERIN;
             shooterState(Shooter.SUCKERIN);
-        }
-
-        else if(gamepad1.y) {
+        } else if (gamepad1.y) {
             curCollectionState = Shooter.INTAKEREST;
             shooterState(Shooter.INTAKEREST);
         }
 
-        if(gamepad1.right_bumper && curCollectionState == Shooter.INTAKEREST)
-        {
+        if (gamepad1.right_bumper && curCollectionState == Shooter.INTAKEREST) {
             curCollectionState = Shooter.SUCKEROUT;
             shooterState(Shooter.SUCKEROUT);
-        }
-
-        else if(gamepad1.x)
-        {
+        } else if (gamepad1.x) {
             curCollectionState = Shooter.INTAKEREST;
             shooterState(Shooter.INTAKEREST);
         }
 
-    if ((gamepad1.left_stick_x !=0) || (gamepad1.left_stick_y!=0) || (gamepad1.right_stick_x!=0))
-        {
+        if ((gamepad1.left_stick_x != 0) || (gamepad1.left_stick_y != 0) || (gamepad1.right_stick_x != 0)) {
 
             curDriveTrainState = DriveTrain.DRIVE;
 
-        }
+        } else if (gamepad1.left_trigger != 0)
 
-    else if (gamepad1.left_trigger!=0)
+            curDriveTrainState = DriveTrain.STRAFEL;
 
-        curDriveTrainState = DriveTrain.STRAFEL;
-
-    else if (gamepad1.right_trigger!=0)
+        else if (gamepad1.right_trigger != 0)
             curDriveTrainState = DriveTrain.STRAFER;
 
 
-
-    else if ((gamepad1.dpad_up &&  (turnFirst))) {
+        else if ((gamepad1.dpad_up && (turnFirst))) {
 
             driveTrainState(DriveTrain.TURNUP, prevDriveState);
-        }
-else if ((gamepad1.dpad_left &&  (turnFirst)))
+        } else if ((gamepad1.dpad_left && (turnFirst)))
 
-    driveTrainState(DriveTrain.TURNLEFT, prevDriveState);
+            driveTrainState(DriveTrain.TURNLEFT, prevDriveState);
 
-else if ((gamepad1.dpad_right &&  (turnFirst)))
+        else if ((gamepad1.dpad_right && (turnFirst)))
 
-    driveTrainState(DriveTrain.TURNRIGHT, prevDriveState);
+            driveTrainState(DriveTrain.TURNRIGHT, prevDriveState);
 
-else if ((gamepad1.dpad_down &&  (turnFirst)))
+        else if ((gamepad1.dpad_down && (turnFirst)))
 
-    driveTrainState(DriveTrain.TURNDOWN,prevDriveState);
+            driveTrainState(DriveTrain.TURNDOWN, prevDriveState);
 
-    else motors.stop();
-
+        else motors.stop();
 
 
         driveTrainState(curDriveTrainState, prevDriveState);
@@ -495,8 +402,8 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
 //            driveTrainState(DriveTrain.STRAFER);
 //        }
 //        else  driveTrainState(DriveTrain.STRAFER.STOP);
-        telemetry.addData("TAP",robot.Tap.getPosition());
-        telemetry.addData("Colour",robot.colourF.alpha());
+        telemetry.addData("TAP", robot.Tap.getPosition());
+        telemetry.addData("Colour", robot.colourF.alpha());
     }
 
 //    private void stateMachine(DriveTrain driveTrain, Shooter shooter) {
@@ -547,10 +454,10 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
                 // Also need to take into account the angle of the robot. Will do some further thinking, come back tomorrow with fresh eyes.
                 /*2021/6/11*/
 
-                double deltaX = (targetX-curX);
-                double deltaY = (targetY-curY);
+                double deltaX = (targetX - curX);
+                double deltaY = (targetY - curY);
 
-                double angle=0;
+                double angle = 0;
                 switch (direction) {
                     case FRONT:
                         angle = 0;
@@ -567,7 +474,7 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
                 }
 
                 int tolerance = 1; // the tolerance when we want the robot to stop
-                boolean destination = curX < (targetX +tolerance) && curX > (targetX -tolerance) && curY < (targetY +tolerance) && curY > (targetY -tolerance);
+                boolean destination = curX < (targetX + tolerance) && curX > (targetX - tolerance) && curY < (targetY + tolerance) && curY > (targetY - tolerance);
 
                 if (!destination) {
                     motors.strafe(angle, 0.5, begin);
@@ -598,19 +505,18 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
 
                 boolean startDrive = prevState != DriveTrain.STOP;
 
-                telemetry.addData("Angle",motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x,startDrive));
+                telemetry.addData("Angle", motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, startDrive));
                 telemetry.addData("Angle", var.getAngle());
-                telemetry.addData("LeftFront",robot.leftFront.getPower());
-                telemetry.addData("RightFront",robot.rightFront.getPower());
-                telemetry.addData("LeftBack",robot.leftBack.getPower());
-                telemetry.addData("RightBack",robot.rightBack.getPower());
+                telemetry.addData("LeftFront", robot.leftFront.getPower());
+                telemetry.addData("RightFront", robot.rightFront.getPower());
+                telemetry.addData("LeftBack", robot.leftBack.getPower());
+                telemetry.addData("RightBack", robot.rightBack.getPower());
 
                 telemetry.update();
 //                if (begin)
 //                    begin = false;
 
                 break;
-
 
 
             case TURNUP:
@@ -701,11 +607,10 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
                 break;
         }
     }
-    private void Tapperstate(Tapper tapper)
-    {
 
-        switch (tapper)
-        {
+    private void Tapperstate(Tapper tapper) {
+
+        switch (tapper) {
             case TAPRIGHT:
                 robot.Tap.setPosition(0);
 
@@ -716,9 +621,7 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
 
     private void shooterState(Shooter shooter) {
 
-        switch (shooter)
-
-        {
+        switch (shooter) {
             case TAPDEFAULT:
                 robot.Tap.setPosition(0.4);
                 break;
@@ -729,9 +632,9 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
 
             case FIRE:
 
-               robot.shooterMotor.setPower(-0.9);
+                robot.shooterMotor.setPower(-0.9);
 
-                    break;
+                break;
 
             case ADJUSTANGLE:
 
@@ -744,7 +647,6 @@ else if ((gamepad1.dpad_down &&  (turnFirst)))
 
 
                 motors.suckerIn(gamepad1.left_bumper);
-
 
 
                 break;
