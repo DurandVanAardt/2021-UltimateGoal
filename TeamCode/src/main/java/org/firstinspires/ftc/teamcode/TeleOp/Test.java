@@ -40,6 +40,8 @@ public class Test extends OpMode {
     private boolean begin;
 
 
+    private boolean prevx;
+    private boolean prevy;
 //    private boolean begin1;
 
     //    private boolean turning = false;
@@ -165,18 +167,18 @@ public class Test extends OpMode {
 
             if (robot.distanceB.getDistance(DistanceUnit.MM) < 450) {
                 while (robot.distanceB.getDistance(DistanceUnit.MM) < 450) {
-                    robot.leftFront.setPower(0.1);
-                    robot.leftBack.setPower(0.1);
-                    robot.rightFront.setPower(0.1);
-                    robot.rightBack.setPower(0.1);
+                    robot.leftFront.setPower(0.75);
+                    robot.leftBack.setPower(0.75);
+                    robot.rightFront.setPower(0.75);
+                    robot.rightBack.setPower(0.75);
                 }
             }
-            if (robot.distanceB.getDistance(DistanceUnit.MM) > 450) {
+            else {
                 while (robot.distanceB.getDistance(DistanceUnit.MM) > 450) {
-                    robot.leftFront.setPower(-0.1);
-                    robot.leftBack.setPower(-0.1);
-                    robot.rightFront.setPower(-0.1);
-                    robot.rightBack.setPower(-0.1);
+                    robot.leftFront.setPower(-0.75);
+                    robot.leftBack.setPower(-0.75);
+                    robot.rightFront.setPower(-0.75);
+                    robot.rightBack.setPower(-0.75);
                 }
             }
             motors.stop();
@@ -218,7 +220,7 @@ public class Test extends OpMode {
             robot.magazineLifter.setPosition(0);
             robot.shooterMotor.setPower(-1);
 
-            if (curTapperState == Tapper.TAPDEFAULT && gamepad2.left_stick_button) {
+            if (curTapperState == Tapper.TAPDEFAULT) {
 
                 curTapperState = (Tapper.TAPRIGHT);
                 Tapperstate(Tapper.TAPRIGHT);
@@ -281,15 +283,10 @@ public class Test extends OpMode {
             robot.magazineLifter.setPosition(0.4);
 
         if (gamepad2.dpad_right) {
-
-
             robot.Tap.setPosition(0.4);
         }
         if (gamepad2.left_trigger != 0) {
             robot.Tap.setPosition(0);
-
-//    if (robot.Tap.getPosition() == robot.Tap)
-
 
         }
         if (gamepad2.left_trigger == 0)
@@ -297,11 +294,6 @@ public class Test extends OpMode {
 
         if (gamepad2.dpad_left) {
 
-            robot.Tap.setPosition(0);
-            double waitTime = 1;
-            timer.reset();
-
-//    if (robot.Tap.getPosition() == robot.Tap)
             robot.Tap.setPosition(0.4);
         }
 
@@ -309,52 +301,58 @@ public class Test extends OpMode {
 
         robot.wobbleMotor.setPower(-gamepad2.right_trigger);
 
-//        if (gamepad2.left_stick_button) {
-//            motors.rotate(90);
-//        }
-
-//        if (gamepad2.dpad_up) {
-//            robot.wobbleLifter.setPosition(0);
-//        }
-//        if (gamepad2.dpad_down) {
-//            robot.wobbleLifter.setPosition(0.45);
-//        }
-
-//        prevShooterState = curShooterState;
-
         if (gamepad2.a && curShooterState == Shooter.SHOOTERREST) {
             curShooterState = Shooter.FIRE;
             shooterState(Shooter.FIRE);
 
-        } else if (gamepad2.x && curShooterState == Shooter.FIRE) {
+        } else if (gamepad2.a && curShooterState == Shooter.FIRE) {
 
             curShooterState = Shooter.SHOOTERREST;
             shooterState(Shooter.SHOOTERREST);
         }
 
-//        if (gamepad2.b)
-//        {
+//        if (gamepad1.left_bumper && curCollectionState == Shooter.INTAKEREST) {
+//            curCollectionState = Shooter.SUCKERIN;
+//            shooterState(Shooter.SUCKERIN);
+//        } else if (gamepad1.y) {
+//            curCollectionState = Shooter.INTAKEREST;
+//            shooterState(Shooter.INTAKEREST);
+//        }
 //
-//         curShooterState = Shooter.ADJUSTANGLE;
-//            shooterState(Shooter.ADJUSTANGLE);
-//
+//        if (gamepad1.right_bumper && curCollectionState == Shooter.INTAKEREST) {
+//            curCollectionState = Shooter.SUCKEROUT;
+//            shooterState(Shooter.SUCKEROUT);
+//        } else if (gamepad1.x) {
+//            curCollectionState = Shooter.INTAKEREST;
+//            shooterState(Shooter.INTAKEREST);
 //        }
 
-        if (gamepad1.left_bumper && curCollectionState == Shooter.INTAKEREST) {
+//        if (gamepad1.y && !prevy)
+//            prevy = true;
+//        else if (!gamepad1.y && prevy)
+//            prevy = false;
+
+        if (gamepad1.y && curCollectionState == Shooter.INTAKEREST && !prevy) {
             curCollectionState = Shooter.SUCKERIN;
             shooterState(Shooter.SUCKERIN);
-        } else if (gamepad1.y) {
+        } else if (gamepad1.y && curCollectionState == Shooter.SUCKERIN && !prevy) {
             curCollectionState = Shooter.INTAKEREST;
             shooterState(Shooter.INTAKEREST);
         }
 
-        if (gamepad1.right_bumper && curCollectionState == Shooter.INTAKEREST) {
+        prevy = gamepad1.y;
+
+        if (gamepad1.x && curCollectionState == Shooter.INTAKEREST && !prevx) {
             curCollectionState = Shooter.SUCKEROUT;
-            shooterState(Shooter.SUCKEROUT);
-        } else if (gamepad1.x) {
+            shooterState(Shooter.SUCKERIN);
+        } else if (gamepad1.x && curCollectionState == Shooter.SUCKEROUT && !prevx) {
             curCollectionState = Shooter.INTAKEREST;
             shooterState(Shooter.INTAKEREST);
         }
+
+        prevx = gamepad1.x;
+
+
 
         if ((gamepad1.left_stick_x != 0) || (gamepad1.left_stick_y != 0) || (gamepad1.right_stick_x != 0)) {
 
