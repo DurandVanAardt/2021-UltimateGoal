@@ -118,6 +118,7 @@ public class Tele_Op extends OpMode {
 
     public void readInputs() {
 
+
         // Move robot to the designated shooting area
         if (gamepad1.dpad_up) {
             while (robot.distanceR.getDistance(DistanceUnit.MM) > 450) {
@@ -176,22 +177,40 @@ public class Tele_Op extends OpMode {
 
         if (gamepad2.dpad_down)
             robot.magazineLifter.setPosition(0.4);
+//
+//        if (gamepad2.dpad_right)
+//            robot.Tap.setPosition(0.4);
+//
+//        if (gamepad2.left_trigger != 0)
+//            robot.Tap.setPosition(0);
+//
+//        if (gamepad2.left_trigger == 0)
+//            robot.Tap.setPosition(0.4);
+        if (gamepad1.a)
+        {
+            robot.wobbleF.setPosition(0.3);
 
-        if (gamepad2.dpad_right)
-            robot.Tap.setPosition(0.4);
+        }else
+            robot.wobbleF.setPosition(0);
 
-        if (gamepad2.left_trigger != 0)
-            robot.Tap.setPosition(0);
+        if (gamepad1.b)
+        {
+            robot.wobbleB.setPosition(0.4);
 
-        if (gamepad2.left_trigger == 0)
-            robot.Tap.setPosition(0.4);
+        }else
+            robot.wobbleB.setPosition(-0.3);
+
 
         if (gamepad2.dpad_left)
+            robot.Tap.setPosition(0);
+        else
             robot.Tap.setPosition(0.4);
 
 
+        if (gamepad2.left_trigger != 0)
         robot.wobbleMotor.setPower(gamepad2.left_trigger);
 
+        if (gamepad2.right_trigger != 0)
         robot.wobbleMotor.setPower(-gamepad2.right_trigger);
 
         if (gamepad2.a && curShooterState == Shooter.SHOOTERREST) {
