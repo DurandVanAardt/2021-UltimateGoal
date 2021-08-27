@@ -110,17 +110,22 @@ public class AutonomousBlue extends LinearOpMode {
 
         waitForStart();
 
-        if (FiringCount == 0) {
-            while (robot.colourF.alpha() < 2000) {
-                robot.leftFront.setPower(1);
-                robot.leftBack.setPower(1);
-                robot.rightFront.setPower(1);
-                robot.rightBack.setPower(1);
-            }
-        }
+if (FiringCount==0) {
+    while (robot.colourF.alpha() < 2000)
+    {
+        robot.leftFront.setPower(1);
+        robot.leftBack.setPower(1);
+        robot.rightFront.setPower(1);
+        robot.rightBack.setPower(1);
 
-        if (FiringCount == 1) {
-            while (robot.colourF.alpha() < 2000) {
+    }
+
+
+}
+
+        if (FiringCount==1) {
+            while (robot.colourF.alpha() < 2000)
+            {
                 robot.leftFront.setPower(1);
                 robot.leftBack.setPower(1);
                 robot.rightFront.setPower(1);

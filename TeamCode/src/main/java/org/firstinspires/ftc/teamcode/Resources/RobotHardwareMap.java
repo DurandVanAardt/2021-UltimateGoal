@@ -22,7 +22,9 @@ public class RobotHardwareMap {
 //    public DcMotor liftMotor;
     public DcMotor shooterMotor;
     public DcMotor sucker;
-    public Servo wobbleLifter;
+    public Servo wobbleB;
+    public Servo wobbleF;
+
 
     public DcMotor shooterAngleMotor;
     public DistanceSensor distanceR;
@@ -48,7 +50,8 @@ public RevColorSensorV3 colourL;
 
     public void init(HardwareMap hardwareMap){
 
-        wobbleLifter = hardwareMap.get(Servo.class, "wobbleLifter");
+        wobbleF = hardwareMap.get(Servo.class, "wobbleF");
+        wobbleB = hardwareMap.get(Servo.class, "wobbleB");
         Tap = hardwareMap.get(Servo.class, "Tap");
         magazineLifter = hardwareMap.get(Servo.class, "magazineLifter");
 //
