@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -42,6 +43,7 @@ public class Tele_Op extends OpMode {
 
     // Vuforia
     VuforiaTrackable lastTrackable;
+    private boolean preva;
 
     @Override
     public void init() {
@@ -106,7 +108,8 @@ public class Tele_Op extends OpMode {
             } else
                 telemetry.addData("# Object Detected", 0);
         }
-
+        telemetry.addData("Imu", var.getAngle());
+        telemetry.addData("Colour", robot.colourF.alpha());
         readInputs();
 
         telemetry.update();
@@ -120,33 +123,33 @@ public class Tele_Op extends OpMode {
 
 
         // Move robot to the designated shooting area
-        if (gamepad1.dpad_up) {
-            while (robot.distanceR.getDistance(DistanceUnit.MM) > 450) {
-                motors.driveStrafe(135 * Math.PI / 180, 0.4, true);
+//        if (gamepad1.dpad_up) {
+//            while (robot.distanceR.getDistance(DistanceUnit.MM) > 450) {
+//                motors.driveStrafe(135 * Math.PI / 180, 0.4, true);
+//
+//            }
+//            motors.stop();
+////            telemetry.addData("Right", robot.distanceR.getDistance(DistanceUnit.MM));
+//
+//            if (robot.distanceB.getDistance(DistanceUnit.MM) < 450) {
+//                while (robot.distanceB.getDistance(DistanceUnit.MM) < 450) {
+//                    robot.leftFront.setPower(0.75);
+//                    robot.leftBack.setPower(0.75);
+//                    robot.rightFront.setPower(0.75);
+//                    robot.rightBack.setPower(0.75);
+//                }
+//            }
+//            else {
+//                while (robot.distanceB.getDistance(DistanceUnit.MM) > 450) {
+//                    robot.leftFront.setPower(-0.75);
+//                    robot.leftBack.setPower(-0.75);
+//                    robot.rightFront.setPower(-0.75);
+//                    robot.rightBack.setPower(-0.75);
+//                }
+//            }
+//            motors.stop();
 
-            }
-            motors.stop();
-            telemetry.addData("Right", robot.distanceR.getDistance(DistanceUnit.MM));
-
-            if (robot.distanceB.getDistance(DistanceUnit.MM) < 450) {
-                while (robot.distanceB.getDistance(DistanceUnit.MM) < 450) {
-                    robot.leftFront.setPower(0.75);
-                    robot.leftBack.setPower(0.75);
-                    robot.rightFront.setPower(0.75);
-                    robot.rightBack.setPower(0.75);
-                }
-            }
-            else {
-                while (robot.distanceB.getDistance(DistanceUnit.MM) > 450) {
-                    robot.leftFront.setPower(-0.75);
-                    robot.leftBack.setPower(-0.75);
-                    robot.rightFront.setPower(-0.75);
-                    robot.rightBack.setPower(-0.75);
-                }
-            }
-            motors.stop();
-
-        }
+//        }
 
 
         telemetry.addData("DistanceL", robot.distanceL.getDistance(DistanceUnit.MM));
@@ -177,6 +180,29 @@ public class Tele_Op extends OpMode {
 
         if (gamepad2.dpad_down)
             robot.magazineLifter.setPosition(0.4);
+
+        if (gamepad2.right_trigger != 0) {
+            robot.wobbleMotor.setPower(gamepad2.right_trigger * 0.4);
+        }
+        if (gamepad2.left_trigger != 0) {
+            robot.wobbleMotor.setPower(-gamepad2.left_trigger * 0.4);
+        }
+
+        telemetry.addData("Hallo", robot.wobbleMotor.getCurrentPosition());
+
+        if (gamepad2.y) {
+            while (robot.wobbleMotor.getCurrentPosition() > 200) {
+                robot.wobbleMotor.setPower(-0.5);
+            }
+                robot.wobbleMotor.setPower(0);
+        }
+        if (gamepad2.b) {
+            while (robot.wobbleMotor.getCurrentPosition() < 350) {
+                robot.wobbleMotor.setPower(0.5);
+            }
+                robot.wobbleMotor.setPower(0);
+
+        }
 //
 //        if (gamepad2.dpad_right)
 //            robot.Tap.setPosition(0.4);
@@ -186,19 +212,18 @@ public class Tele_Op extends OpMode {
 //
 //        if (gamepad2.left_trigger == 0)
 //            robot.Tap.setPosition(0.4);
-        if (gamepad1.a)
-        {
+        if (gamepad1.a) {
             robot.wobbleF.setPosition(0.3);
+            robot.wobbleB.setPosition(0.2);
 
-        }else
+        }
+
+        if (gamepad1.b) {
             robot.wobbleF.setPosition(0);
-
-        if (gamepad1.b)
-        {
-            robot.wobbleB.setPosition(0.4);
-
-        }else
             robot.wobbleB.setPosition(-0.3);
+
+        }
+
 
 
         if (gamepad2.dpad_left)
@@ -206,22 +231,46 @@ public class Tele_Op extends OpMode {
         else
             robot.Tap.setPosition(0.4);
 
+if (gamepad1.dpad_down)
+{
+    while (robot.distanceR.getDistance(DistanceUnit.MM) >=440)
+    {
+        motors.driveStrafe(135 * Math.PI / 180, 0.4, true);
+    }
+    var.resetAngle();
+    motors.pidRotate.reset();
+    motors.pidRotate.enable();
 
-        if (gamepad2.left_trigger != 0)
-        robot.wobbleMotor.setPower(gamepad2.left_trigger);
 
-        if (gamepad2.right_trigger != 0)
-        robot.wobbleMotor.setPower(-gamepad2.right_trigger);
+    motors.rotate(-3.5);
 
-        if (gamepad2.a && curShooterState == Shooter.SHOOTERREST) {
+    while (!motors.pidRotate.onTarget())
+        motors.rotate(-3.5);
+
+    telemetry.addData("IMU", var.getAngle());
+
+    while (robot.distanceB.getDistance(DistanceUnit.MM) < 700) {
+        robot.leftFront.setPower(0.1);
+        robot.leftBack.setPower(0.1);
+        robot.rightFront.setPower(0.1);
+        robot.rightBack.setPower(0.1);
+    }
+
+}
+
+
+
+        if (gamepad2.a && curShooterState == Shooter.SHOOTERREST && !preva) {
             curShooterState = Shooter.FIRE;
             shooterState(Shooter.FIRE);
 
-        } else if (gamepad2.a && curShooterState == Shooter.FIRE) {
+        } else if (gamepad2.a && curShooterState == Shooter.FIRE && !preva) {
 
             curShooterState = Shooter.SHOOTERREST;
             shooterState(Shooter.SHOOTERREST);
         }
+
+        preva = gamepad2.a;
 
         if (gamepad1.y && curCollectionState == Shooter.INTAKEREST && !prevy) {
             curCollectionState = Shooter.SUCKERIN;
@@ -255,30 +304,14 @@ public class Tele_Op extends OpMode {
         else if (gamepad1.right_trigger != 0)
             curDriveTrainState = DriveTrain.STRAFER;
 
-
-        else if ((gamepad1.dpad_up && (turnFirst))) {
-
-            driveTrainState(DriveTrain.TURNUP, prevDriveState);
-        } else if ((gamepad1.dpad_left && (turnFirst)))
-
-            driveTrainState(DriveTrain.TURNLEFT, prevDriveState);
-
-        else if ((gamepad1.dpad_right && (turnFirst)))
-
-            driveTrainState(DriveTrain.TURNRIGHT, prevDriveState);
-
-        else if ((gamepad1.dpad_down && (turnFirst)))
-
-            driveTrainState(DriveTrain.TURNDOWN, prevDriveState);
-
         else motors.stop();
 
 
         driveTrainState(curDriveTrainState, prevDriveState);
 
 
-        telemetry.addData("TAP", robot.Tap.getPosition());
-        telemetry.addData("Colour", robot.colourF.alpha());
+//        telemetry.addData("TAP", robot.Tap.getPosition());
+//        telemetry.addData("Colour", robot.colourF.alpha());
     }
 
     private void driveTrainState(DriveTrain driveTrain, DriveTrain prevState) {
@@ -377,7 +410,7 @@ public class Tele_Op extends OpMode {
 
                 motors.mecanum(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, startDrive);
 
-                telemetry.update();
+
 //                if (begin)
 //                    begin = false;
 
@@ -484,7 +517,8 @@ public class Tele_Op extends OpMode {
         }
     }
 
-    private void shooterState(Shooter shooter) {
+    private void
+    shooterState(Shooter shooter) {
 
         switch (shooter) {
             case TAPDEFAULT:
@@ -497,7 +531,7 @@ public class Tele_Op extends OpMode {
 
             case FIRE:
 
-                robot.shooterMotor.setPower(-0.9);
+                robot.shooterMotor.setPower(-1);
 
                 break;
 

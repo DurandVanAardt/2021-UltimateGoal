@@ -294,8 +294,9 @@ public class Test extends OpMode {
 
         if (gamepad2.dpad_left) {
 
-            robot.Tap.setPosition(0.4);
+            robot.Tap.setPosition(0);
         }
+        else  robot.Tap.setPosition(0.4);
 
         robot.wobbleMotor.setPower(gamepad2.left_trigger);
 

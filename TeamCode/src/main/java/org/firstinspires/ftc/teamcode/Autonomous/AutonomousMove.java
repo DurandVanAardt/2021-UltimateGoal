@@ -5,8 +5,11 @@ enum AutonomousMove {
     STRAFERTOVIEW,
     STOP,
     TURNLEFT,
+    TURNPOWER,
     TURNRIGHT,
     TURNBACK,
     TURNFRONT,
-
+    MOVEBLACK,
+    MOVEBLUE,
+    REVERSEBLUE
 }
